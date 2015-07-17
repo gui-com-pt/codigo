@@ -1,0 +1,19 @@
+{
+  "name": "codigo",
+  "version": "0.0.1",
+  "license": "MIT",
+  "dependencies": {
+    "pi-angular": "dev",
+    "pi-sass": "dev"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "resolutions": {
+    "angular": "1.3.0-beta.14"
+  }
+}

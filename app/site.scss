@@ -1,0 +1,69 @@
+@import "../bower_components/pi-sass/src/variables";
+@import "../bower_components/pi-sass/src/boot";
+@import "variables";
+@import "panel";
+
+/*
+ * Card Sets
+ */
+.card-set__wrapper {
+  @include clearfix();
+}
+
+.card-set {
+  @include span(1 of 6);
+
+  &:nth-child(6) {
+    @include span(1 of 6 last);
+  }
+}
+
+.card-set__img {
+  width: 100%&
+}
+
+.card-set__list {
+  border: solid 1px #f0f0f0;
+  @include clearfix();
+
+}
+
+.card-set__list-avatar {
+  @include span(1 of 6);
+  > img {
+    @include border-radius(50%);
+    width: 100%;
+  }
+}
+.card-set__content {
+  @include span(5 of 6 last);
+}
+.card-set__author {
+  background-color: $color-gray;
+  color: $color-gray-dark;
+  @include clearfix();
+}
+.card-set__author-avatar {
+  @include span(1 of 7);
+  > img {
+    @include border-radius(50%);
+  }
+}
+.card-set__author-likes {
+  @include span(6 of 7 last);
+  text-align: right;
+}
+
+/*
+ * Profile Edit
+ */
+.profile-edit__wrapper {
+  @include container();
+}
+
+.profile-edit__side {
+  @include span(1 of 4);
+}
+.profile-edit__content {
+  @include span(3 of 4 last);
+}
