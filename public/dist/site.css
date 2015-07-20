@@ -150,7 +150,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
  *
  * Depends on modernizr.
  * When using this mix you must upload both default extension and svg
- * 
+ *
  */
 /*
  * @usage
@@ -176,14 +176,14 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 /**
  * @name Opacity
  * @description
- * 
+ *
  * Compatible with IE5+ usinf the alpha filter
  * @usage
  * p {
  *  @include opacity(0.8);
  * }
  */
-/** 
+/**
  * @name Clearfix
  * @description
  *
@@ -1332,6 +1332,174 @@ input[type="text"], input[type="email"], input[type="password"], input[type="but
   color: inherit;
 }
 
+.list-group {
+  padding-left: 0px;
+  margin: 15px;
+}
+.list-group > li, .list-group > .list-group__item {
+  overflow: hidden;
+  *zoom: 1;
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+  border: solid 1px #f6f6f6;
+  background-color: #fff;
+}
+.list-group > li > a, .list-group > .list-group__item > a {
+  display: block;
+}
+.list-group > li:first-child, .list-group > .list-group__item:first-child {
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.list-group > li:hover, .list-group > .list-group__item:hover {
+  background-color: #f6f6f6;
+  cursor: pointer;
+}
+.list-group > .list-group__item-primary {
+  background-color: #0e57c8;
+  color: #000000;
+}
+.list-group > .list-group__item-primary a {
+  color: #000000;
+}
+.list-group > .list-group__item-secondary {
+  background-color: #01a1c5;
+  color: #000000;
+}
+.list-group > .list-group__item-secondary a {
+  color: #000000;
+}
+.list-group > .list-group__item-danger {
+  background-color: #da3826;
+  color: #000000;
+}
+.list-group > .list-group__item-danger a {
+  color: #000000;
+}
+.list-group > .list-group__item-info {
+  background-color: yellow;
+  color: #000000;
+}
+.list-group > .list-group__item-info a {
+  color: #000000;
+}
+.list-group > .list-group__item-highlight {
+  background-color: #da3826;
+  color: #000000;
+}
+.list-group > .list-group__item-highlight a {
+  color: #000000;
+}
+.list-group > .list-group__item-default {
+  background-color: #f6f6f6;
+  color: #000000;
+}
+.list-group > .list-group__item-default a {
+  color: #000000;
+}
+.list-group > .list-group__item-active {
+  background-color: #0e57c8;
+  color: #000000;
+  border: #0e57c8;
+}
+.list-group > .list-group__item-active a {
+  color: #000000;
+}
+
+.list-group__item > .avatar {
+  max-width: 15%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  border: solid 1px #f6f6f6;
+  float: left;
+}
+
+.list-group__item > .button, .list-group__item > .badge {
+  float: right;
+}
+
+.panel {
+  margin-bottom: 22px;
+  border: 1px solid transparent;
+  border-radius: 25px;
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.panel-primary {
+  border: solid 2px #0e57c8;
+}
+.panel-primary > .panel-heading {
+  background-color: #0e57c8;
+  color: #000000;
+}
+
+.panel-secondary {
+  border: solid 2px #01a1c5;
+}
+.panel-secondary > .panel-heading {
+  background-color: #01a1c5;
+  color: #000000;
+}
+
+.panel-danger {
+  border: solid 2px #da3826;
+}
+.panel-danger > .panel-heading {
+  background-color: #da3826;
+  color: #000000;
+}
+
+.panel-info {
+  border: solid 2px yellow;
+}
+.panel-info > .panel-heading {
+  background-color: yellow;
+  color: #000000;
+}
+
+.panel-highlight {
+  border: solid 2px #da3826;
+}
+.panel-highlight > .panel-heading {
+  background-color: #da3826;
+  color: #000000;
+}
+
+.panel-default {
+  border: solid 2px #f6f6f6;
+}
+.panel-default > .panel-heading {
+  background-color: #f6f6f6;
+  color: #000000;
+}
+
+.panel-body {
+  padding: 15px;
+  overflow: hidden;
+  *zoom: 1;
+}
+
+.panel-heading {
+  padding: 10px 15px;
+  border: 1px solid transparent;
+}
+
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 18px;
+  color: inherit;
+}
+
 /*
  * Card Sets
  */
@@ -1352,13 +1520,41 @@ input[type="text"], input[type="email"], input[type="password"], input[type="but
 }
 
 .card-set__img {
-  width: 100% .card-set__img;
+  position: relative;
+}
+.card-set__img > img {
+  width: 100%;
+}
+
+.card-set--hover > .card-set__img > .card-set__img-hover {
+  display: block;
+}
+
+.card-set__img-hover {
+  display: none;
+  background-color: #000;
+  color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+ul.card-set__list li > {
+  list-style: none;
 }
 
 .card-set__list {
   border: solid 1px #f0f0f0;
   overflow: hidden;
   *zoom: 1;
+}
+.card-set__list > li > a, .card-set__list > a {
+  display: block;
+}
+
+.card-set__list > li, .card-set__list-item {
+  padding: 5px;
 }
 
 .card-set__list-avatar {
@@ -1418,14 +1614,18 @@ input[type="text"], input[type="email"], input[type="password"], input[type="but
   clear: both;
 }
 
-.profile-edit__side {
-  width: 21.05263%;
-  float: left;
-  margin-right: 5.26316%;
+@media (min-width: 1200px) {
+  .profile-edit__side {
+    width: 21.05263%;
+    float: left;
+    margin-right: 5.26316%;
+  }
 }
 
-.profile-edit__content {
-  width: 73.68421%;
-  float: right;
-  margin-right: 0;
+@media (min-width: 1200px) {
+  .profile-edit__content {
+    width: 73.68421%;
+    float: right;
+    margin-right: 0;
+  }
 }

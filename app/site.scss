@@ -11,6 +11,7 @@
 }
 
 .card-set {
+
   @include span(1 of 6);
 
   &:nth-child(6) {
@@ -18,13 +19,43 @@
   }
 }
 
-.card-set__img {
-  width: 100%&
+.card-set > p {
+
 }
 
+
+.card-set__img {
+  position: relative;
+  > img {
+    width: 100%;
+  }
+}
+.card-set--hover > .card-set__img >.card-set__img-hover {
+  display: block;
+}
+.card-set__img-hover {
+  display: none;
+  background-color: #000;
+  color: #fff;
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+}
+
+ul.card-set__list {
+  li > {
+    list-style: none
+  }
+}
 .card-set__list {
   border: solid 1px #f0f0f0;
   @include clearfix();
+  > li > a, > a {
+    display: block
+  }
+}
+
+.card-set__list > li, .card-set__list-item {
+  padding: 5px;
 
 }
 
@@ -62,8 +93,12 @@
 }
 
 .profile-edit__side {
-  @include span(1 of 4);
+  @include breakpoint($breakpoint-site) {
+    @include span(1 of 4);
+  }
 }
 .profile-edit__content {
-  @include span(3 of 4 last);
+  @include breakpoint($breakpoint-site) {
+    @include span(3 of 4 last);
+  }
 }

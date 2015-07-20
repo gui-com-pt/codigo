@@ -3,7 +3,7 @@
     .module('templates', []);
 
   angular
-    .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product']);
+    .module('codigo', ['piClassHover', 'templates', 'pi.core', 'pi.core.app', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product']);
 
   angular
     .module('codigo')

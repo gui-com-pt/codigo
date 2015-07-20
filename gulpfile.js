@@ -9,6 +9,7 @@ var paths = {
     dependencies: [
         './bower_components/ui-router/release/angular-ui-router.js',
         './bower_components/underscore/underscore.js',
+        './bower_components/pi-class-hover/dist/pi-class-hover.js',
         './bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
         './bower_components/angular-facebook/lib/angular-facebook.js',
         './bower_components/ui-bootstrap/src/transition/transition.js',
