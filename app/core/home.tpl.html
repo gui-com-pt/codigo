@@ -1,0 +1,5 @@
+<div infinite-scroll="ctrl.query()" infinite-scroll-disabled="ctrl.queryModel.busy" infinite-scroll-immediate-check="true">
+    <div ng-repeat="sportnew in ctrl.news">
+        <a ui-sref="article-view({id: sportnew.id})" ng-bind="sportnew.name"></a>
+    </div>
+</div>

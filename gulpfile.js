@@ -35,7 +35,8 @@ var paths = {
         './bower_components/angular-dragdrop/src/angular-dragdrop.min.js',
         './bower_components/angular-contenteditable/angular-contenteditable.js'
     ],
-    templates: ['./public/*.html', './public/**/*.html', './public/**/**/*.html', './public/**/**/**/*.html'],
+    templates: ['./public/*.html', './public/**/*.html', './public/**/**/*.html', './public/**/**/**/*.html',
+        './app/*.html', './app/**/*.html', './app/**/**/*.html', './app/**/**/**/*.html'],
     appModules: [
         './app/module.js',
         './app/**/module.js',

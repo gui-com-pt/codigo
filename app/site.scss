@@ -1,7 +1,10 @@
 @import "../bower_components/pi-sass/src/variables";
+$pi-nav-bg: #fff;
+
 @import "../bower_components/pi-sass/src/boot";
 @import "variables";
 @import "panel";
+@import "text-angular";
 
 /*
  * Card Sets

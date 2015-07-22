@@ -1,0 +1,24 @@
+<div class="sportsnews-create__wrapper">
+    <div class="sportsnews-create__side">
+        <div class="upload-thumbnail" upload-thumbnail ng-model="ctrl.model.image"></div>
+    </div>
+    <div class="sportsnews-create__content">
+        <div class="fit-form__wrapper">
+            <form class="fit-form" name="createForm">
+                <div class="fit-form__group">
+                    <input type="text" required class="fit-form__group-control" placeholder="Título da Notícia" ng-model="ctrl.model.name" />
+                </div>
+                <div class="fit-form__group">
+                    <textarea placeholder="Um exerpto da Notícia" required class="fit-form__group-control" rows="3" ng-model="ctrl.model.excerpt"></textarea>
+                </div>
+                <div class="fit-form__group">
+                    <div placeholder="O conteúdo principal da Notícia" text-angular  ng-model="ctrl.model.articleBody"></div>
+                </div>
+                <div class="fit-form__footer">
+                    <button ng-disabled="createForm.$invalid || createForm.$pristine" ng-click="ctrl.create()">Criar</button>
+                </div>
+            </form>
+            <div class="fit-form__guide">Ajuda no plano de nutrição</div>
+        </div>
+    </div>
+</div>

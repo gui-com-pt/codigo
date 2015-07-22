@@ -5,7 +5,9 @@
   "dependencies": {
     "pi-angular": "dev",
     "pi-sass": "dev",
-    "ui-router": "~0.2.15"
+    "ui-router": "~0.2.15",
+    "textAngular": "~1.4.2",
+    "ngInfiniteScroll": "~1.2.1"
   },
   "ignore": [
     "**/.*",

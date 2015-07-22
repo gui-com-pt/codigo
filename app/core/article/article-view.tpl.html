@@ -1,0 +1,13 @@
+<div class="sportsnews-view__wrapper">
+    <div class="sportsnews-view__side">
+        <img ng-src="{{ctrl.sportsNews.image}}" />
+        <ul ng-show="ctrl.sportsNews.meta.length > 0">
+            <li ng-repeat="meta in ctrl.sportsNews.meta"><b ng-bind="meta.displayName"></b><br><span ng-bind="meta.value"></span></li>
+        </ul>
+    </div>
+    <div class="sportsnews-view__content">
+        <h2 ng-bind="ctrl.sportsNews.name"></h2>
+        <div ng-bind-html="ctrl.sportsNews.articleBody"></div>
+        <div pi-comment-window namespace="sportsnews" id="{{ctrl.id}}"></div>
+    </div>
+</div>

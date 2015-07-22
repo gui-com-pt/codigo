@@ -3,14 +3,14 @@
 
 	};
 	var configFn = function(FacebookProvider, $httpProvider, piProvider){
-		
+
 		$httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 	};
 
 	configFn.$inject = ['FacebookProvider', '$httpProvider', 'piProvider'];
 
 	angular
-		.module('pi', ['ngResource', 'facebook', 'pi.core', 'pi.core.app', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product'])
+		.module('pi', ['ngResource', 'facebook', 'pi.core', 'pi.core.app', 'pi.core.article', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product'])
 		.config(configFn)
 		.provider('pi', [function(){
 			var appId,
@@ -29,6 +29,23 @@
 			}];
 		}]);
 })();
+(function(){
+	'use strict';
+
+	angular
+		.module('pi.core', ['pi']);
+
+	angular
+		.module('pi.core.likes', ['pi.core']);
+
+	angular
+		.module('pi.core.product', ['pi.core']);
+
+	angular
+		.module('pi.core.article', ['pi.core']);
+
+})();
+
 /**
  *
  */
@@ -296,6 +313,87 @@ angular
 		module('pi.ui-extensions', ['ui.router']);
 })();
 (function(){
+  angular
+      .module('pi.admin', []);
+
+  angular
+    .module('pi.admin')
+    .config(['$stateProvider', function($stateProvider){
+      $stateProvider
+        .state('admin', {
+          url: '/admin',
+          controller: 'pi.admin.adminCtrl',
+          controllerAs: 'ctrl',
+          templateUrl: 'admin/admin.html'
+        })
+        .state('article-manage', {
+          url: '/admin/article',
+          controller: 'pi.admin.articleManageCtrl',
+          controllerAs: 'ctrl',
+          templateUrl: 'admin/article-manage.html'
+        })
+        .state('article-edit', {
+          url: '/admin/article/:id',
+          controller: 'pi.admin.articleEditCtrl',
+          controllerAs: 'ctrl',
+          templateUrl: 'admin/article-edit.html'
+        })
+        .state('event-manage', {
+          url: '/admin/event',
+          controller: 'pi.admin.eventManageCtrl',
+          controllerAsl: 'ctrl',
+          templateUrl: 'admin/event-manage.html'
+        })
+        .state('event-edit', {
+          url: '/admin/event/:id',
+          controller: 'pi.admin.eventEditCtrl',
+          controllerAs: 'ctrl',
+          templateUrl: 'admin/event-edit.html'
+        });
+    }]);
+})();
+
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.adminCtrl', ['$rootScope', function($rootScope){
+
+    }]);
+})();
+
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.articleEditCtrl', ['pi.core.article.articleSvc', '$scope', function(articleSvc, $scope){
+
+    }]);
+})();
+
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.articleManageCtrl', ['pi.core.article.articleSvc', '$scope', function(articleSvc, $scope){
+
+    }]);
+})();
+
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.eventEditCtrl', ['pi.core.app.eventSvc', '$scope', function(eventSvc, $scope){
+
+    }]);
+})();
+
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.eventManageCtrl', ['pi.core.app.eventSvc', '$scope', function(eventSvc, $scope){
+
+    }]);
+})();
+
+(function(){
   var piAlertStack = function(piStack)
   {
     var stack = {};
@@ -508,6 +606,46 @@ angular
 })();
 (function(){
 	angular
+		.module('pi.core.article')
+		.factory('pi.core.article.articleCategorySvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/article-category', model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/article-category/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/article-category', model);
+			};
+			return this;
+		}]);
+})();
+
+(function(){
+	angular
+		.module('pi.core.article')
+		.factory('pi.core.article.articleSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/article', model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/article/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/article', model);
+			};
+			return this;
+		}]);
+})();
+
+(function(){
+	angular
 		.module('pi.core.chat', ['pi.core']);
 })();
 (function(){
@@ -530,19 +668,7 @@ angular
 			return this;
 		}]);
 })();
-(function(){
-	'use strict';
 
-	angular
-		.module('pi.core', ['pi']);
-
-	angular
-		.module('pi.core.likes', ['pi.core']);
-
-	angular
-		.module('pi.core.product', ['pi.core']);
-
-})();
 (function(){
 	'use strict';
 
