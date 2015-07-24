@@ -6,7 +6,10 @@
         <div class="fit-form__wrapper">
             <form class="fit-form" name="createForm">
                 <div class="fit-form__group">
-                    <input class="pi-form__control" type="text" required class="fit-form__group-control" placeholder="Título da Notícia" ng-model="ctrl.model.name" />
+                    <input type="text" required class="pi-form__control" placeholder="Título da Notícia" ng-model="ctrl.model.name" />
+                </div>
+                <div class="fit-form__group">
+                    <input placeholder="Um exerpto da Notícia" required class="pi-form__control" type="text" ng-model="ctrl.model.headline" />
                 </div>
                 <div class="fit-form__group">
                     <ui-select required ng-model="ctrl.categorySelect" theme="selectize">
@@ -17,13 +20,11 @@
                     </ui-select>
                 </div>
                 <div class="fit-form__group">
-                    <input placeholder="Um exerpto da Notícia" required class="pi-form__control" type="text" ng-model="ctrl.model.headline" />
-                </div>
-                <div class="fit-form__group">
                     <div placeholder="O conteúdo principal da Notícia" text-angular  ng-model="ctrl.model.articleBody"></div>
                 </div>
                 <div class="fit-form__footer">
-                    <button ng-disabled="createForm.$invalid || createForm.$pristine" ng-click="ctrl.create()">Criar</button>
+                    <button ng-click="ctrl.remove()">Apagar</button>
+                    <button ng-click="ctrl.save()">Guardar Alterações</button>
                 </div>
             </form>
             <div class="fit-form__guide">Ajuda no plano de nutrição</div>

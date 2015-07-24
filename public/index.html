@@ -1,5 +1,6 @@
 <html ng-app="codigo">
 <head>
+    <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
   <!-- inject:css -->
 <link rel="stylesheet" href="dist/site.css">
 <!-- endinject -->
@@ -14,22 +15,59 @@
 <!-- endinject -->
 </head>
 <body>
-  <div class="pi-nav__wrapper">
+  <div class="pi-nav__wrapper pi-nav__wrapper--fixed">
       <div class="pi-nav">
-          <ul>
-              <li><a ui-sref="home">home</a></li>
-            <li><a ui-sref="category-list">Linux</a></li>
-            <li><a href="">SASS</a></li>
-            <li><a href="">C#/Mono</a></li>
-            <li><a href="">PHP/HHVM</a></li>
-            <li><a href="">UI/UX</a></li>
-            <li><a href="">Javascript</a></li>
-            <li><a href="">Hack</a></li>
-              <li><a ui-sref="article-create">Criar Artigo</a></li>
-      </div>
+      <ul >
+            <li><a ui-sref="home">home</a></li>
+            <li ng-repeat="cat in $root.categories"><a ui-sref="article-list({categoryId: cat.id})" ng-bind="cat.displayName"></a></li>
+            <li><a ui-sref="article-create">Criar Artigo</a></li>
+            <li><a ui-sref="question-list">Perguntas</a></li>
+          <li><a ui-sref="category-list">Categorias</a></li>
+          <li><a ui-sref="category-create">Criar Categoria</a></li>
+        </ul>
+          </div>
   </div>
-  <ui-view></ui-view>
-  <div class="card-set__wrapper">
+  <div class="cod__view">
+      <ui-view></ui-view>
+  </div>
+  <script type="text/ng-template" id="html/pi/comment-window.html">
+      <h3>Comentários</h3>
+      <div pi-comment-form></div>
+      <div ng-repeat="comment in comments | reverse" pi-comment-message comment="comment"></div>
+   </script>
+
+  <script type="text/ng-template" id="html/pi/comment-message.html">
+      <div class="comment-message">
+          <a class="comment-message__author" ui-sref="profile.home({id: comment.author.id})">
+              <img class="comment-message__author-img" ng-src="/uploads/user/default.jpg" />
+          </a>
+          <div class="comment-message__body">
+              <div><span ng-bind="comment.author.displayName"></span><span class="comment-message__created" ng-bind="comment.created"></span></div>
+              <!--<div>aqui metiamos a sport phrase dele</div>-->
+              <div ng-bind="comment.message"></div>
+          </div>
+      </div>
+  </script>
+  <script type="text/ng-template" id="html/pi/comment-form.html">
+      <div class="fit-form" class="pi-comment-form">
+          <form class="fit-form__group" ng-submit="send(message)">
+              <textarea rows="4" ng-model="message" class="fit-form__group-control"></textarea>
+      </div>
+      <div class="fit-form__footer">
+          <button type="button" ng-click="send(message)">Enviar Comentário</button>
+      </div>
+      </div>
+  </script>
+  <script type="text/ng-template" id="html/upload-thumbnail.html">
+      <div class="upload-thumbnail__btn" ngf-select ngf-change="upload($files)">
+          <div>Upload Foto</div>
+          <img ng-src="{{thumbnailSrc}}">
+          <div ng-show="uploadProgress > 0 && uploadProgress < 100">
+              A enviar... <!--{{ctrl.uploadProgress}} %-->
+          </div>
+      </div>
+</script>
+  <!--<div class="card-set__wrapper">
     <div class="card-set" pi-class-hover="card-set--hover">
       <div class="card-set__img">
         <img src="http://2.bp.blogspot.com/-6hr2GQSaz4k/Vak3-MY5zeI/AAAAAAAAjmk/UIfcib4fdBk/s1600/Hacker-free-Frequent-Flyer-Miles-United-Airlines.jpg" />
@@ -102,6 +140,6 @@
   </div>
   <div class="pi-footer__wrapper">
 
-  </div>
+  </div>-->
 </body>
 </html>

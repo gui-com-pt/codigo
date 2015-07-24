@@ -1,0 +1,14 @@
+<div class="sportsnews-view__wrapper">
+    <div class="sportsnews-view__side">
+        <img ng-src="{{ctrl.question.image}}" />
+        <ul ng-show="ctrl.question.meta.length > 0">
+            <li ng-repeat="meta in ctrl.question.meta"><b ng-bind="meta.displayName"></b><br><span ng-bind="meta.value"></span></li>
+        </ul>
+    </div>
+    <div class="sportsnews-view__content">
+        <h2 ng-bind="ctrl.question.name"></h2>
+        <div ng-bind-html="ctrl.question.articleBody"></div>
+        <div pi-comment-window namespace="question" id="{{ctrl.id}}"></div>
+        <button ui-sref="question-save({id: ctrl.id})">editar</button>
+    </div>
+</div>

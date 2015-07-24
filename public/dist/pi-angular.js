@@ -10,7 +10,7 @@
 	configFn.$inject = ['FacebookProvider', '$httpProvider', 'piProvider'];
 
 	angular
-		.module('pi', ['ngResource', 'facebook', 'pi.core', 'pi.core.app', 'pi.core.article', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product'])
+		.module('pi', ['ngResource', 'facebook', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.article', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product'])
 		.config(configFn)
 		.provider('pi', [function(){
 			var appId,
@@ -44,6 +44,8 @@
 	angular
 		.module('pi.core.article', ['pi.core']);
 
+	angular
+		.module('pi.core.question', ['pi.core']);
 })();
 
 /**
@@ -613,12 +615,16 @@ angular
 				return piHttp.post('/article-category', model);
 			}
 
+			this.remove = function(id){
+				return piHttp.post('/article-category-remove/' + id);
+			}
+
 			this.get = function(id, model) {
 				return piHttp.get('/article-category/' + id, model);
 			}
 
 			this.find = function(model) {
-				return piHttp.get('/article-category', model);
+				return piHttp.get('/article-category', {params: model});
 			};
 			return this;
 		}]);
@@ -633,12 +639,20 @@ angular
 				return piHttp.post('/article', model);
 			}
 
+			this.remove = function(id) {
+				return piHttp.post('/article-remove/' + id);
+			}
+
+			this.put = function(id, model) {
+				return piHttp.post('/article/' + id, model);
+			}
+
 			this.get = function(id, model) {
 				return piHttp.get('/article/' + id, model);
 			}
 
 			this.find = function(model) {
-				return piHttp.get('/article', model);
+				return piHttp.get('/article', {params: model});
 			};
 			return this;
 		}]);
@@ -668,7 +682,6 @@ angular
 			return this;
 		}]);
 })();
-
 (function(){
 	'use strict';
 
@@ -1044,6 +1057,59 @@ angular
 			return this;
 		}]);
 })();
+(function(){
+	angular
+		.module('pi.core.question')
+		.factory('pi.core.question.questionCategorySvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/question-category', model);
+			}
+
+			this.remove = function(id){
+				return piHttp.post('/question-category-remove/' + id);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/question-category/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/question-category', {params: model});
+			};
+			return this;
+		}]);
+})();
+
+
+(function(){
+	angular
+		.module('pi.core.question')
+		.factory('pi.core.question.questionSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/question', model);
+			}
+
+			this.remove = function(id) {
+				return piHttp.post('/question-remove/' + id);
+			}
+
+			this.put = function(id, model) {
+				return piHttp.post('/question/' + id, model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/question/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/question', {params: model});
+			};
+			return this;
+		}]);
+})();
+
 (function(){
 
 	var AccountRecover = function(AccountRecoverService)
@@ -1795,6 +1861,71 @@ var INTEGER_REGEXP = /^\-?\d*$/;
     .directive('piSeoValidator', PiSeoValidator);
 })();
 
+(function(){
+    'use strict';
+    var UploadThumbnail = function(Upload){
+
+        var linkFn = function(scope, elem, attrs, ngModel){
+            var self = this;
+
+
+            //scope.thumbnailSrc = _.isString(ngModel.$viewValue) ? ngModel.$viewValue : 'http://fitting.pt/dist/images/event-thumbnail.jpg';
+            attrs.$observe('ngModel', function(value){ // Got ng-model bind path here
+              scope.$watch(value,function(newValue){ // Watch given path for changes
+                  scope.thumbnailSrc = _.isString(ngModel.$viewValue) ? ngModel.$viewValue : 'http://fitting.pt/dist/images/event-thumbnail.jpg';
+              });
+           });
+
+            scope.$watch('files', function () {
+                scope.upload(scope.files);
+            });
+
+            scope.upload = function (files) {
+
+                if (files && files.length) {
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+                        Upload.upload({
+                            url: 'http://pi.codigo.ovh/filesystem',
+                            fields: {},
+                            file: file
+                        }).progress(function (evt) {
+                            scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
+                        }).success(function (data, status, headers, config) {
+                            ngModel.$setViewValue(data.uri);
+                            scope.thumbnailSrc = data.uri;
+                        });
+                    }
+                }
+            };
+
+
+            scope.getTemplate = function(){
+                if(!_.isUndefined(attrs.piTemplate)){
+                    return attrs.piTemplate;
+                }
+
+                return 'html/upload-thumbnail.html';
+            }
+        };
+
+        return {
+            require: '^ngModel',
+            scope: {
+
+            },
+            link: linkFn,
+            template: '<ng-include class="upload-thumbnail" src="getTemplate()"></ng-include>'
+        }
+    };
+
+    UploadThumbnail.$inject = ['Upload'];
+
+    angular
+        .module('pi')
+        .directive('uploadThumbnail', UploadThumbnail);
+
+})();
 (function(){
 
 	var piFileManager = function(){
@@ -3447,10 +3578,10 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 				}
 
 				var getFn = function($http) {
-					
+
 					var s = this;
 
-					// Augments the request configuration object 
+					// Augments the request configuration object
 					// with OAuth specific stuff (e.g. some header)
 					function getAugmentedConfig(cfg) {
 						var config  = cfg || {};
@@ -3460,7 +3591,7 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 					}
 
 					// The service object to be returned (`$http` wrapper)
-					
+
 
 					// Create wrappers for methods WITHOUT data
 					['delete', 'get', 'head', 'jsonp'].forEach(function (method) {
@@ -3495,6 +3626,7 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 			}
 		]);
 })();
+
 (function(){
   "use strict";
 

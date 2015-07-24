@@ -1,0 +1,8 @@
+<div class="pi-card">
+    <div class="pi-card__thumb">
+        <img ng-src="{{question.image}}" />
+    </div>
+    <a ui-sref="question-view({id: question.id})" ng-bind="question.name"></a>
+    <div class="pi-card__content" ng-bind="question.excerpt"></div>
+    <div class="pi-card__date" ng-bind="question.id"></div>
+</div>

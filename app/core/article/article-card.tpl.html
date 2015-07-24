@@ -1,0 +1,8 @@
+<div class="pi-card">
+    <div class="pi-card__thumb">
+        <img ng-src="{{article.image}}" />
+    </div>
+    <a ui-sref="article-view({id: article.id})" ng-bind="article.name"></a>
+    <p class="pi-card__content" ng-bind="article.headline"></p>
+    <div class="pi-card__date"> há 3 horas</div>
+</div>

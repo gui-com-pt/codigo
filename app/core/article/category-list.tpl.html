@@ -1,4 +1,4 @@
 <a ui-sref="category-create">Criar Categoria</a>
 <div ng-repeat="category in ctrl.categories">
-    {{category | json}}
+    <div>{{category.displayName}} <button ui-sref="category-save({id: category.id})">Alterar</button></div>
 </div>

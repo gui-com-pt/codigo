@@ -9,18 +9,36 @@
     angular
         .module('codigo.core.article', ['codigo.core']);
 
+    angular
+        .module('codigo.core.question', ['codigo.core']);
+
   angular
-    .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article',
-      'ui.router', 'textAngular', 'infinite-scroll']);
+    .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
+      'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select']);
 
   angular
     .module('codigo')
-      .config(['$stateProvider', function($stateProvider){
+      .config(['$stateProvider', 'uiSelectConfig', function($stateProvider, uiSelectConfig){
+
+          uiSelectConfig.theme = 'selectize';
+
           $stateProvider
               .state('home', {
                   url: '/',
                   templateUrl: 'core/home.tpl.html',
                   controller: 'codigo.core.homeCtrl',
+                  controllerAs: 'ctrl'
+              })
+              .state('question-list',{
+                  url: '/perguntas',
+                  templateUrl: 'core/question/question-list.tpl.html',
+                  controller: 'codigo.core.question.questionListCtrl',
+                  controllerAs: 'ctrl'
+              })
+              .state('question-view', {
+                  url: '/question/:id',
+                  templateUrl: 'core/question/question-view.tpl.html',
+                  controller: 'codigo.core.question.questionViewCtrl',
                   controllerAs: 'ctrl'
               })
               .state('category-create', {
@@ -29,16 +47,34 @@
                   controller: 'codigo.core.article.categoryCreateCtrl',
                   controllerAs: 'ctrl'
               })
+              .state('category-save', {
+                  url: '/categoria-editar/:id',
+                  templateUrl: 'core/article/category-save.tpl.html',
+                  controller: 'codigo.core.article.categorySaveCtrl',
+                  controllerAs: 'ctrl'
+              })
               .state('category-list',{
                   url: '/categorias',
                   templateUrl: 'core/article/category-list.tpl.html',
                   controller: 'codigo.core.article.categoryListCtrl',
                   controllerAs: 'ctrl'
               })
+              .state('article-list', {
+                  url: '/artigos?name&categoryId',
+                  templateUrl: 'core/article/article-list.tpl.html',
+                  controller: 'codigo.core.article.articleListCtrl',
+                  controllerAs: 'ctrl'
+              })
               .state('article-create', {
                   url: '/artigo-novo',
                   templateUrl: 'core/article/article-create.tpl.html',
                   controller: 'codigo.core.article.articleCreateCtrl',
+                  controllerAs: 'ctrl'
+              })
+              .state('article-save', {
+                  url: '/artigo-editar/:id',
+                  templateUrl: 'core/article/article-save.tpl.html',
+                  controller: 'codigo.core.article.articleSaveCtrl',
                   controllerAs: 'ctrl'
               })
               .state('article-view', {
@@ -49,10 +85,12 @@
               });
 
       }])
-    .run(['$rootScope', 'pi.core.app.eventSvc', function($rootScope, eventSvc){
-      eventSvc.find()
+    .run(['$rootScope', 'pi.core.article.articleCategorySvc', function($rootScope, categorySvc){
+
+
+          categorySvc.find()
         .then(function(res){
-          $rootScope.events = res.data.events;
+          $rootScope.categories = res.data.categories;
         });
     }]);
 })();
@@ -75,7 +113,7 @@
             if(self.queryModel.busy) return;
 
             self.queryModel.busy = true;
-            articleSvc.find({skip: self.news.length, take: 4}).then(function(r){
+            articleSvc.find({skip: self.news.length, take: 12}).then(function(r){
                 if(r.data.articles.length < 1) return;
 
                 angular.forEach(r.data.articles, function(event){
@@ -97,24 +135,141 @@
         .controller('codigo.core.homeCtrl', SportsNewsListCtrl);
 })();
 (function(){
-    var SportsNewsCreateCtrl = function(articleSvc, $state){
+
+    angular
+        .module('codigo.core.article')
+        .controller('codigo.core.article.articleCardCtrl', [function(){
+
+        }])
+        .directive('codigoArticleCard', [function(){
+
+            return {
+                scope: {
+                    'article': '='
+                },
+                replace: true,
+                templateUrl: 'core/article/article-card.tpl.html',
+                controller: 'codigo.core.article.articleCardCtrl'
+            }
+        }]);
+})();
+(function(){
+    var SportsNewsCreateCtrl = function(articleSvc, $state, $rootScope){
         var self = this;
         this.model = {}; // the form model
 
         this.create = function(){
             var model = angular.copy(this.model);
             model.title = model.displayName;
+            if(!_.isUndefined(self.categorySelect)) {
+                model.categoryId = self.categorySelect.id;
+            }
             articleSvc.post(model).then(function(res){
+                $rootScope.categories.push(res.data.category);
                 $state.go('article-list');
             });
         };
     };
 
-    SportsNewsCreateCtrl.$inject = ['pi.core.article.articleSvc', '$state'];
+    SportsNewsCreateCtrl.$inject = ['pi.core.article.articleSvc', '$state', '$rootScope'];
 
     angular
         .module('codigo')
         .controller('codigo.core.article.articleCreateCtrl', SportsNewsCreateCtrl);
+})();
+(function(){
+    var SportsNewsListCtrl = function(articleSvc, $scope, $stateParams){
+        var self = this;
+
+        this.news = [];
+
+        this.queryModel = {
+            busy: false
+        };
+
+        $scope.$on('$destroy', function(){
+            self.news = undefined;
+        });
+
+        var getModelFromStateParams = function(names, model){
+
+            angular.forEach(names, function(value){
+                if(!_.isUndefined($stateParams[value])) {
+                    model[value] = $stateParams[value];
+                }
+            });
+
+            return model;
+        }
+
+        var getQueryModel = function(){
+            var model = {skip: self.news.length, take: 12};
+            getModelFromStateParams(['name', 'categoryId'], model);
+            return model;
+        }
+
+        this.query = function() {
+            if(self.queryModel.busy) return;
+
+            self.queryModel.busy = true;
+            articleSvc.find(getQueryModel()).then(function(r){
+                if(r.data.articles.length < 1) return;
+
+                angular.forEach(r.data.articles, function(event){
+                    self.news.push(event);
+                });
+
+                self.queryModel.busy = false;
+            }, function(){
+                self.queryModel.busy = false;
+            });
+        };
+
+    };
+
+    SportsNewsListCtrl.$inject = ['pi.core.article.articleSvc', '$scope', '$stateParams'];
+
+    angular
+        .module('codigo')
+        .controller('codigo.core.article.articleListCtrl', SportsNewsListCtrl);
+})();
+(function(){
+    var ctrl = function(articleSvc, $state, $stateParams){
+        var self = this;
+        this.model = {}; // the form model
+        this.modelBusy = false;
+
+        self.modelBusy = true;
+        articleSvc.get($stateParams.id)
+            .then(function(res){
+                self.model = res.data.article;
+                self.modelBusy = false;
+            });
+
+        this.save = function(){
+            var model = angular.copy(this.model);
+            model.title = model.displayName;
+            if(!_.isUndefined(self.categorySelect)) {
+                model.categoryId = self.categorySelect.id;
+            }
+
+            articleSvc.put($stateParams.id, model).then(function(res){
+                $state.go('article-list');
+            });
+        };
+
+        this.remove = function(){
+            articleSvc.remove($stateParams.id).then(function(res){
+                $state.go('article-list');
+            });
+        }
+    };
+
+    ctrl.$inject = ['pi.core.article.articleSvc', '$state', '$stateParams'];
+
+    angular
+        .module('codigo')
+        .controller('codigo.core.article.articleSaveCtrl', ctrl);
 })();
 (function(){
     var SportsNewsViewCtrl = function(articleSvc, $scope, $stateParams) {
@@ -158,4 +313,120 @@
                     self.categories = res.data.categories;
                 })
         }])
+})();
+(function(){
+    angular
+        .module('codigo.core.article')
+        .controller('codigo.core.article.categorySaveCtrl', ['pi.core.article.articleCategorySvc', '$state', '$stateParams', function(categorySvc, $state, $stateParams){
+
+            var self = this;
+            this.model = {};
+            categorySvc.get($stateParams.id)
+                .then(function(res){
+                    self.model = res.data.category;
+                });
+
+            this.remove = function(){
+                categorySvc.remove($stateParams.id, self.model)
+                    .then(function(res){
+                        $state.go('category-list');
+                    });
+            }
+            this.save = function(){
+                categorySvc.put($stateParams.id, self.model)
+                    .then(function(res){
+                        $state.go('category-list');
+                    });
+            }
+        }]);
+})();
+(function(){
+
+    angular
+        .module('codigo.core.question')
+        .controller('codigo.core.question.questionCardCtrl', [function(){
+
+        }])
+        .directive('codigoQuestionCard', [function(){
+
+            return {
+                scope: {
+                    'question': '='
+                },
+                replace: true,
+                templateUrl: 'core/question/question-card.tpl.html',
+                controller: 'codigo.core.question.questionCardCtrl'
+            }
+        }]);
+})();
+(function(){
+    var ctrl = function(questionSvc, $scope, $stateParams){
+        var self = this;
+
+        this.questions = [];
+
+        this.queryModel = {
+            busy: false
+        };
+
+        $scope.$on('$destroy', function(){
+            self.questions = undefined;
+        });
+
+        var getModelFromStateParams = function(names, model){
+
+            angular.forEach(names, function(value){
+                if(!_.isUndefined($stateParams[value])) {
+                    model[value] = $stateParams[value];
+                }
+            });
+
+            return model;
+        }
+
+        var getQueryModel = function(){
+            var model = {skip: self.questions.length, take: 12};
+            getModelFromStateParams(['name', 'categoryId'], model);
+            return model;
+        }
+
+        this.query = function() {
+            if(self.queryModel.busy) return;
+
+            self.queryModel.busy = true;
+            questionSvc.find(getQueryModel()).then(function(r){
+                if(r.data.questions.length < 1) return;
+
+                angular.forEach(r.data.questions, function(event){
+                    self.questions.push(event);
+                });
+
+                self.queryModel.busy = false;
+            }, function(){
+                self.queryModel.busy = false;
+            });
+        };
+
+    };
+
+    ctrl.$inject = ['pi.core.question.questionSvc', '$scope', '$stateParams'];
+
+    angular
+        .module('codigo')
+        .controller('codigo.core.question.questionListCtrl', ctrl);
+})();
+(function(){
+    var SportsNewsViewCtrl = function(questionSvc, $scope, $stateParams) {
+        this.id = $stateParams.id;
+        var self = this;
+        questionSvc.get($stateParams.id)
+            .then(function(res){
+                self.question = res.data.question;
+            });
+    }
+    SportsNewsViewCtrl.$inject = ['pi.core.question.questionSvc', '$scope', '$stateParams'];
+
+    angular
+        .module('codigo')
+        .controller('codigo.core.question.questionViewCtrl', SportsNewsViewCtrl);
 })();

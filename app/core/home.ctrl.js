@@ -16,7 +16,7 @@
             if(self.queryModel.busy) return;
 
             self.queryModel.busy = true;
-            articleSvc.find({skip: self.news.length, take: 4}).then(function(r){
+            articleSvc.find({skip: self.news.length, take: 12}).then(function(r){
                 if(r.data.articles.length < 1) return;
 
                 angular.forEach(r.data.articles, function(event){

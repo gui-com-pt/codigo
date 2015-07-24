@@ -1,13 +1,17 @@
-<div class="sportsnews-view__wrapper">
-    <div class="sportsnews-view__side">
+<div class="page-view__wrapper">
+    <div class="page-view__side">
         <img ng-src="{{ctrl.sportsNews.image}}" />
+        <ul>
+            <li><i class="icon ion-android-calendar"></i> Criado há 3 horas</li>
+        </ul>
         <ul ng-show="ctrl.sportsNews.meta.length > 0">
             <li ng-repeat="meta in ctrl.sportsNews.meta"><b ng-bind="meta.displayName"></b><br><span ng-bind="meta.value"></span></li>
         </ul>
     </div>
-    <div class="sportsnews-view__content">
+    <div class="page-view__content">
         <h2 ng-bind="ctrl.sportsNews.name"></h2>
         <div ng-bind-html="ctrl.sportsNews.articleBody"></div>
         <div pi-comment-window namespace="sportsnews" id="{{ctrl.id}}"></div>
+        <button ui-sref="article-save({id: ctrl.id})">editar</button>
     </div>
 </div>
