@@ -14,13 +14,45 @@
 
   angular
     .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
-      'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select']);
+      'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select',
+      'piClassHover']);
 
   angular
     .module('codigo')
-      .config(['$stateProvider', 'uiSelectConfig', function($stateProvider, uiSelectConfig){
+      .config(['$stateProvider', 'uiSelectConfig', '$provide', function($stateProvider, uiSelectConfig, $provide){
 
           uiSelectConfig.theme = 'selectize';
+          $provide.decorator('taOptions', ['taRegisterTool', '$delegate', function(taRegisterTool, taOptions){
+              taOptions.toolbar = [
+                  ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'],
+                  ['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
+                  ['justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent'],
+                  ['html', 'insertImage','insertLink', 'insertVideo', 'wordcount', 'charcount']
+              ];
+
+              taRegisterTool('titulo', {
+                  iconclass: "fa fa-square red",
+                  buttonText:' Titulo',
+                  action: function(){
+                      return this.$editor().wrapSelection("formatBlock", "<h2>");
+                  }
+              });
+              taOptions.toolbar[0].push('titulo');
+
+
+              taOptions.classes = {
+                  focussed: 'focussed',
+                  toolbar: 'btn-toolbar',
+                  toolbarGroup: 'btn-group',
+                  toolbarButton: 'btn btn-default',
+                  toolbarButtonActive: 'active',
+                  disabled: 'disabled',
+                  textEditor: 'form-control',
+                  htmlEditor: 'form-control'
+              };
+              return taOptions;
+          }]);
+
 
           $stateProvider
               .state('home', {
@@ -85,9 +117,12 @@
               });
 
       }])
-    .run(['$rootScope', 'pi.core.article.articleCategorySvc', function($rootScope, categorySvc){
+    .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state',
+          function($rootScope, categorySvc, $state){
 
-
+          $rootScope.search = function(value) {
+            $state.go('article-list', {name: value, categoryId: null});
+          }
           categorySvc.find()
         .then(function(res){
           $rootScope.categories = res.data.categories;

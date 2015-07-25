@@ -20,6 +20,7 @@ var paths = {
         './bower_components/restangular/dist/restangular.js',
         './bower_components/moment/moment.js',
         './bower_components/moment/locale/pt.js',
+        './bower_components/pi-class-hover/dist/pi-class-hover.js',
         './bower_components/moment-timezone/moment-timezone.js',
         './bower_components/angular-moment/angular-moment.js',
         './bower_components/angular-masonry-directive/src/angular-masonry-directive.js',

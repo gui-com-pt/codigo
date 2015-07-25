@@ -26,7 +26,7 @@
                     <button ng-disabled="createForm.$invalid || createForm.$pristine" ng-click="ctrl.create()">Criar</button>
                 </div>
             </form>
-            <div class="fit-form__guide">Ajuda no plano de nutrição</div>
+            {{ctrl.model.articleBody | json}}
         </div>
     </div>
 </div>

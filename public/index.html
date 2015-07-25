@@ -1,7 +1,8 @@
 <html ng-app="codigo">
 <head>
     <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
-  <!-- inject:css -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <!-- inject:css -->
 <link rel="stylesheet" href="dist/site.css">
 <!-- endinject -->
 <!-- inject:js -->
@@ -18,13 +19,32 @@
   <div class="pi-nav__wrapper pi-nav__wrapper--fixed">
       <div class="pi-nav">
       <ul >
-            <li><a ui-sref="home">home</a></li>
+            <li><a ui-sref="home">codigo.ovh</a></li>
             <li ng-repeat="cat in $root.categories"><a ui-sref="article-list({categoryId: cat.id})" ng-bind="cat.displayName"></a></li>
-            <li><a ui-sref="article-create">Criar Artigo</a></li>
             <li><a ui-sref="question-list">Perguntas</a></li>
-          <li><a ui-sref="category-list">Categorias</a></li>
-          <li><a ui-sref="category-create">Criar Categoria</a></li>
+            <li><a href="">Gestão</a>
+                <ul>
+                    <li><a ui-sref="article-create">Criar Artigo</a></li>
+                    <li><a ui-sref="category-list">Categorias</a></li>
+                    <li><a ui-sref="category-create">Criar Categoria</a></li>
+                </ul>
+            </li>
+
         </ul>
+          <ul>
+              <li>
+                  <form ng-submit="$root.search(searchModel)">
+                      <div class="pi-form__btn-group">
+                          <div class="pi-form__group">
+                              <input type="text" ng-model="searchModel" placeholder="Pesquisar" class="pi-form__control" />
+                          </div>
+                          <div class="pi-form__group">
+                              <button type="submit" class="button-primary"><i class="icon ion-android-search"></i></button>
+                          </div>
+                      </div>
+                  </form>
+              </li>
+          </ul>
           </div>
   </div>
   <div class="cod__view">
