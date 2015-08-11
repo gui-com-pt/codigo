@@ -1,4 +1,5 @@
 (function(){
+"use restrict";
 
     angular
         .module('templates', []);
@@ -127,5 +128,38 @@
         .then(function(res){
           $rootScope.categories = res.data.categories;
         });
-    }]);
+    }])
+      .directive('ngPrism', ['$interpolate', function($interpolate){
+              return {
+                  restrict: 'AEC',
+                  template: '<pre><code ng-transclude></code></pre>',
+                  replace: true,
+                  transclude: true,
+                  link: function (scope, elm) {
+                      var tmp = $interpolate(elm.find('code').text())(scope);
+                      elm.find('code').html(Prism.highlightElement(tmp).value);
+                  }
+              };
+          }])
+      .directive('bindHtmlCompile', ['$compile', function ($compile) {
+          return {
+              restrict: 'A',
+              link: function (scope, element, attrs) {
+                  scope.$watch(function () {
+                      return scope.$eval(attrs.bindHtmlCompile);
+                  }, function (value) {
+                      // Incase value is a TrustedValueHolderType, sometimes it
+                      // needs to be explicitly called into a string in order to
+                      // get the HTML string.
+                      element.html(value && value.toString());
+                      // If scope is provided use it, otherwise use parent scope
+                      var compileScope = scope;
+                      if (attrs.bindHtmlScope) {
+                          compileScope = scope.$eval(attrs.bindHtmlScope);
+                      }
+                      $compile(element.contents())(compileScope);
+                  });
+              }
+          };
+      }]);;
 })();

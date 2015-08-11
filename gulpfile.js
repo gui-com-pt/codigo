@@ -3,7 +3,8 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglifyjs'),
     templateCache = require('gulp-angular-templatecache'),
     watch = require('gulp-watch'),
-    inject = require('gulp-inject');
+    inject = require('gulp-inject'),
+    sass = require('gulp-sass');
 
 var paths = {
     dependencies: [
@@ -34,7 +35,8 @@ var paths = {
         './bower_components/textAngular/dist/textAngular.min.js',
         './bower_components/angular-ui-select/dist/select.js',
         './bower_components/angular-dragdrop/src/angular-dragdrop.min.js',
-        './bower_components/angular-contenteditable/angular-contenteditable.js'
+        './bower_components/angular-contenteditable/angular-contenteditable.js',
+        './bower_components/prism/prism.js'
     ],
     templates: ['./public/*.html', './public/**/*.html', './public/**/**/*.html', './public/**/**/**/*.html',
         './app/*.html', './app/**/*.html', './app/**/**/*.html', './app/**/**/**/*.html'],
@@ -56,7 +58,8 @@ var paths = {
         './app/core/*.js',
         './app/core/**/*.js',
         './app/core/**/**/*.js'
-    ]
+    ],
+    sass: ['./app/*.scss', './app/**/*.scss']
 };
 
 gulp.task('templates', function () {
@@ -133,11 +136,18 @@ gulp.task('index', function () {
     .pipe(gulp.dest('./public'));
 });
 
+
+gulp.task('sass', function () {
+    gulp.src(paths.sass)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest('./public/dist'));
+});
+
 gulp.task('watch', function(){
     gulp.watch(paths.templates, ['templates']);
     gulp.watch(paths.appModules, ['scripts']);
     gulp.watch(paths.dependencies, ['dependencies']);
-
+    gulp.watch(paths.sass, ['sass']);
 });
 
-gulp.task('default', ['scripts', 'dependencies', 'templates', 'index']);
+gulp.task('default', ['scripts', 'dependencies', 'templates', 'index', 'sass']);

@@ -10,7 +10,7 @@
     </div>
     <div class="page-view__content">
         <h2 ng-bind="ctrl.sportsNews.name"></h2>
-        <div ng-bind-html="ctrl.sportsNews.articleBody"></div>
+        <div bind-html-compile="ctrl.sportsNews.articleBody"></div>
         <div pi-comment-window namespace="sportsnews" id="{{ctrl.id}}"></div>
         <button ui-sref="article-save({id: ctrl.id})">editar</button>
     </div>

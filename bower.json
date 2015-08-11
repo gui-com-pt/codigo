@@ -11,7 +11,11 @@
     "ng-file-upload": "~5.0.9",
     "angular-ui-select": "~0.12.0",
     "select2": "~4.0.0",
-    "selectize-scss": "~0.8.9"
+    "selectize-scss": "~0.8.9",
+    "prism": "https://github.com/PrismJS/prism.git#master",
+    "susy": "~2.2.5",
+    "compass-mixins": "~1.0.2",
+    "compass-breakpoint": "~2.6.1"
   },
   "ignore": [
     "**/.*",
@@ -22,6 +26,7 @@
   ],
   "resolutions": {
     "angular": "1.3.0-beta.14",
-    "select2": "~4.0.0"
+    "select2": "~4.0.0",
+    "prism": "master"
   }
 }
