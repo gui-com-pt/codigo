@@ -6,16 +6,36 @@ $susy: (
 @import "../bower_components/susy/sass/susy";
 @import "../bower_components/compass-breakpoint/stylesheets/breakpoint";
 @import "../bower_components/compass-mixins/lib/compass";
-@import "../bower_components/pi-sass/src/boot";
+@import "../bower_components/susy/sass/susy";
+@import "../bower_components/compass-breakpoint/stylesheets/breakpoint";
+@import "../bower_components/compass-mixins/lib/compass";
+@import "pi-sass/src/boot";
 @import "panel";
 @import "text-angular";
 @import "selectize";
 @import "../bower_components/selectize-scss/src/selectize.default";
 @import "ui-select";
 @import "../bower_components/ionicons/scss/ionicons";
+@import "sass/ng-tags-bootstrap";
 @import "prism";
+@import "core/comment";
 
-.home__recent {
+
+body {
+  margin-top: 42px;
+}
+
+.pi-nav__sub {
+  background-color: #ccc;
+  font-size: 0.75em;
+}
+
+.pi-nav__sub  > .pi-nav {
+  padding: 4px 0px;
+  min-height: auto;
+  font-weight: normal;
+}
+.home__recent, .question__list {
 
   @include clearfix();
 
@@ -33,16 +53,33 @@ $susy: (
   }
 }
 
-.pi-card__list {
+.pi-card__social-list {
+  text-align: center;
+
   > li, > .pi-card__list-item {
-    display: inline-block;
+    text-align:center;
+    white-space:nowrap;
+    display: inline;
     text-align: center;
-    font-size: 1.4em;
-    @include span(1 of 3);
-    &:nth-child(3n) {
-      @include span(1 of 3 last);
-    }
+    font-size: 2em;
   }
+}
+
+.pi-card__thumb-anchor {
+  background-repeat: none;
+  background-size: 100% auto;
+  width: 100%;
+  min-height: 100px;
+}
+
+
+.pi-card__content > p {
+  max-height: $font-size-small * 4;
+  line-height: $font-size-small;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
 }
 .ui-select-choices-content {
   background-color: #fff;

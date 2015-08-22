@@ -1,12 +1,30 @@
 <div class="pi-card" pi-class-hover="pi-card--hover">
     <div class="pi-card__thumb">
-        <a class="pi-card__thumb-anchor" ui-sref="article-view({id: article.id})"><img ng-src="{{article.image}}" /></a>
+        <a ng-style="{'background-image': 'url({{article.image}})'}" class="pi-card__thumb-anchor" ui-sref="article-view({id: article.id})"></a>
         <div class="pi-card__content">
         <p ng-bind="article.headline"></p>
-        <ul class="pi-card__list">
-            <li><a><i class="icon ion-social-linkedin-outline"></i></a></li>
-            <li><a><i class="icon ion-social-twitch-outline"></i></a></li>
-            <li><a><i class="icon ion-social-facebook-outline"></i></a></li>
+        <ul class="pi-card__social-list">
+            <li>
+                <a href="#" socialshare socialshare-provider="linkedin" socialshare-text="{{article.headline}}" socialshare-url="http://720kb.net"><i class="icon ion-social-linkedin-outline"></i></a>
+            </li>
+            <li>
+                <a href="#" socialshare socialshare-provider="facebook" socialshare-text="{{article.headline}}" socialshare-url="http://720kb.net"><i class="icon ion-social-facebook-outline"></i></a>
+            </li>
+            <li>
+                <a href="#" socialshare socialshare-provider="twitter" socialshare-text="{{article.headline}}" socialshare-url="http://720kb.net"><i class="icon ion-social-twitter-outline"></i></a>
+            </li>
+            <li>
+                <a href="#" socialshare socialshare-provider="pinterest" socialshare-text="{{article.headline}}" socialshare-url="http://720kb.net"><i class="icon ion-social-pinterest-outline"></i></a>
+            </li>
+            <li>
+                <a href="#" socialshare socialshare-provider="google+" socialshare-text="{{article.headline}}" socialshare-url="http://720kb.net"><i class="icon ion-social-google-outline"></i></a>
+            </li>
+            <li>
+                <a href="#" socialshare socialshare-provider="tumblr" socialshare-text="{{article.headline}}" socialshare-url="http://720kb.net"><i class="icon ion-social-tumblr-outline"></i></a>
+            </li>
+            <li>
+                <a href="#" socialshare socialshare-provider="reddit" socialshare-text="{{article.headline}}" socialshare-url="http://720kb.net"><i class="icon ion-social-reddit-outline"></i></a>
+            </li>
         </ul>
         </div>
     </div>

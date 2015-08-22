@@ -16,11 +16,24 @@
   angular
     .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
       'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select',
-      'piClassHover']);
+      'piClassHover', 'ngTagsInput', '720kb.socialshare']);
 
   angular
     .module('codigo')
-      .config(['$stateProvider', 'uiSelectConfig', '$provide', function($stateProvider, uiSelectConfig, $provide){
+      .config(['$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', function($stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider){
+
+          tagsInputConfigProvider
+            .setDefaults('tagsInput', {
+              placeholder: 'Nova Tag',
+              minLength: 5,
+              addOnEnter: false
+            })
+            .setDefaults('autoComplete', {
+              debounceDelay: 200,
+              loadOnDownArrow: true,
+              loadOnEmpty: true
+            })
+
 
           uiSelectConfig.theme = 'selectize';
           $provide.decorator('taOptions', ['taRegisterTool', '$delegate', function(taRegisterTool, taOptions){
@@ -204,6 +217,58 @@
         .controller('codigo.core.homeCtrl', SportsNewsListCtrl);
 })();
 (function(){
+	
+	angular
+		.module('codigo')
+		.provider('socialShare', [function(){
+
+			var socials = ['facebook', 'google', 'twitter'],
+				self = this;
+			this.available = [];
+			this.stacks = [];
+
+			this.$get = function($modal){
+
+				return {
+					available: self.available,
+					share: function(title, message, image, url, social) {
+						self.stacks.push($modal.open({
+							templateUrl: 'core/social/social-share-fb.modal.html',
+							controller: 'socialShareModalCtrl',
+							resolve: {
+								image: function(){
+									return image;
+								},
+								title: function(){
+									return title;
+								},
+								message: function(){
+									return message;
+								}
+							}
+						}))
+					}
+				}
+			}
+			this.$get.$inject = ['$modal'];
+
+			this.setAvailable = function(values) {
+				self.available = values;
+			}
+
+		}])
+		.controller('socialShareModalCtrl', ['$scope', 'title', 'image', 'message', '$modalInstance',
+			function($scope, title, image, message, $modalInstance){
+			$scope.image = image;
+			$scope.title = title;
+			$scope.message = message;
+
+			$scope.cancel = function(){
+				$modalInstance.dismiss();
+			}
+		}]);
+})();
+(function(){
 
     angular
         .module('codigo.core.article')
@@ -230,6 +295,10 @@
         this.create = function(){
             var model = angular.copy(this.model);
             model.title = model.displayName;
+            model.keywords = [];
+            angular.forEach(this.model.keywords, function(v, k){
+                model.keywords.push(v.text);
+            });
             if(!_.isUndefined(self.categorySelect)) {
                 model.categoryId = self.categorySelect.id;
             }

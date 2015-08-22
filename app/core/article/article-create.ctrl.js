@@ -6,6 +6,10 @@
         this.create = function(){
             var model = angular.copy(this.model);
             model.title = model.displayName;
+            model.keywords = [];
+            angular.forEach(this.model.keywords, function(v, k){
+                model.keywords.push(v.text);
+            });
             if(!_.isUndefined(self.categorySelect)) {
                 model.categoryId = self.categorySelect.id;
             }

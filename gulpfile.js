@@ -4,7 +4,10 @@ var gulp = require('gulp'),
     templateCache = require('gulp-angular-templatecache'),
     watch = require('gulp-watch'),
     inject = require('gulp-inject'),
-    sass = require('gulp-sass');
+    sass = require('gulp-sass'),
+    requireDir = require('require-dir');
+
+var tasks = requireDir('./bower_components/pi-gulp-tasks/tasks');
 
 var paths = {
     dependencies: [
@@ -36,10 +39,10 @@ var paths = {
         './bower_components/angular-ui-select/dist/select.js',
         './bower_components/angular-dragdrop/src/angular-dragdrop.min.js',
         './bower_components/angular-contenteditable/angular-contenteditable.js',
-        './bower_components/prism/prism.js'
+        './bower_components/prism/prism.js',
+        './bower_components/ng-tags-input/ng-tags-input.js',
+        './bower_components/angularjs-socialshare/dist/angular-socialshare.min.js'
     ],
-    templates: ['./public/*.html', './public/**/*.html', './public/**/**/*.html', './public/**/**/**/*.html',
-        './app/*.html', './app/**/*.html', './app/**/**/*.html', './app/**/**/**/*.html'],
     appModules: [
         './app/module.js',
         './app/**/module.js',
@@ -58,15 +61,8 @@ var paths = {
         './app/core/*.js',
         './app/core/**/*.js',
         './app/core/**/**/*.js'
-    ],
-    sass: ['./app/*.scss', './app/**/*.scss']
+    ]
 };
-
-gulp.task('templates', function () {
-    gulp.src(paths.templates)
-        .pipe(templateCache())
-        .pipe(gulp.dest('./public/dist'));
-});
 
 gulp.task('scripts', function(){
 
@@ -127,22 +123,6 @@ gulp.task('dependencies', function(){
        .pipe(gulp.dest('./public/dist'));
 });
 
-gulp.task('index', function () {
-  var target = gulp.src('./public/index.html');
-  // It's not necessary to read the files (will speed up things), we're only after their paths:
-  var sources = gulp.src(['./public/dist/*.js', './public/dist/*.css'], {read: false});
-
-  return target.pipe(inject(sources, {ignorePath: '/public', addRootSlash: false}))
-    .pipe(gulp.dest('./public'));
-});
-
-
-gulp.task('sass', function () {
-    gulp.src(paths.sass)
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('./public/dist'));
-});
-
 gulp.task('watch', function(){
     gulp.watch(paths.templates, ['templates']);
     gulp.watch(paths.appModules, ['scripts']);
@@ -150,4 +130,4 @@ gulp.task('watch', function(){
     gulp.watch(paths.sass, ['sass']);
 });
 
-gulp.task('default', ['scripts', 'dependencies', 'templates', 'index', 'sass']);
+gulp.task('default', ['scripts', 'dependencies', 'templates', 'inject-dist', 'sass']);

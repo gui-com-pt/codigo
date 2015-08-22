@@ -2,6 +2,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.0.0/ng-tags-input.css">
     <!-- inject:css -->
 <link rel="stylesheet" href="dist/site.css">
 <!-- endinject -->
@@ -18,9 +19,8 @@
 <body>
   <div class="pi-nav__wrapper pi-nav__wrapper--fixed">
       <div class="pi-nav">
-      <ul >
+      <ul>
             <li><a ui-sref="home">codigo.ovh</a></li>
-            <li ng-repeat="cat in $root.categories"><a ui-sref="article-list({categoryId: cat.id})" ng-bind="cat.displayName"></a></li>
             <li><a ui-sref="question-list">Perguntas</a></li>
             <li><a href="">Gestão</a>
                 <ul>
@@ -31,7 +31,7 @@
             </li>
 
         </ul>
-          <ul>
+          <ul class="pi-list__right">
               <li>
                   <form ng-submit="$root.search(searchModel)">
                       <div class="pi-form__btn-group">
@@ -47,6 +47,14 @@
           </ul>
           </div>
   </div>
+  <div class="pi-nav__wrapper pi-nav__sub">
+  <div class="pi-nav">
+  <ul>
+    <li ng-repeat="cat in $root.categories"><a ui-sref="article-list({categoryId: cat.id})" ng-bind="cat.displayName"></a></li>
+    </ul>
+    </div>
+  </div>
+  <div ng-show="current.name != 'home'" class="pi-breadcrumb" pi-breadcrumb></div>
 
 
   <div class="cod__view">
@@ -58,11 +66,31 @@
       <div pi-comment-form></div>
       <div ng-repeat="comment in comments | reverse" pi-comment-message comment="comment"></div>
    </script>
+<script type="text/ng-template" id="/html/pi/breadcrumb.html">
+<div class="pi-breadcrumb__wrapper">
+    <div class="pi-breadcrumb__side">
+        &nbsp;
+    </div>
+    <!--<div class="pi-breadcrumb__feed">
+        <div class="feed-photo-create">
+            <div class="feed-photo-create" feed-photo-create></div>
+            <!--<button class="feed-photo-create" feed-animal-create></button>
+            <button class="feed-photo-create" feed-running-create></button>
+            <button class="feed-photo-create" feed-bike-create></button>-->
+        <!--</div>
+    </div>-->
+    <div class="pi-breadcrumb__nav">
+        <button class="btn btn-primary btn-xs btn-transparent" href="" ng-click="previousState()"><i class="fa fa-arrow-circle-left"></i> Retroceder</a></button>
+        <button class="btn btn-primary btn-xs btn-transparent" ng-repeat="item in $root.menuItems" ng-if="item.isAnchor" ui-sref="{{item.state}}"><span class="subMenu-icon" ng-if="item.icon"><i class="{{item.icon}}"></i> </span><span ng-bind="item.label"></span></button>
+        <button class="btn btn-primary btn-xs btn-transparent" ng-repeat="item in $root.menuItems" ng-if="item.isButton && item != null" href="#" ng-click="item.action()"><i class="{{item.icon}}"></i> <span ng-bind="item.label"></span></button>
 
+    </div>
+</div>
+</script>
   <script type="text/ng-template" id="html/pi/comment-message.html">
       <div class="comment-message">
           <a class="comment-message__author" ui-sref="profile.home({id: comment.author.id})">
-              <img class="comment-message__author-img" ng-src="/uploads/user/default.jpg" />
+              <img class="comment-message__author-img" ng-src="http://lorempixel.com/100/100/people/" />
           </a>
           <div class="comment-message__body">
               <div><span ng-bind="comment.author.displayName"></span><span class="comment-message__created" ng-bind="comment.created"></span></div>

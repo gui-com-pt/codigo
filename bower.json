@@ -5,6 +5,7 @@
   "dependencies": {
     "pi-angular": "dev",
     "pi-sass": "dev",
+    "pi-class-hover": "*",
     "ui-router": "~0.2.15",
     "textAngular": "~1.4.2",
     "ngInfiniteScroll": "~1.2.1",
@@ -15,7 +16,11 @@
     "prism": "https://github.com/PrismJS/prism.git#master",
     "susy": "~2.2.5",
     "compass-mixins": "~1.0.2",
-    "compass-breakpoint": "~2.6.1"
+    "compass-breakpoint": "~2.6.1",
+    "ionicons": "~2.0.1",
+    "ng-tags-input": "~3.0.0",
+    "angularjs-socialshare": "~0.1.13",
+    "pi-gulp-tasks": "*"
   },
   "ignore": [
     "**/.*",
@@ -25,7 +30,7 @@
     "tests"
   ],
   "resolutions": {
-    "angular": "1.3.0-beta.14",
+    "angular": ">=1.2.18",
     "select2": "~4.0.0",
     "prism": "master"
   }

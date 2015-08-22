@@ -2,12 +2,12 @@
 	var settings = {
 
 	};
-	var configFn = function(FacebookProvider, $httpProvider, piProvider){
+	var configFn = function(FacebookProvider, $httpProvider){
 
 		$httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 	};
 
-	configFn.$inject = ['FacebookProvider', '$httpProvider', 'piProvider'];
+	configFn.$inject = ['FacebookProvider', '$httpProvider'];
 
 	angular
 		.module('pi', ['ngResource', 'facebook', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.article', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product'])
@@ -33,6 +33,9 @@
 	'use strict';
 
 	angular
+		.module('pi.ui-router', ['pi', 'ui.router']);
+
+	angular
 		.module('pi.core', ['pi']);
 
 	angular
@@ -46,6 +49,83 @@
 
 	angular
 		.module('pi.core.question', ['pi.core']);
+})();
+
+(function(){
+	angular
+		.module('pi.form', []);
+})();
+(function(){
+	angular.
+		module('pi.ui-extensions', ['ui.router']);
+})();
+angular
+	.module('pi.chat', []);
+(function(){
+  angular
+      .module('pi.admin', []);
+
+  angular
+    .module('pi.admin')
+    .config(['$stateProvider', function($stateProvider){
+      $stateProvider
+        .state('admin', {
+          url: '/admin',
+          controller: 'pi.admin.adminCtrl',
+          controllerAs: 'ctrl',
+          templateUrl: 'admin/admin.html'
+        })
+        .state('article-manage', {
+          url: '/admin/article',
+          controller: 'pi.admin.articleManageCtrl',
+          controllerAs: 'ctrl',
+          templateUrl: 'admin/article-manage.html'
+        })
+        .state('article-edit', {
+          url: '/admin/article/:id',
+          controller: 'pi.admin.articleEditCtrl',
+          controllerAs: 'ctrl',
+          templateUrl: 'admin/article-edit.html'
+        })
+        .state('event-manage', {
+          url: '/admin/event',
+          controller: 'pi.admin.eventManageCtrl',
+          controllerAsl: 'ctrl',
+          templateUrl: 'admin/event-manage.html'
+        })
+        .state('event-edit', {
+          url: '/admin/event/:id',
+          controller: 'pi.admin.eventEditCtrl',
+          controllerAs: 'ctrl',
+          templateUrl: 'admin/event-edit.html'
+        });
+    }]);
+})();
+
+(function(){
+	'use strict';
+
+	angular
+		.module('pi.core.app', ['pi.core']);
+
+})();
+(function(){
+	angular
+		.module('pi.core.chat', ['pi.core']);
+})();
+(function(){
+	'use strict';
+
+	angular
+		.module('pi.core.event', ['pi.core']);
+
+})();
+(function(){
+	'use strict';
+
+	angular
+		.module('pi.core.payment', ['pi.core']);
+
 })();
 
 /**
@@ -304,97 +384,6 @@
         .value('piSettings', settings)
 		.provider('piApp', providerFn);
 })();
-angular
-	.module('pi.chat', []);
-(function(){
-	angular
-		.module('pi.form', []);
-})();
-(function(){
-	angular.
-		module('pi.ui-extensions', ['ui.router']);
-})();
-(function(){
-  angular
-      .module('pi.admin', []);
-
-  angular
-    .module('pi.admin')
-    .config(['$stateProvider', function($stateProvider){
-      $stateProvider
-        .state('admin', {
-          url: '/admin',
-          controller: 'pi.admin.adminCtrl',
-          controllerAs: 'ctrl',
-          templateUrl: 'admin/admin.html'
-        })
-        .state('article-manage', {
-          url: '/admin/article',
-          controller: 'pi.admin.articleManageCtrl',
-          controllerAs: 'ctrl',
-          templateUrl: 'admin/article-manage.html'
-        })
-        .state('article-edit', {
-          url: '/admin/article/:id',
-          controller: 'pi.admin.articleEditCtrl',
-          controllerAs: 'ctrl',
-          templateUrl: 'admin/article-edit.html'
-        })
-        .state('event-manage', {
-          url: '/admin/event',
-          controller: 'pi.admin.eventManageCtrl',
-          controllerAsl: 'ctrl',
-          templateUrl: 'admin/event-manage.html'
-        })
-        .state('event-edit', {
-          url: '/admin/event/:id',
-          controller: 'pi.admin.eventEditCtrl',
-          controllerAs: 'ctrl',
-          templateUrl: 'admin/event-edit.html'
-        });
-    }]);
-})();
-
-(function(){
-  angular
-    .module('pi.admin')
-    .controller('pi.admin.adminCtrl', ['$rootScope', function($rootScope){
-
-    }]);
-})();
-
-(function(){
-  angular
-    .module('pi.admin')
-    .controller('pi.admin.articleEditCtrl', ['pi.core.article.articleSvc', '$scope', function(articleSvc, $scope){
-
-    }]);
-})();
-
-(function(){
-  angular
-    .module('pi.admin')
-    .controller('pi.admin.articleManageCtrl', ['pi.core.article.articleSvc', '$scope', function(articleSvc, $scope){
-
-    }]);
-})();
-
-(function(){
-  angular
-    .module('pi.admin')
-    .controller('pi.admin.eventEditCtrl', ['pi.core.app.eventSvc', '$scope', function(eventSvc, $scope){
-
-    }]);
-})();
-
-(function(){
-  angular
-    .module('pi.admin')
-    .controller('pi.admin.eventManageCtrl', ['pi.core.app.eventSvc', '$scope', function(eventSvc, $scope){
-
-    }]);
-})();
-
 (function(){
   var piAlertStack = function(piStack)
   {
@@ -510,604 +499,6 @@ angular
       }
   };
 
-})();
-
-(function(){
-	'use strict';
-
-	var chat = function(){
-		var appKey = '',
-			appSecret = '',
-			appId = '',
-			inbox = [];
-
-		var receiveMessage = function(sender, message, datetime){
-
-		}
-
-		var sendMessage = function(sender, message){
-
-		}
-
-		return {
-			setAppKey: function(value){
-				appKey = value;
-			},
-			setAppSecret: function(value){
-				appSecret = value;
-			},
-			setAppId: function(value){
-				appId = value;
-			},
-			$get: function(){
-
-				return {
-
-				}
-			}
-		}
-	}
-
-	var chatWindow = function(){
-		var controller = function(){
-
-		};
-
-		return {
-			templateUrl: '/html/pi/chat-window.html',
-			controller: controller,
-			controllerAs: 'chatWindowCtrl'
-		}
-	}
-
-	var chatMessage = function(){
-		return {
-			templateUrl: '/html/pi/chat-message.html',
-		}
-	}
-
-	var chatMessagePreview = function(){
-		return {
-			templateUrl: '/html/pi/chat-message-preview.html'
-		}
-	}
-
-	angular
-		.module('pi.chat')
-		.directive
-})();
-(function(){
-	'use strict';
-
-	angular
-		.module('pi.core.app', ['pi.core']);
-
-})();
-(function(){
-	'use strict';
-
-	angular
-		.module('pi.core.app')
-		.factory('pi.core.app.appSvc', ['piHttp', function(piHttp){
-
-			this.post = function(model){
-				return piHttp.post('/api/application', model);
-			}
-
-			this.find = function(id, model) {
-				return piHttp.get('/api/application' + id, model);
-			}
-
-			this.find = function(model) {
-				return piHttp.get('/api/application', model);
-			}
-
-			return this;
-		}]);
-
-})();
-(function(){
-	angular
-		.module('pi.core.article')
-		.factory('pi.core.article.articleCategorySvc', ['piHttp', function(piHttp){
-
-			this.post = function(model){
-				return piHttp.post('/article-category', model);
-			}
-
-			this.remove = function(id){
-				return piHttp.post('/article-category-remove/' + id);
-			}
-
-			this.get = function(id, model) {
-				return piHttp.get('/article-category/' + id, model);
-			}
-
-			this.find = function(model) {
-				return piHttp.get('/article-category', {params: model});
-			};
-			return this;
-		}]);
-})();
-
-(function(){
-	angular
-		.module('pi.core.article')
-		.factory('pi.core.article.articleSvc', ['piHttp', function(piHttp){
-
-			this.post = function(model){
-				return piHttp.post('/article', model);
-			}
-
-			this.remove = function(id) {
-				return piHttp.post('/article-remove/' + id);
-			}
-
-			this.put = function(id, model) {
-				return piHttp.post('/article/' + id, model);
-			}
-
-			this.get = function(id, model) {
-				return piHttp.get('/article/' + id, model);
-			}
-
-			this.find = function(model) {
-				return piHttp.get('/article', {params: model});
-			};
-			return this;
-		}]);
-})();
-
-(function(){
-	angular
-		.module('pi.core.chat', ['pi.core']);
-})();
-(function(){
-
-	angular
-		.module('pi.core.chat')
-		.factory('pi.core.chat.inboxSvc', ['piHttp', '$rootScope', function(piHttp, $rootScope){
-
-			this.post = function(model){
-				return piHttp.post('/api/inbox', model);
-			}
-
-			this.get = function(id) {
-				var model = {};
-				model.fromId = id;
-				model.toId = $rootScope.userId;
-				return piHttp.post('/api/inbox-view', model);
-			}
-
-			return this;
-		}]);
-})();
-(function(){
-	'use strict';
-
-	angular
-		.module('pi.core.event', ['pi.core']);
-
-})();
-(function(){
-	'use strict';
-
-	angular
-		.module('pi.core.app')
-		.factory('pi.core.app.eventSvc', ['piHttp', function(piHttp){
-
-			this.post = function(model){
-				return piHttp.post('/api/event', model);
-			}
-
-			this.get = function(id, model) {
-				return piHttp.get('/api/event/' + id, model);
-			}
-
-			this.find = function(model) {
-				return piHttp.get('/api/event', model);
-			};
-
-			return this;
-		}]);
-
-		angular
-			.module('pi.core.app')
-			.factory('pi.core.app.eventSubSvc', ['piHttp', function(piHttp){
-				
-				this.post = function(model) {
-					return piHttp.post('/api/event-subscription', model);
-				}
-
-				this.get = function(id, model) {
-					return piHttp.get('/api/event-subscription/' + id);
-				}
-
-				this.find = function(model) {
-					return piHttp.get('/api/event', model);
-				}
-
-				return this;
-			}]);
-
-		angular
-			.module('pi.core.app')
-			.factory('pi.core.app.eventAttendSvc', ['piHttp', function(piHttp){
-				
-				this.post = function(model) {
-					return piHttp.post('/api/event-attend', model);
-				}
-
-				this.get = function(id, model) {
-					return piHttp.get('/api/event-attend/' + id);
-				}
-
-				this.find = function(model) {
-					return piHttp.get('/api/event-attend', model);
-				}
-
-				return this;
-			}]);
-})();
-(function(){
-    angular
-        .module('pi.core.likes')
-        .directive('piLikes', [function(){
-
-            var ctrl = function(likesSvc, $scope) {
-                var self = this,
-                    loaded = false;
-
-                $scope.$watch('entityId', function(current) {
-                    if(!current) return;
-                    self.entityId = current;
-                    if(!loaded) {
-                        self.get();
-                        loaded = true;
-                    }
-                });
-
-                $scope.$watch('entityNamespace', function(current) {
-                    if(!current) return;
-                    self.entityNamespace = current;
-                });
-
-                this.get = function() {
-                    likesSvc.get(self.entityNamespace, self.entityId)
-                        .then(function (res) {
-                            self.users = res.data.likes;
-                        });
-                };
-
-
-                this.like = function(){
-                    likesSvc.like(self.entityNamespace, self.entityId);
-                }
-            }
-
-
-            return {
-                templateUrl: 'html/pi/likes.tpl.html',
-                controller: ['pi.core.likes.likesSvc', '$scope', ctrl],
-                controllerAs: 'ctrl',
-                scope: {
-                    entityId: '=',
-                    entityNamespace: '='
-                }
-            }
-        }]);
-})();
-(function(){
-	angular
-		.module('pi.core.likes')
-		.factory('pi.core.likes.likesSvc', ['piHttp', function(piHttp){
-
-            this.get = function(namespace, id) {
-                return piHttp.get('/like/' + namespace + '/' + id);
-            };
-
-            this.hasLiked = function(namespace, id) {
-
-            }
-
-            this.like = function(namespace, id) {
-                return piHttp.post('/like/' + namespace + '/' + id);
-            }
-
-            return this;
-
-        }]);
-})();
-(function(){
-	'use strict';
-
-	angular
-		.module('pi.core.payment', ['pi.core']);
-
-})();
-(function(){
-	'use strict';
-
-	angular
-		.module('pi.core.app')
-		.factory('pi.core.payment.paymentSvc', ['piHttp', function(piHttp){
-
-			this.post = function(model){
-				return piHttp.post('/api/payment/report', model);
-			}
-
-			this.get = function(id, model) {
-				return piHttp.get('/api/payment/report/' + id, model);
-			}
-
-			this.find = function(model) {
-				return piHttp.get('/api/payment/report', model);
-			};
-
-			return this;
-		}]);
-})();
-(function(){
-	angular
-		.module('pi.core.payment')
-		.factory('pi.core.payment.paymentMethod', [function(){
-			var svc = [
-				{ byBankTransferInAdvance: 1 },
-				{ byInvoice: 2 },
-				{ cash: 3 },
-				{ checkInAdvance: 4 },
-				{ cod: 5 },
-				{ directDebit: 6 },
-				{ googleCheckout: 7 },
-				{ payPal: 8 },
-				{ paySwarm: 9 }
-			];
-			return svc;
-		}]);
-})();
-(function(){
-	
-	angular
-		.module('pi.core.product')
-		.directive('piPriceSpecifications', ['$log', function($log){
-			return {
-
-				link: function(scope, elem, attrs, ngModel) {
-					scope.view = 'home';
-					var modelDefault = {
-							eligibleQuantity: null,
-							eligibleTransactionVolume: null,
-							minPrice: null,
-							maxPrice: null,
-							price: null,
-							priceCurreny: 'EURO',
-							validFrom: null,
-							validThrough: null,
-							valueAddedTaxIncluded: null
-						};
-
-					scope.model = {};
-					scope.items = [];
-			
-					scope.setPrice = function() {
-						var value = ngModel.$viewValue;
-						value.push(scope.model);
-						ngModel.$setViewValue(value);	
-						scope.items.push(scope.model);
-
-						scope.model = angular.copy(modelDefault);
-						scope.view = 'home';
-					}
-
-					scope.edit = function(index) {
-						scope.editIndex = index;
-						scope.editModel = scope.items[index];
-						scope.view = 'edit';
-					}
-
-					scope.save = function() {
-						ngModel.$viewValue[scope.editIndex] = scope.editModel;
-						scope.items[scope.editIndex] = scope.editModel;
-
-						scope.view = 'home';
-					}
-
-					attrs.$observe('ngModel', function(value){
-			        	scope.$watch(value, function(newValue){ 
-			        			try {
-			        				ngModel.$setViewValue(_.isObject(ngModel.$viewValue) ? ngModel.$viewValue : [modelDefault]);	
-			        			} catch(err) {
-			        				$log.info('piPriceSpecification couldnt set the ngModel, the default is used. Error: ' + err);
-			        				ngModel.$setViewValue([modelDefault]);
-			        			}
-			                    
-			            });
-			        });
-
-			        scope.model = angular.copy(modelDefault);
-				},
-				scope: {
-					'piPriceSpecifications': '@'
-				},
-				require: '^ngModel',
-				templateUrl: 'html/pi/price-specification.tpl.html'
-			}
-		}]);
-})();
-(function() {
-    angular
-        .module('pi')
-        .factory('pi.core.placeSvc', ['piHttp', function (piHttp) {
-
-            this.post= function (dto) {
-                return piHttp.post('/place', dto);
-            }
-
-            this.find = function () {
-                return piHttp.get('/place');
-            }
-
-            this.get = function (id) {
-                return piHttp.get('/place/' + id);
-            }
-
-
-            return this;
-
-        }]);
-})();
-(function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.businessEntity', [function(){
-			var svc = [
-				{ key: 'Business', value: 1 },
-				{ key: 'Enduser', value: 2 },
-				{ key: 'PublicInstitution', value: 3 },
-				{ key: 'Reseller', value: 4 }
-			];
-			return svc;
-		}]);
-})();
-(function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.businessFunction', [function(){
-			var svc = [
-				{ key: 'ConstructionInstallation', value: 1 },
-				{ key: 'Dispose', value: 2 },
-				{ key: 'LeaseOut', value: 3 },
-				{ key: 'Maintain', value: 4 },
-				{ key: 'ProvideService', value: 5 },
-				{ key: 'Repair', value: 6 },
-				{ key: 'Sell', value: 7 },
-				{ key: 'Buy', value: 8 }
-			];
-			return svc;
-		}]);
-})();
-(function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.deliveryMethod', [function(){
-			var svc = [
-				{ key: 'Direct Download', value: 1 },
-				{ key: 'Freight', value: 2 },
-				{ key: 'Mail', value: 3 },
-				{ key: 'Own Fleet', value: 4 },
-				{ key: 'PickUp Mode', value: 5 },
-				{ key: 'DHL', value: 6 },
-				{ key: 'Federal Express', value: 7 },
-				{ key: 'UPS', value: 8 }
-			];
-			return svc;
-		}]);
-})();
-(function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.itemCondition', [function(){
-			var svc = [
-				{ key: 'Discontinued', value: 1 },
-				{ key: 'InStock', value: 2 },
-				{ key: 'InStoreOnly', value: 3 },
-				{ key: 'LimitedAvailability', value: 4 },
-				{ key: 'OnlineOnly', value: 5 },
-				{ key: 'PutOfStock', value: 6 },
-				{ key: 'PreOrder', value: 7 },
-				{ key: 'SoldOut', value: 8 }
-			];
-			return svc;
-		}]);
-})();
-(function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.offerStatus', [function(){
-			var svc = [
-				{ damagedCondition: 1 },
-				{ newCondition: 2 },
-				{ refurbishedCondition: 3 },
-				{ usedCondition: 4 }
-			];
-			return svc;
-		}]);
-})();
-(function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.productSvc', ['piHttp', function(piHttp){
-
-			this.post = function(model){
-				return piHttp.post('/product', model);
-			}
-
-			this.get = function(id, model) {
-				return piHttp.get('/product/' + id, model);
-			}
-
-			this.find = function(model) {
-				return piHttp.get('/product', model);
-			};
-
-			this.postOffer = function(productId, model) {
-				return piHttp.post('/product-offer/' + productId, model);
-			}
-
-			return this;
-		}]);
-})();
-(function(){
-	angular
-		.module('pi.core.question')
-		.factory('pi.core.question.questionCategorySvc', ['piHttp', function(piHttp){
-
-			this.post = function(model){
-				return piHttp.post('/question-category', model);
-			}
-
-			this.remove = function(id){
-				return piHttp.post('/question-category-remove/' + id);
-			}
-
-			this.get = function(id, model) {
-				return piHttp.get('/question-category/' + id, model);
-			}
-
-			this.find = function(model) {
-				return piHttp.get('/question-category', {params: model});
-			};
-			return this;
-		}]);
-})();
-
-
-(function(){
-	angular
-		.module('pi.core.question')
-		.factory('pi.core.question.questionSvc', ['piHttp', function(piHttp){
-
-			this.post = function(model){
-				return piHttp.post('/question', model);
-			}
-
-			this.remove = function(id) {
-				return piHttp.post('/question-remove/' + id);
-			}
-
-			this.put = function(id, model) {
-				return piHttp.post('/question/' + id, model);
-			}
-
-			this.get = function(id, model) {
-				return piHttp.get('/question/' + id, model);
-			}
-
-			this.find = function(model) {
-				return piHttp.get('/question', {params: model});
-			};
-			return this;
-		}]);
 })();
 
 (function(){
@@ -1927,108 +1318,108 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
 })();
 (function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.adminCtrl', ['$rootScope', function($rootScope){
 
-	var piFileManager = function(){
-
-
-
-		return {
-
-			$get: {
-
-			}
-		}
-	}
-
-	var piUploadService = function(){
-
-		var upload = function(file, uploadDto){
-
-		}
-		return {
-			upload: upload
-		}
-	}
-
-	var piFileDashboard = function(){
-
-		return {
-			templateUrl: '/html/pi/file-dashboard.html'
-		}
-	}
-	var piFileUpload = function(){
-
-		var link = function(scope, elem, attr){
-
-		}
-
-		var controller = function($scope){
-			this.upload = function(){
-
-			}
-		}
-		return {
-			link: link,
-			controller: controller,
-			controllerAs: 'ctrl'
-		}
-	}
-
-	var  piFileUploadArea = function(){
-
-		return {
-			templateUrl: '/html/pi/file-upload-area.html'
-		}
-	}
-
-	var piFileUploadBrowse = function(){
-		return {
-			templateUrl: '/html/pi/file-upload-browser.html'
-		}
-	}
-
-	var piFileEditCard = function(){
-		return {
-			templateUrl: '/html/pi/file-edit-card.html'
-		}
-	}
-
-	var piFileCard = function(){
-		return {
-			templateUrl: '/html/pi/file-card.html'
-		}
-	}
-
-	
+    }]);
 })();
-/**
- * Filter to reverse a list
- * @ngdoc filter
- * @name reserve
- * @kind function
- *
- * @description
- * Reverse a array without replacing the original array since slice is used to return the array 
- *
- * @return {Array}
- *
- * @example
- * <div ng-repeat="verses in bibles.kingJames | reverse">
- * 	<em ng-bind="verse.number"></em> <span ng-bind="verse.message"></span>
- * </div>
- */
+
 (function(){
-	
-	var reverseFilter = function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.articleEditCtrl', ['pi.core.article.articleSvc', '$scope', function(articleSvc, $scope){
 
-	  return function(items) {
-	    return items ? items.slice().reverse() : [];
-	  };
+    }]);
+})();
 
-	};
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.articleManageCtrl', ['pi.core.article.articleSvc', '$scope', function(articleSvc, $scope){
 
-	angular.module('pi')
-		.filter('reverse', reverseFilter);
+    }]);
+})();
+
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.eventEditCtrl', ['pi.core.app.eventSvc', '$scope', function(eventSvc, $scope){
+
+    }]);
+})();
+
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.eventManageCtrl', ['pi.core.app.eventSvc', '$scope', function(eventSvc, $scope){
+
+    }]);
+})();
+
+(function(){
+	'use strict';
+
+	var chat = function(){
+		var appKey = '',
+			appSecret = '',
+			appId = '',
+			inbox = [];
+
+		var receiveMessage = function(sender, message, datetime){
+
+		}
+
+		var sendMessage = function(sender, message){
+
+		}
+
+		return {
+			setAppKey: function(value){
+				appKey = value;
+			},
+			setAppSecret: function(value){
+				appSecret = value;
+			},
+			setAppId: function(value){
+				appId = value;
+			},
+			$get: function(){
+
+				return {
+
+				}
+			}
+		}
+	}
+
+	var chatWindow = function(){
+		var controller = function(){
+
+		};
+
+		return {
+			templateUrl: '/html/pi/chat-window.html',
+			controller: controller,
+			controllerAs: 'chatWindowCtrl'
+		}
+	}
+
+	var chatMessage = function(){
+		return {
+			templateUrl: '/html/pi/chat-message.html',
+		}
+	}
+
+	var chatMessagePreview = function(){
+		return {
+			templateUrl: '/html/pi/chat-message-preview.html'
+		}
+	}
+
+	angular
+		.module('pi.chat')
+		.directive
 })();
 (function(){
 		'use strict';
@@ -2281,6 +1672,151 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
 })();
 
+(function() {
+    angular
+        .module('pi')
+        .factory('pi.core.placeSvc', ['piHttp', function (piHttp) {
+
+            this.post= function (dto) {
+                return piHttp.post('/place', dto);
+            }
+
+            this.find = function () {
+                return piHttp.get('/place');
+            }
+
+            this.get = function (id) {
+                return piHttp.get('/place/' + id);
+            }
+
+
+            return this;
+
+        }]);
+})();
+(function(){
+  angular
+    .module('pi.ui-router')
+    .factory('pi.ui-router.stateUtils', ['$stateParams', function($stateParams){
+      return {
+        getModelFromStateParams: function(names, model){
+
+            angular.forEach(names, function(value){
+                if(!_.isUndefined($stateParams[value])) {
+                    model[value] = $stateParams[value];
+                }
+            });
+
+            return model;
+        }
+      }
+    }]);
+})();
+
+(function(){
+
+	var piFileManager = function(){
+
+
+
+		return {
+
+			$get: {
+
+			}
+		}
+	}
+
+	var piUploadService = function(){
+
+		var upload = function(file, uploadDto){
+
+		}
+		return {
+			upload: upload
+		}
+	}
+
+	var piFileDashboard = function(){
+
+		return {
+			templateUrl: '/html/pi/file-dashboard.html'
+		}
+	}
+	var piFileUpload = function(){
+
+		var link = function(scope, elem, attr){
+
+		}
+
+		var controller = function($scope){
+			this.upload = function(){
+
+			}
+		}
+		return {
+			link: link,
+			controller: controller,
+			controllerAs: 'ctrl'
+		}
+	}
+
+	var  piFileUploadArea = function(){
+
+		return {
+			templateUrl: '/html/pi/file-upload-area.html'
+		}
+	}
+
+	var piFileUploadBrowse = function(){
+		return {
+			templateUrl: '/html/pi/file-upload-browser.html'
+		}
+	}
+
+	var piFileEditCard = function(){
+		return {
+			templateUrl: '/html/pi/file-edit-card.html'
+		}
+	}
+
+	var piFileCard = function(){
+		return {
+			templateUrl: '/html/pi/file-card.html'
+		}
+	}
+
+	
+})();
+/**
+ * Filter to reverse a list
+ * @ngdoc filter
+ * @name reserve
+ * @kind function
+ *
+ * @description
+ * Reverse a array without replacing the original array since slice is used to return the array 
+ *
+ * @return {Array}
+ *
+ * @example
+ * <div ng-repeat="verses in bibles.kingJames | reverse">
+ * 	<em ng-bind="verse.number"></em> <span ng-bind="verse.message"></span>
+ * </div>
+ */
+(function(){
+	
+	var reverseFilter = function(){
+
+	  return function(items) {
+	    return items ? items.slice().reverse() : [];
+	  };
+
+	};
+
+	angular.module('pi')
+		.filter('reverse', reverseFilter);
+})();
 (function(){
 	var fn = function(apiException){
 
@@ -2419,500 +1955,6 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
   piModalBack.$inject = ['$compile'];
 })();
-
-(function(){
-	
-	var apiFn = function(){
-		this.get = function(articleId) {
-			var httpObj = {
-				method: 'GET',
-				url: '/api/blog/article/' + articleId
-			};
-
-			return $http(httpObj);
-		};
-
-		this.post = function(blogId, model) {
-			model.blogId = blogId;
-
-			var httpObj = {
-				method: 'POST',
-				url: '/api/blog/article',
-				data: model
-			};
-
-			return $http(httpObj);
-		};
-
-		this.put = function(articleId, model) {
-			var httpObj = {
-				method: 'POST',
-				url: '/api/blog/article/:id',
-				data: model
-			};
-
-			return $http(httpObj);
-		};
-
-		this.remove = function(articleId) {
-			var httpObj = {
-				method: 'DELETE',
-				url: '/api/blog/article/' + articleId
-			};
-
-			return $http(httpObj);
-		};
-	};
-
-	var blogArticleResource = function($resource) {
-		return $resource('/api/blog/article/:id');
-	};
-	blogArticleResource.$inject = ['$resource'];
-
-	angular
-		.module('pi')
-		.factory('blogArticleResource', blogArticleResource)
-		.service('blogArticleApi', ['$rootScope', '$q', '$http', apiFn]);
-
-})();
-/**
- * @ng-doc service
- * @name blogArticleCreateService
- *
- * @description
- * Create a new Article
- *
- * @dependencies blogApi
- */
-(function(){
-	
-	var createService = function(blogApi){
-
-		var fn = function(blogId) {
-			this.blogId = blogId;
-			this.model = {};
-		};
-
-		/*
-		 * Title is validated agains the API to check titles already in use
-		 */
-		fn.prototype.slugIsValid = function(){
-			if(blogApi.validateSlugTitle(this.model.title) == false) {
-
-			};
-		};
-
-		fn.prototype.validateSeo = function(){
-
-		};
-
-		fn.prototype.create = function(){
-			return blogApi.createArticle(this.model);
-		};
-
-		return fn;
-	};
-
-	createService.$inject = ['blogApi'];
-
-	angular
-		.module('pi')
-		.factory('articleCreateService', createService);
-
-})();
-(function(){
-	var apiFn = function($rootScope, $http, $q){
-		this.get = function(id){
-			var httpObj = {
-				method: 'GET',
-				url: '/api/blog/' + id
-			};
-
-			return $http(httpObj);
-		};
-
-		this.post = function(model) {
-			var httpObj = {
-				method: 'POST',
-				url: '/api/blog',
-				data: model
-			};
-
-			return $http(httpObj);
-		};
-
-		this.put = function(blogId, model) {
-			var httpObj = {
-				method: 'POST',
-				url: '/api/blog/' + blogId,
-				datA: datA
-			};
-
-			return $http(httpObj);
-		};
-
-		this.remove = function(blogId) {
-			var httpObj = {
-				method: 'DELETE',
-				url: '/api/blog/' + blogId
-			};
-
-			return $http(httpObj);
-		};
-	};
-
-	angular
-		.module('pi')
-		.service('blogApi', ['$rootScope', '$http', '$q', apiFn]);
-})();
-(function(){
-	var directiveFn = function() {
-		var linkFn = function(scope, element, attrs, blogApi) {
-			scope.model = {};
-
-			scope.submit = function(){
-				
-				blogApi
-					.post(scope.model)
-					.then(successFn, errorFn);
-			};
-		};
-
-		return {
-			link: linkFn,
-			replace: false
-		}
-	};
-
-	angular
-		.module('piBlogCreate', [''])
-})();
-(function(){
-
-	var svcFn = function($http, $q){
-		/**
-		 * Create a new forum
-		 *
-		 * @param model Request model
-		 * @param parentId The forum parent id. If null or undefined, the forum is created as a Parent
-		 */
-		this.create = function(model, parentId) {
-
-			var data = angular.copy(model);
-			if(!_.isUndefined(parentId)) {
-				data.parentId = parentId;
-			}
-
-			var deferred = $q.defer(),
-				successFn = function(res) {
-					deferred.resolve(res.data);
-				},
-				errorFn = function(res) {
-					deferred.reject(res.data);
-				},
-				httpObj = {
-					method: 'POST',
-					url: '/api/community/forum',
-					data: data
-				};
-
-			$http(httpObj)
-				.then(successFn, errorFn);
-
-			return deferred.promise;
-		};
-
-		this.updateInformation = function(forumId, model) {
-			var data = angular.copy(model);
-			data.id = forumId;
-
-			var deferred = $q.defer(),
-				successFn = function(res) {
-					deferred.resolve(res.data);
-				},
-				errorFn = function(res) {
-					deferred.reject(res);
-				},
-				httpObj = {
-					method: 'POST',
-					url: '/api/community/forum/info',
-					data: data
-				};
-
-			$http(httpObj)
-				.then(successFn, errorFn);
-
-			return deferred.promise;
-		};
-
-		this.remove = function(forumId, reason) {
-			var data = {
-					id: forumId
-				},
-				deferred = $q.defer(),
-				succesFn = function(res) {
-					deferred.resolve(res.data);
-				},
-				errorFn = function(res) {
-					deferred.reject(res);
-				},
-				httpObj = {
-					method: 'DELETE',
-					url: '/api/community/forum',
-					data: data
-				};
-
-			$http(httpObj)
-				.then(successFn, errorFn);
-
-			return deferred.promise;
-		};
-
-		angular
-			.module('pi')
-			.service('forumApi', ['$http', '$q', svcFn]);
-	};
-});
-(function(){
-	var svcFn = function($http, $q, $rootScope, piHttp) {
-
-        /**
-         * Login
-         *
-         * @param email
-         * @param password
-         * @returns {*}
-         */
-        this.login = function(email, password) {
-            return piHttp.post('/login', {
-                    email: email,
-                    password: password
-                })
-        };
-
-        /**
-         * register new account
-         * @param model
-         * @returns {*}
-         */
-		this.register = function(model){
-			return piHttp.post('/api/account', model)
-		};
-
-        /**
-         * Request a recover link to email
-         * @param email
-         * @returns {*}
-         */
-        this.recoverFromEmail = function(email) {
-            return piHttp.post('/api/account/recover', {
-                    email: email
-                });
-        };
-
-        /**
-         * Update account credentials
-         * @param email User email or nick handle
-         * @param currentPassword Current password
-         * @param newPassword New password
-         * @param newPasswordConfirm Confirmation of new password
-         * @returns {*}
-         */
-        this.updatePassword = function(email, currentPassword, newPassword, newPasswordConfirm) {
-            return piHttp.post('/api/account/password', 
-                {
-                    email: email,
-                    currentPassword: currentPassword,
-                    newPassword: newPassword,
-                    newPasswordConfirm: newPasswordConfirm
-                });
-        };
-
-	};
-
-	angular
-		.module('pi')
-		.service('accountApi', ['$http', '$q', '$rootScope', 'piHttp', svcFn]);
-	})();
-(function(){
-  var service = function($http, $q) {
-
-    /**
-     * @ngdoc function
-     * @name Login
-     * @description
-     *
-     * Try to authenticate using a username and password
-     * If the authentication is confirmed, a token is returned to consume the API
-     */
-    this.login = function(username, password) {
-
-      var deferred = $q.defer(),
-          successFn = function(res) {
-            deferred.resolve(res.data);
-          },
-          errorFn = function(res) {
-            deferred.reject(res);
-          },
-          request = {
-            email: username,
-            password: password
-          },
-          httpObj = {
-            url: '/login',
-            method: 'POST',
-            data: request
-          };
-
-          $http(httpObj)
-            .then(sucessFn, errorFn);
-
-      return deferred.promise;
-    };
-
-    /**
-     * @ngdoc function
-     * @name Domain Black List
-     * @description
-     *
-     * A list of domains blocked from Pi network
-     * Those domains have been banned and cannot register or login
-     */
-    this.domainBlackList = ['gov.pt'];
-  };
-})();
-
-(function(){
-    var svcFn = function(accountApi, $q) {
-
-        this.recover = function(email){
-
-            var deferred = $q.defer(),
-                successFn = function(res){
-                    deferred.resolve(res.data);
-                },
-                errorFn = function(res) {
-                    deferred.reject(res);
-                };
-
-            accountApi
-                .recoverFromEmail(email)
-                .then(successFn, errorFn);
-
-            return deferred.promise;
-        };
-    };
-
-    var directiveFn = function(recoverSvc){
-        var linkFn = function(scope, element, attrs) {
-
-            scope.recover = function(){
-
-                var successFn = function(res){
-                        scope.onSuccess(res);
-                    },
-                    errorFn = function(res) {
-                        scope.onError(res);
-                    };
-
-                recoverSvc
-                    .recover(scope.email)
-                    .then(successFn, errorFn);
-            };
-        };
-
-        return {
-            link: linkFn,
-            replace: false,
-            scope: {
-                'onSuccess': '&',
-                'onError': '&'            }
-        }
-    };
-
-    var directiveSubmit = function()
-    {
-        var linkFn = function(scope, element, attrs, parentCtrl)
-        {
-            element.bind('click', function(){
-                parentCtrl.recover();
-            })
-        };
-
-        return {
-            replace: false,
-            link: linkFn
-        }
-    };
-
-    angular
-        .module('pi')
-        .service('recoverSvc', ['accountApi', '$q', svcFn])
-        .directive('piAccountRecover', ['recoverSvc', directiveFn])
-        .directive('piAccountRecoverSubmit', directiveSubmit);
-})();
-
-(function(){
-	var svcFn = function(accountApi, $q) {
-
-		this.basic = function(email, password, passwordConfirm, requestModel) {
-
-			if(_.isUndefined(requestModel) && !_.isObject(requestModel)) {
-				requestModel = {};
-			}
-			requestModel.email = email;
-			requestModel.password = password;
-
-			var deferred = $q.defer(),
-				successFn = function(res) {
-					deferred.resolve(res.data);
-				},
-				errorFn = function(res) {
-					deferred.reject(res.data);
-				};
-
-            accountApi.register(requestModel)
-				.then(successFn, errorFn);
-
-			return deferred.promise;
-		};
-
-	};
-
-	var directiveFn = function(registerSvc){
-		
-		var linkFn = function(scope, element, attrs) {
-			
-			var disposeFn = function(){
-
-			};
-
-			element.on('$destroy', disposeFn);
-
-			scope.account = {};
-
-			scope.submit = function(){
-				var model = {};
-				registerSvc.basic(scope.account.email, scope.account.password, model);
-			};
-
-		};
-		return {
-			link: linkFn,
-			scope: {
-				'account': ''
-			},
-			replace: false
-		}
-	};
-
-	angular
-		.module('pi')
-		.service('registerSvc', ['accountApi', '$q', svcFn])
-		.directive('piRegister', ['registerSvc', directiveFn]);
-
-})();
-
 
 /**
  * @ng-doc service
@@ -4019,3 +3061,991 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.module('pi.ui-extensions')
 		.run(runFn)
 })();
+(function(){
+	angular
+		.module('pi.core.article')
+		.factory('pi.core.article.articleCategorySvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/article-category', model);
+			}
+
+			this.remove = function(id){
+				return piHttp.post('/article-category-remove/' + id);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/article-category/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/article-category', {params: model});
+			};
+			return this;
+		}]);
+})();
+
+(function(){
+	angular
+		.module('pi.core.article')
+		.factory('pi.core.article.articleSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/article', model);
+			}
+
+			this.remove = function(id) {
+				return piHttp.post('/article-remove/' + id);
+			}
+
+			this.put = function(id, model) {
+				return piHttp.post('/article/' + id, model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/article/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/article', {params: model});
+			};
+			return this;
+		}]);
+})();
+
+(function(){
+	'use strict';
+
+	angular
+		.module('pi.core.app')
+		.factory('pi.core.app.appSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/api/application', model);
+			}
+
+			this.find = function(id, model) {
+				return piHttp.get('/api/application' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/api/application', model);
+			}
+
+			return this;
+		}]);
+
+})();
+(function(){
+
+	angular
+		.module('pi.core.chat')
+		.factory('pi.core.chat.inboxSvc', ['piHttp', '$rootScope', function(piHttp, $rootScope){
+
+			this.post = function(model){
+				return piHttp.post('/api/inbox', model);
+			}
+
+			this.get = function(id) {
+				var model = {};
+				model.fromId = id;
+				model.toId = $rootScope.userId;
+				return piHttp.post('/api/inbox-view', model);
+			}
+
+			return this;
+		}]);
+})();
+(function(){
+	'use strict';
+
+	angular
+		.module('pi.core.app')
+		.factory('pi.core.app.eventSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/api/event', model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/api/event/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/api/event', model);
+			};
+
+			this.remove = function(id) {
+				return piHttp.post('/api/event-remove/' + id);
+			};
+
+			return this;
+		}]);
+
+		angular
+			.module('pi.core.app')
+			.factory('pi.core.app.eventSubSvc', ['piHttp', function(piHttp){
+				
+				this.post = function(model) {
+					return piHttp.post('/api/event-subscription', model);
+				}
+
+				this.get = function(id, model) {
+					return piHttp.get('/api/event-subscription/' + id);
+				}
+
+				this.find = function(model) {
+					return piHttp.get('/api/event-subscription', model);
+				}
+
+				this.remove = function(id) {
+					return piHttp.post('/api/event-subscription-remove/' + id);
+				};
+
+				return this;
+			}]);
+
+		angular
+			.module('pi.core.app')
+			.factory('pi.core.app.eventAttendSvc', ['piHttp', function(piHttp){
+				
+				this.post = function(model) {
+					return piHttp.post('/api/event-attend', model);
+				}
+
+				this.get = function(id, model) {
+					return piHttp.get('/api/event-attend/' + id);
+				}
+
+				this.find = function(model) {
+					return piHttp.get('/api/event-attend', model);
+				}
+
+				return this;
+			}]);
+})();
+(function(){
+    angular
+        .module('pi.core.likes')
+        .directive('piLikes', [function(){
+
+            var ctrl = function(likesSvc, $scope) {
+                var self = this,
+                    loaded = false;
+
+                $scope.$watch('entityId', function(current) {
+                    if(!current) return;
+                    self.entityId = current;
+                    if(!loaded) {
+                        self.get();
+                        loaded = true;
+                    }
+                });
+
+                $scope.$watch('entityNamespace', function(current) {
+                    if(!current) return;
+                    self.entityNamespace = current;
+                });
+
+                this.get = function() {
+                    likesSvc.get(self.entityNamespace, self.entityId)
+                        .then(function (res) {
+                            self.users = res.data.likes;
+                        });
+                };
+
+
+                this.like = function(){
+                    likesSvc.like(self.entityNamespace, self.entityId);
+                }
+            }
+
+
+            return {
+                templateUrl: 'html/pi/likes.tpl.html',
+                controller: ['pi.core.likes.likesSvc', '$scope', ctrl],
+                controllerAs: 'ctrl',
+                scope: {
+                    entityId: '=',
+                    entityNamespace: '='
+                }
+            }
+        }]);
+})();
+(function(){
+	angular
+		.module('pi.core.likes')
+		.factory('pi.core.likes.likesSvc', ['piHttp', function(piHttp){
+
+            this.get = function(namespace, id) {
+                return piHttp.get('/like/' + namespace + '/' + id);
+            };
+
+            this.hasLiked = function(namespace, id) {
+
+            }
+
+            this.like = function(namespace, id) {
+                return piHttp.post('/like/' + namespace + '/' + id);
+            }
+
+            return this;
+
+        }]);
+})();
+(function(){
+	'use strict';
+
+	angular
+		.module('pi.core.app')
+		.factory('pi.core.payment.paymentSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/api/payment/report', model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/api/payment/report/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/api/payment/report', model);
+			};
+
+			return this;
+		}]);
+})();
+(function(){
+	angular
+		.module('pi.core.payment')
+		.factory('pi.core.payment.paymentMethod', [function(){
+			var svc = [
+				{ byBankTransferInAdvance: 1 },
+				{ byInvoice: 2 },
+				{ cash: 3 },
+				{ checkInAdvance: 4 },
+				{ cod: 5 },
+				{ directDebit: 6 },
+				{ googleCheckout: 7 },
+				{ payPal: 8 },
+				{ paySwarm: 9 }
+			];
+			return svc;
+		}]);
+})();
+(function(){
+	
+	angular
+		.module('pi.core.product')
+		.directive('piPriceSpecifications', ['$log', function($log){
+			return {
+
+				link: function(scope, elem, attrs, ngModel) {
+					scope.view = 'home';
+					var modelDefault = {
+							eligibleQuantity: null,
+							eligibleTransactionVolume: null,
+							minPrice: null,
+							maxPrice: null,
+							price: null,
+							priceCurreny: 'EURO',
+							validFrom: null,
+							validThrough: null,
+							valueAddedTaxIncluded: null
+						};
+
+					scope.model = {};
+					scope.items = [];
+			
+					scope.setPrice = function() {
+						var value = ngModel.$viewValue;
+						value.push(scope.model);
+						ngModel.$setViewValue(value);	
+						scope.items.push(scope.model);
+
+						scope.model = angular.copy(modelDefault);
+						scope.view = 'home';
+					}
+
+					scope.edit = function(index) {
+						scope.editIndex = index;
+						scope.editModel = scope.items[index];
+						scope.view = 'edit';
+					}
+
+					scope.save = function() {
+						ngModel.$viewValue[scope.editIndex] = scope.editModel;
+						scope.items[scope.editIndex] = scope.editModel;
+
+						scope.view = 'home';
+					}
+
+					attrs.$observe('ngModel', function(value){
+			        	scope.$watch(value, function(newValue){ 
+			        			try {
+			        				ngModel.$setViewValue(_.isObject(ngModel.$viewValue) ? ngModel.$viewValue : [modelDefault]);	
+			        			} catch(err) {
+			        				$log.info('piPriceSpecification couldnt set the ngModel, the default is used. Error: ' + err);
+			        				ngModel.$setViewValue([modelDefault]);
+			        			}
+			                    
+			            });
+			        });
+
+			        scope.model = angular.copy(modelDefault);
+				},
+				scope: {
+					'piPriceSpecifications': '@'
+				},
+				require: '^ngModel',
+				templateUrl: 'html/pi/price-specification.tpl.html'
+			}
+		}]);
+})();
+(function(){
+	angular
+		.module('pi.core.product')
+		.factory('pi.core.product.businessEntity', [function(){
+			var svc = [
+				{ key: 'Business', value: 1 },
+				{ key: 'Enduser', value: 2 },
+				{ key: 'PublicInstitution', value: 3 },
+				{ key: 'Reseller', value: 4 }
+			];
+			return svc;
+		}]);
+})();
+(function(){
+	angular
+		.module('pi.core.product')
+		.factory('pi.core.product.businessFunction', [function(){
+			var svc = [
+				{ key: 'ConstructionInstallation', value: 1 },
+				{ key: 'Dispose', value: 2 },
+				{ key: 'LeaseOut', value: 3 },
+				{ key: 'Maintain', value: 4 },
+				{ key: 'ProvideService', value: 5 },
+				{ key: 'Repair', value: 6 },
+				{ key: 'Sell', value: 7 },
+				{ key: 'Buy', value: 8 }
+			];
+			return svc;
+		}]);
+})();
+(function(){
+	angular
+		.module('pi.core.product')
+		.factory('pi.core.product.deliveryMethod', [function(){
+			var svc = [
+				{ key: 'Direct Download', value: 1 },
+				{ key: 'Freight', value: 2 },
+				{ key: 'Mail', value: 3 },
+				{ key: 'Own Fleet', value: 4 },
+				{ key: 'PickUp Mode', value: 5 },
+				{ key: 'DHL', value: 6 },
+				{ key: 'Federal Express', value: 7 },
+				{ key: 'UPS', value: 8 }
+			];
+			return svc;
+		}]);
+})();
+(function(){
+	angular
+		.module('pi.core.product')
+		.factory('pi.core.product.itemCondition', [function(){
+			var svc = [
+				{ key: 'Discontinued', value: 1 },
+				{ key: 'InStock', value: 2 },
+				{ key: 'InStoreOnly', value: 3 },
+				{ key: 'LimitedAvailability', value: 4 },
+				{ key: 'OnlineOnly', value: 5 },
+				{ key: 'PutOfStock', value: 6 },
+				{ key: 'PreOrder', value: 7 },
+				{ key: 'SoldOut', value: 8 }
+			];
+			return svc;
+		}]);
+})();
+(function(){
+	angular
+		.module('pi.core.product')
+		.factory('pi.core.product.offerStatus', [function(){
+			var svc = [
+				{ damagedCondition: 1 },
+				{ newCondition: 2 },
+				{ refurbishedCondition: 3 },
+				{ usedCondition: 4 }
+			];
+			return svc;
+		}]);
+})();
+(function(){
+	angular
+		.module('pi.core.product')
+		.factory('pi.core.product.productSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/product', model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/product/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/product', model);
+			};
+
+			this.postOffer = function(productId, model) {
+				return piHttp.post('/product-offer/' + productId, model);
+			}
+
+			return this;
+		}]);
+})();
+(function(){
+	angular
+		.module('pi.core.question')
+		.factory('pi.core.question.questionCategorySvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/question-category', model);
+			}
+
+			this.remove = function(id){
+				return piHttp.post('/question-category-remove/' + id);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/question-category/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/question-category', {params: model});
+			};
+			return this;
+		}]);
+})();
+
+(function(){
+	angular
+		.module('pi.core.question')
+		.factory('pi.core.question.questionSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/question', model);
+			}
+
+			this.remove = function(id) {
+				return piHttp.post('/question-remove/' + id);
+			}
+
+			this.put = function(id, model) {
+				return piHttp.post('/question/' + id, model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/question/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/question', {params: model});
+			};
+			return this;
+		}]);
+})();
+
+(function(){
+	
+	var apiFn = function(){
+		this.get = function(articleId) {
+			var httpObj = {
+				method: 'GET',
+				url: '/api/blog/article/' + articleId
+			};
+
+			return $http(httpObj);
+		};
+
+		this.post = function(blogId, model) {
+			model.blogId = blogId;
+
+			var httpObj = {
+				method: 'POST',
+				url: '/api/blog/article',
+				data: model
+			};
+
+			return $http(httpObj);
+		};
+
+		this.put = function(articleId, model) {
+			var httpObj = {
+				method: 'POST',
+				url: '/api/blog/article/:id',
+				data: model
+			};
+
+			return $http(httpObj);
+		};
+
+		this.remove = function(articleId) {
+			var httpObj = {
+				method: 'DELETE',
+				url: '/api/blog/article/' + articleId
+			};
+
+			return $http(httpObj);
+		};
+	};
+
+	var blogArticleResource = function($resource) {
+		return $resource('/api/blog/article/:id');
+	};
+	blogArticleResource.$inject = ['$resource'];
+
+	angular
+		.module('pi')
+		.factory('blogArticleResource', blogArticleResource)
+		.service('blogArticleApi', ['$rootScope', '$q', '$http', apiFn]);
+
+})();
+/**
+ * @ng-doc service
+ * @name blogArticleCreateService
+ *
+ * @description
+ * Create a new Article
+ *
+ * @dependencies blogApi
+ */
+(function(){
+	
+	var createService = function(blogApi){
+
+		var fn = function(blogId) {
+			this.blogId = blogId;
+			this.model = {};
+		};
+
+		/*
+		 * Title is validated agains the API to check titles already in use
+		 */
+		fn.prototype.slugIsValid = function(){
+			if(blogApi.validateSlugTitle(this.model.title) == false) {
+
+			};
+		};
+
+		fn.prototype.validateSeo = function(){
+
+		};
+
+		fn.prototype.create = function(){
+			return blogApi.createArticle(this.model);
+		};
+
+		return fn;
+	};
+
+	createService.$inject = ['blogApi'];
+
+	angular
+		.module('pi')
+		.factory('articleCreateService', createService);
+
+})();
+(function(){
+	var apiFn = function($rootScope, $http, $q){
+		this.get = function(id){
+			var httpObj = {
+				method: 'GET',
+				url: '/api/blog/' + id
+			};
+
+			return $http(httpObj);
+		};
+
+		this.post = function(model) {
+			var httpObj = {
+				method: 'POST',
+				url: '/api/blog',
+				data: model
+			};
+
+			return $http(httpObj);
+		};
+
+		this.put = function(blogId, model) {
+			var httpObj = {
+				method: 'POST',
+				url: '/api/blog/' + blogId,
+				datA: datA
+			};
+
+			return $http(httpObj);
+		};
+
+		this.remove = function(blogId) {
+			var httpObj = {
+				method: 'DELETE',
+				url: '/api/blog/' + blogId
+			};
+
+			return $http(httpObj);
+		};
+	};
+
+	angular
+		.module('pi')
+		.service('blogApi', ['$rootScope', '$http', '$q', apiFn]);
+})();
+(function(){
+	var directiveFn = function() {
+		var linkFn = function(scope, element, attrs, blogApi) {
+			scope.model = {};
+
+			scope.submit = function(){
+				
+				blogApi
+					.post(scope.model)
+					.then(successFn, errorFn);
+			};
+		};
+
+		return {
+			link: linkFn,
+			replace: false
+		}
+	};
+
+	angular
+		.module('piBlogCreate', [''])
+})();
+(function(){
+	var svcFn = function($http, $q, $rootScope, piHttp) {
+
+        /**
+         * Login
+         *
+         * @param email
+         * @param password
+         * @returns {*}
+         */
+        this.login = function(email, password) {
+            return piHttp.post('/login', {
+                    email: email,
+                    password: password
+                })
+        };
+
+        /**
+         * register new account
+         * @param model
+         * @returns {*}
+         */
+		this.register = function(model){
+			return piHttp.post('/api/account', model)
+		};
+
+        /**
+         * Request a recover link to email
+         * @param email
+         * @returns {*}
+         */
+        this.recoverFromEmail = function(email) {
+            return piHttp.post('/api/account/recover', {
+                    email: email
+                });
+        };
+
+        /**
+         * Update account credentials
+         * @param email User email or nick handle
+         * @param currentPassword Current password
+         * @param newPassword New password
+         * @param newPasswordConfirm Confirmation of new password
+         * @returns {*}
+         */
+        this.updatePassword = function(email, currentPassword, newPassword, newPasswordConfirm) {
+            return piHttp.post('/api/account/password', 
+                {
+                    email: email,
+                    currentPassword: currentPassword,
+                    newPassword: newPassword,
+                    newPasswordConfirm: newPasswordConfirm
+                });
+        };
+
+	};
+
+	angular
+		.module('pi')
+		.service('accountApi', ['$http', '$q', '$rootScope', 'piHttp', svcFn]);
+	})();
+(function(){
+  var service = function($http, $q) {
+
+    /**
+     * @ngdoc function
+     * @name Login
+     * @description
+     *
+     * Try to authenticate using a username and password
+     * If the authentication is confirmed, a token is returned to consume the API
+     */
+    this.login = function(username, password) {
+
+      var deferred = $q.defer(),
+          successFn = function(res) {
+            deferred.resolve(res.data);
+          },
+          errorFn = function(res) {
+            deferred.reject(res);
+          },
+          request = {
+            email: username,
+            password: password
+          },
+          httpObj = {
+            url: '/login',
+            method: 'POST',
+            data: request
+          };
+
+          $http(httpObj)
+            .then(sucessFn, errorFn);
+
+      return deferred.promise;
+    };
+
+    /**
+     * @ngdoc function
+     * @name Domain Black List
+     * @description
+     *
+     * A list of domains blocked from Pi network
+     * Those domains have been banned and cannot register or login
+     */
+    this.domainBlackList = ['gov.pt'];
+  };
+})();
+
+(function(){
+    var svcFn = function(accountApi, $q) {
+
+        this.recover = function(email){
+
+            var deferred = $q.defer(),
+                successFn = function(res){
+                    deferred.resolve(res.data);
+                },
+                errorFn = function(res) {
+                    deferred.reject(res);
+                };
+
+            accountApi
+                .recoverFromEmail(email)
+                .then(successFn, errorFn);
+
+            return deferred.promise;
+        };
+    };
+
+    var directiveFn = function(recoverSvc){
+        var linkFn = function(scope, element, attrs) {
+
+            scope.recover = function(){
+
+                var successFn = function(res){
+                        scope.onSuccess(res);
+                    },
+                    errorFn = function(res) {
+                        scope.onError(res);
+                    };
+
+                recoverSvc
+                    .recover(scope.email)
+                    .then(successFn, errorFn);
+            };
+        };
+
+        return {
+            link: linkFn,
+            replace: false,
+            scope: {
+                'onSuccess': '&',
+                'onError': '&'            }
+        }
+    };
+
+    var directiveSubmit = function()
+    {
+        var linkFn = function(scope, element, attrs, parentCtrl)
+        {
+            element.bind('click', function(){
+                parentCtrl.recover();
+            })
+        };
+
+        return {
+            replace: false,
+            link: linkFn
+        }
+    };
+
+    angular
+        .module('pi')
+        .service('recoverSvc', ['accountApi', '$q', svcFn])
+        .directive('piAccountRecover', ['recoverSvc', directiveFn])
+        .directive('piAccountRecoverSubmit', directiveSubmit);
+})();
+
+(function(){
+	var svcFn = function(accountApi, $q) {
+
+		this.basic = function(email, password, passwordConfirm, requestModel) {
+
+			if(_.isUndefined(requestModel) && !_.isObject(requestModel)) {
+				requestModel = {};
+			}
+			requestModel.email = email;
+			requestModel.password = password;
+
+			var deferred = $q.defer(),
+				successFn = function(res) {
+					deferred.resolve(res.data);
+				},
+				errorFn = function(res) {
+					deferred.reject(res.data);
+				};
+
+            accountApi.register(requestModel)
+				.then(successFn, errorFn);
+
+			return deferred.promise;
+		};
+
+	};
+
+	var directiveFn = function(registerSvc){
+		
+		var linkFn = function(scope, element, attrs) {
+			
+			var disposeFn = function(){
+
+			};
+
+			element.on('$destroy', disposeFn);
+
+			scope.account = {};
+
+			scope.submit = function(){
+				var model = {};
+				registerSvc.basic(scope.account.email, scope.account.password, model);
+			};
+
+		};
+		return {
+			link: linkFn,
+			scope: {
+				'account': ''
+			},
+			replace: false
+		}
+	};
+
+	angular
+		.module('pi')
+		.service('registerSvc', ['accountApi', '$q', svcFn])
+		.directive('piRegister', ['registerSvc', directiveFn]);
+
+})();
+
+
+(function(){
+
+	var svcFn = function($http, $q){
+		/**
+		 * Create a new forum
+		 *
+		 * @param model Request model
+		 * @param parentId The forum parent id. If null or undefined, the forum is created as a Parent
+		 */
+		this.create = function(model, parentId) {
+
+			var data = angular.copy(model);
+			if(!_.isUndefined(parentId)) {
+				data.parentId = parentId;
+			}
+
+			var deferred = $q.defer(),
+				successFn = function(res) {
+					deferred.resolve(res.data);
+				},
+				errorFn = function(res) {
+					deferred.reject(res.data);
+				},
+				httpObj = {
+					method: 'POST',
+					url: '/api/community/forum',
+					data: data
+				};
+
+			$http(httpObj)
+				.then(successFn, errorFn);
+
+			return deferred.promise;
+		};
+
+		this.updateInformation = function(forumId, model) {
+			var data = angular.copy(model);
+			data.id = forumId;
+
+			var deferred = $q.defer(),
+				successFn = function(res) {
+					deferred.resolve(res.data);
+				},
+				errorFn = function(res) {
+					deferred.reject(res);
+				},
+				httpObj = {
+					method: 'POST',
+					url: '/api/community/forum/info',
+					data: data
+				};
+
+			$http(httpObj)
+				.then(successFn, errorFn);
+
+			return deferred.promise;
+		};
+
+		this.remove = function(forumId, reason) {
+			var data = {
+					id: forumId
+				},
+				deferred = $q.defer(),
+				succesFn = function(res) {
+					deferred.resolve(res.data);
+				},
+				errorFn = function(res) {
+					deferred.reject(res);
+				},
+				httpObj = {
+					method: 'DELETE',
+					url: '/api/community/forum',
+					data: data
+				};
+
+			$http(httpObj)
+				.then(successFn, errorFn);
+
+			return deferred.promise;
+		};
+
+		angular
+			.module('pi')
+			.service('forumApi', ['$http', '$q', svcFn]);
+	};
+});

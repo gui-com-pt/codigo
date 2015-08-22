@@ -16,11 +16,24 @@
   angular
     .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
       'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select',
-      'piClassHover']);
+      'piClassHover', 'ngTagsInput', '720kb.socialshare']);
 
   angular
     .module('codigo')
-      .config(['$stateProvider', 'uiSelectConfig', '$provide', function($stateProvider, uiSelectConfig, $provide){
+      .config(['$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', function($stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider){
+
+          tagsInputConfigProvider
+            .setDefaults('tagsInput', {
+              placeholder: 'Nova Tag',
+              minLength: 5,
+              addOnEnter: false
+            })
+            .setDefaults('autoComplete', {
+              debounceDelay: 200,
+              loadOnDownArrow: true,
+              loadOnEmpty: true
+            })
+
 
           uiSelectConfig.theme = 'selectize';
           $provide.decorator('taOptions', ['taRegisterTool', '$delegate', function(taRegisterTool, taOptions){

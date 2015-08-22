@@ -1,0 +1,10 @@
+.comment-message {
+	@include clearfix();
+}
+
+.comment-message__author {
+	@include span(1 of 10);
+}
+.comment-message__body {
+	@include span(9 of 10 last);
+}

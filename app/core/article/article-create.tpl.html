@@ -3,12 +3,12 @@
         <div class="upload-thumbnail" upload-thumbnail ng-model="ctrl.model.image"></div>
     </div>
     <div class="sportsnews-create__content">
-        <div class="fit-form__wrapper">
+        <div class="pi-form__wrapper">
             <form class="fit-form" name="createForm">
-                <div class="fit-form__group">
-                    <input class="pi-form__control" type="text" required class="fit-form__group-control" placeholder="Título da Notícia" ng-model="ctrl.model.name" />
+                <div class="pi-form__group">
+                    <input class="pi-form__control" type="text" required class="pi-form__group-control" placeholder="Título da Notícia" ng-model="ctrl.model.name" />
                 </div>
-                <div class="fit-form__group">
+                <div class="pi-form__group">
                     <ui-select required ng-model="ctrl.categorySelect" theme="selectize">
                         <ui-select-match placeholder="Localidade">{{$select.selected.displayName}}</ui-select-match>
                         <ui-select-choices repeat="cat in $root.categories | filter: $select.search">
@@ -16,17 +16,19 @@
                         </ui-select-choices>
                     </ui-select>
                 </div>
-                <div class="fit-form__group">
+                <div class="pi-form__group">
+                    <tags-input ng-model="ctrl.model.keywords"></tags-input>
+                </div>
+                <div class="pi-form__group">
                     <input placeholder="Um exerpto da Notícia" required class="pi-form__control" type="text" ng-model="ctrl.model.headline" />
                 </div>
-                <div class="fit-form__group">
+                <div class="pi-form__group">
                     <div placeholder="O conteúdo principal da Notícia" text-angular  ng-model="ctrl.model.articleBody"></div>
                 </div>
-                <div class="fit-form__footer">
+                <div class="pi-form__footer">
                     <button ng-disabled="createForm.$invalid || createForm.$pristine" ng-click="ctrl.create()">Criar</button>
                 </div>
             </form>
-            {{ctrl.model.articleBody | json}}
         </div>
     </div>
 </div>
