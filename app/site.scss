@@ -6,10 +6,7 @@ $susy: (
 @import "../bower_components/susy/sass/susy";
 @import "../bower_components/compass-breakpoint/stylesheets/breakpoint";
 @import "../bower_components/compass-mixins/lib/compass";
-@import "../bower_components/susy/sass/susy";
-@import "../bower_components/compass-breakpoint/stylesheets/breakpoint";
-@import "../bower_components/compass-mixins/lib/compass";
-@import "pi-sass/src/boot";
+@import "../bower_components/pi-sass/src/boot";
 @import "panel";
 @import "text-angular";
 @import "selectize";
@@ -200,4 +197,3 @@ ul.card-set__list {
     @include span(3 of 4 last);
   }
 }
-

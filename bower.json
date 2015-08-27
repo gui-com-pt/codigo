@@ -32,6 +32,10 @@
   "resolutions": {
     "angular": ">=1.2.18",
     "select2": "~4.0.0",
-    "prism": "master"
+    "prism": "master",
+    "angular-mocks": "~1.4.4"
+  },
+  "devDependencies": {
+    "pi-gulp-tasks": "*"
   }
 }

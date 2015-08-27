@@ -39,6 +39,9 @@
 		.module('pi.core', ['pi']);
 
 	angular
+		.module('pi.core.user', ['pi.core']);
+
+	angular
 		.module('pi.core.likes', ['pi.core']);
 
 	angular
@@ -51,6 +54,8 @@
 		.module('pi.core.question', ['pi.core']);
 })();
 
+angular
+	.module('pi.chat', []);
 (function(){
 	angular
 		.module('pi.form', []);
@@ -59,8 +64,6 @@
 	angular.
 		module('pi.ui-extensions', ['ui.router']);
 })();
-angular
-	.module('pi.chat', []);
 (function(){
   angular
       .module('pi.admin', []);
@@ -385,6 +388,46 @@ angular
 		.provider('piApp', providerFn);
 })();
 (function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.adminCtrl', ['$rootScope', function($rootScope){
+
+    }]);
+})();
+
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.articleEditCtrl', ['pi.core.article.articleSvc', '$scope', function(articleSvc, $scope){
+
+    }]);
+})();
+
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.articleManageCtrl', ['pi.core.article.articleSvc', '$scope', function(articleSvc, $scope){
+
+    }]);
+})();
+
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.eventEditCtrl', ['pi.core.app.eventSvc', '$scope', function(eventSvc, $scope){
+
+    }]);
+})();
+
+(function(){
+  angular
+    .module('pi.admin')
+    .controller('pi.admin.eventManageCtrl', ['pi.core.app.eventSvc', '$scope', function(eventSvc, $scope){
+
+    }]);
+})();
+
+(function(){
   var piAlertStack = function(piStack)
   {
     var stack = {};
@@ -499,6 +542,111 @@ angular
       }
   };
 
+})();
+
+(function(){
+	'use strict';
+
+	var chat = function(){
+		var appKey = '',
+			appSecret = '',
+			appId = '',
+			inbox = [];
+
+		var receiveMessage = function(sender, message, datetime){
+
+		}
+
+		var sendMessage = function(sender, message){
+
+		}
+
+		return {
+			setAppKey: function(value){
+				appKey = value;
+			},
+			setAppSecret: function(value){
+				appSecret = value;
+			},
+			setAppId: function(value){
+				appId = value;
+			},
+			$get: function(){
+
+				return {
+
+				}
+			}
+		}
+	}
+
+	var chatWindow = function(){
+		var controller = function(){
+
+		};
+
+		return {
+			templateUrl: '/html/pi/chat-window.html',
+			controller: controller,
+			controllerAs: 'chatWindowCtrl'
+		}
+	}
+
+	var chatMessage = function(){
+		return {
+			templateUrl: '/html/pi/chat-message.html',
+		}
+	}
+
+	var chatMessagePreview = function(){
+		return {
+			templateUrl: '/html/pi/chat-message-preview.html'
+		}
+	}
+
+	angular
+		.module('pi.chat')
+		.directive
+})();
+(function() {
+    angular
+        .module('pi')
+        .factory('pi.core.placeSvc', ['piHttp', function (piHttp) {
+
+            this.post= function (dto) {
+                return piHttp.post('/place', dto);
+            }
+
+            this.find = function () {
+                return piHttp.get('/place');
+            }
+
+            this.get = function (id) {
+                return piHttp.get('/place/' + id);
+            }
+
+
+            return this;
+
+        }]);
+})();
+(function(){
+  angular
+    .module('pi.ui-router')
+    .factory('pi.ui-router.stateUtils', ['$stateParams', function($stateParams){
+      return {
+        getModelFromStateParams: function(names, model){
+
+            angular.forEach(names, function(value){
+                if(!_.isUndefined($stateParams[value])) {
+                    model[value] = $stateParams[value];
+                }
+            });
+
+            return model;
+        }
+      }
+    }]);
 })();
 
 (function(){
@@ -649,7 +797,7 @@ angular
 	var piCommentResource = function($resource) {
 		return {
 			create: function(namespace, id) {
-				return $resource('http://pi.codigo.ovh/comment/' + namespace + '/' + id,
+				return $resource('http://fitting.pt/comment/' + namespace + '/' + id,
 		            {},
 		            {
 		            'query': {
@@ -1254,7 +1402,7 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
 (function(){
     'use strict';
-    var UploadThumbnail = function(Upload){
+    var UploadThumbnail = function(Upload, piHttp){
 
         var linkFn = function(scope, elem, attrs, ngModel){
             var self = this;
@@ -1276,8 +1424,10 @@ var INTEGER_REGEXP = /^\-?\d*$/;
                 if (files && files.length) {
                     for (var i = 0; i < files.length; i++) {
                         var file = files[i];
+                        var url = 'http://fitting.pt/filesystem';
+
                         Upload.upload({
-                            url: 'http://pi.codigo.ovh/filesystem',
+                            url: url,
                             fields: {},
                             file: file
                         }).progress(function (evt) {
@@ -1310,7 +1460,7 @@ var INTEGER_REGEXP = /^\-?\d*$/;
         }
     };
 
-    UploadThumbnail.$inject = ['Upload'];
+    UploadThumbnail.$inject = ['Upload', 'piHttp'];
 
     angular
         .module('pi')
@@ -1318,108 +1468,108 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
 })();
 (function(){
-  angular
-    .module('pi.admin')
-    .controller('pi.admin.adminCtrl', ['$rootScope', function($rootScope){
 
-    }]);
-})();
+	var piFileManager = function(){
 
-(function(){
-  angular
-    .module('pi.admin')
-    .controller('pi.admin.articleEditCtrl', ['pi.core.article.articleSvc', '$scope', function(articleSvc, $scope){
 
-    }]);
-})();
-
-(function(){
-  angular
-    .module('pi.admin')
-    .controller('pi.admin.articleManageCtrl', ['pi.core.article.articleSvc', '$scope', function(articleSvc, $scope){
-
-    }]);
-})();
-
-(function(){
-  angular
-    .module('pi.admin')
-    .controller('pi.admin.eventEditCtrl', ['pi.core.app.eventSvc', '$scope', function(eventSvc, $scope){
-
-    }]);
-})();
-
-(function(){
-  angular
-    .module('pi.admin')
-    .controller('pi.admin.eventManageCtrl', ['pi.core.app.eventSvc', '$scope', function(eventSvc, $scope){
-
-    }]);
-})();
-
-(function(){
-	'use strict';
-
-	var chat = function(){
-		var appKey = '',
-			appSecret = '',
-			appId = '',
-			inbox = [];
-
-		var receiveMessage = function(sender, message, datetime){
-
-		}
-
-		var sendMessage = function(sender, message){
-
-		}
 
 		return {
-			setAppKey: function(value){
-				appKey = value;
-			},
-			setAppSecret: function(value){
-				appSecret = value;
-			},
-			setAppId: function(value){
-				appId = value;
-			},
-			$get: function(){
 
-				return {
+			$get: {
 
-				}
 			}
 		}
 	}
 
-	var chatWindow = function(){
-		var controller = function(){
+	var piUploadService = function(){
 
-		};
+		var upload = function(file, uploadDto){
+
+		}
+		return {
+			upload: upload
+		}
+	}
+
+	var piFileDashboard = function(){
 
 		return {
-			templateUrl: '/html/pi/chat-window.html',
+			templateUrl: '/html/pi/file-dashboard.html'
+		}
+	}
+	var piFileUpload = function(){
+
+		var link = function(scope, elem, attr){
+
+		}
+
+		var controller = function($scope){
+			this.upload = function(){
+
+			}
+		}
+		return {
+			link: link,
 			controller: controller,
-			controllerAs: 'chatWindowCtrl'
+			controllerAs: 'ctrl'
 		}
 	}
 
-	var chatMessage = function(){
+	var  piFileUploadArea = function(){
+
 		return {
-			templateUrl: '/html/pi/chat-message.html',
+			templateUrl: '/html/pi/file-upload-area.html'
 		}
 	}
 
-	var chatMessagePreview = function(){
+	var piFileUploadBrowse = function(){
 		return {
-			templateUrl: '/html/pi/chat-message-preview.html'
+			templateUrl: '/html/pi/file-upload-browser.html'
 		}
 	}
 
-	angular
-		.module('pi.chat')
-		.directive
+	var piFileEditCard = function(){
+		return {
+			templateUrl: '/html/pi/file-edit-card.html'
+		}
+	}
+
+	var piFileCard = function(){
+		return {
+			templateUrl: '/html/pi/file-card.html'
+		}
+	}
+
+	
+})();
+/**
+ * Filter to reverse a list
+ * @ngdoc filter
+ * @name reserve
+ * @kind function
+ *
+ * @description
+ * Reverse a array without replacing the original array since slice is used to return the array 
+ *
+ * @return {Array}
+ *
+ * @example
+ * <div ng-repeat="verses in bibles.kingJames | reverse">
+ * 	<em ng-bind="verse.number"></em> <span ng-bind="verse.message"></span>
+ * </div>
+ */
+(function(){
+	
+	var reverseFilter = function(){
+
+	  return function(items) {
+	    return items ? items.slice().reverse() : [];
+	  };
+
+	};
+
+	angular.module('pi')
+		.filter('reverse', reverseFilter);
 })();
 (function(){
 		'use strict';
@@ -1672,151 +1822,6 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
 })();
 
-(function() {
-    angular
-        .module('pi')
-        .factory('pi.core.placeSvc', ['piHttp', function (piHttp) {
-
-            this.post= function (dto) {
-                return piHttp.post('/place', dto);
-            }
-
-            this.find = function () {
-                return piHttp.get('/place');
-            }
-
-            this.get = function (id) {
-                return piHttp.get('/place/' + id);
-            }
-
-
-            return this;
-
-        }]);
-})();
-(function(){
-  angular
-    .module('pi.ui-router')
-    .factory('pi.ui-router.stateUtils', ['$stateParams', function($stateParams){
-      return {
-        getModelFromStateParams: function(names, model){
-
-            angular.forEach(names, function(value){
-                if(!_.isUndefined($stateParams[value])) {
-                    model[value] = $stateParams[value];
-                }
-            });
-
-            return model;
-        }
-      }
-    }]);
-})();
-
-(function(){
-
-	var piFileManager = function(){
-
-
-
-		return {
-
-			$get: {
-
-			}
-		}
-	}
-
-	var piUploadService = function(){
-
-		var upload = function(file, uploadDto){
-
-		}
-		return {
-			upload: upload
-		}
-	}
-
-	var piFileDashboard = function(){
-
-		return {
-			templateUrl: '/html/pi/file-dashboard.html'
-		}
-	}
-	var piFileUpload = function(){
-
-		var link = function(scope, elem, attr){
-
-		}
-
-		var controller = function($scope){
-			this.upload = function(){
-
-			}
-		}
-		return {
-			link: link,
-			controller: controller,
-			controllerAs: 'ctrl'
-		}
-	}
-
-	var  piFileUploadArea = function(){
-
-		return {
-			templateUrl: '/html/pi/file-upload-area.html'
-		}
-	}
-
-	var piFileUploadBrowse = function(){
-		return {
-			templateUrl: '/html/pi/file-upload-browser.html'
-		}
-	}
-
-	var piFileEditCard = function(){
-		return {
-			templateUrl: '/html/pi/file-edit-card.html'
-		}
-	}
-
-	var piFileCard = function(){
-		return {
-			templateUrl: '/html/pi/file-card.html'
-		}
-	}
-
-	
-})();
-/**
- * Filter to reverse a list
- * @ngdoc filter
- * @name reserve
- * @kind function
- *
- * @description
- * Reverse a array without replacing the original array since slice is used to return the array 
- *
- * @return {Array}
- *
- * @example
- * <div ng-repeat="verses in bibles.kingJames | reverse">
- * 	<em ng-bind="verse.number"></em> <span ng-bind="verse.message"></span>
- * </div>
- */
-(function(){
-	
-	var reverseFilter = function(){
-
-	  return function(items) {
-	    return items ? items.slice().reverse() : [];
-	  };
-
-	};
-
-	angular.module('pi')
-		.filter('reverse', reverseFilter);
-})();
 (function(){
 	var fn = function(apiException){
 
@@ -1854,6 +1859,165 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 			ok: 200
 		})
 		.factory('apiResponseProvider', ['apiException', fn]);
+})();
+(function(){
+    angular
+        .module('pi')
+        .directive('piLayerHover', ['piLayer', '$timeout', 'piLayerStack', function(piLayer, $timeout, piLayerStack){
+
+            return {
+                link: function(scope, elem, attrs) {
+
+                    var waiting = false,
+                        waitingShow = false,
+                        instance = null,
+                        showTimer = null;
+
+                    elem.on('mouseenter', function(){
+                        waitingShow = true;
+
+                        var topPos  = elem.offset().top;
+                        var leftPos = elem.offset().left;
+
+                        showTimer  = $timeout(function(){
+                            waitingShow = false;
+                            instance = piLayer.open({
+                                namespace: scope.piNamespace,
+                                entity: scope.piEntity,
+                                top: topPos,
+                                left: leftPos,
+                                width: elem.width()
+                            })
+                        }, 700);
+
+
+                    });
+
+                    var clearFn = function(){
+                        if(waitingShow) {
+                            $timeout.cancel(showTimer)
+                        }
+                        waiting = true;
+                        $timeout(function(){
+                            scope.$apply(function(){
+                                if(!_.isNull(instance)) {
+                                    instance.close();
+                                }
+                            });
+                        }, 3000)
+                    }
+                    elem.on('mouseleave', clearFn);
+                    elem.on('blur', clearFn);
+                },
+                scope: {
+                    piNamespace: '=',
+                    piEntity: '='
+                }
+            }
+        }])
+        .directive('piLayerWindow', ['piLayerStack', function(piLayerStack){
+
+            return {
+
+                controller: function($scope){
+                    $scope.visible = false;
+                    $scope.current = piLayerStack.getTop();
+
+                    $scope.closeCurrent = function(){
+                        piLayerStack.dismiss($scope.current);
+                        if(piLayerStack.length() > 0) {
+                            $scope.current = piLayerStack.getTop();
+                        } else {
+                            $scope.current = null;
+                            $scope.visible = false;
+                        }
+                    };
+
+                    piLayerStack.onAdded(function(layer, opts){
+                        currentLayer = layer;
+                        if(!_.isUndefined($scope.current)) {
+                            $scope.closeCurrent();
+                        }
+
+                        $scope.$apply(function(){
+                            $scope.visible = true;
+                            $scope.current = opts.entity;
+                            $scope.top = opts.top;
+
+                            $scope.left = opts.left - opts.width;
+                        });
+                    });
+
+
+                }
+            }
+        }])
+        .factory('piLayer', ['piLayerStack', '$q', function(piLayerStack, $q){
+            this.open = function(opts) {
+                var resultDeferred = $q.defer(),
+                    openDeferred = $q.defer(),
+                    instance = {
+                        result: resultDeferred.promise,
+                        opened: openDeferred.promise,
+                        close: function(result) {
+                            piLayerStack.close(instance);
+                        },
+                        dismiss: function(reason) {
+                            piLayerStack.dismiss(instance);
+                        }
+                    };
+
+                piLayerStack.open(instance, opts);
+
+                return instance;
+            };
+
+            return this;
+        }])
+        .factory('piLayerStack', ['piStack', function(piStack){
+            var stack = {};
+            var callable;
+            var layersVisibled = piStack.create();
+
+            var open = function(instance, opts) {
+                layersVisibled.add(instance, opts);
+                if(!_.isUndefined(callable)){
+                    callable(instance, opts);
+                }
+
+                return instance;
+            }
+
+            var close = function(instance) {
+                layersVisibled.remove(instance);
+            }
+
+            var dismiss = function(instance) {
+                layersVisibled.remove(instance);
+            }
+
+            var getTop = function() {
+                return layersVisibled.top();
+            }
+
+            var getLength = function(){
+                return layersVisibled.length();
+            }
+
+            return {
+                length: getLength,
+                open: open,
+                onAdded: function(c) {
+                    return callable = c;
+                },
+                length: function(){
+                    return layersVisibled.length();
+                },
+                dismiss: dismiss,
+                close: close,
+                getTop: getTop
+            }
+        }]);
 })();
 (function(){
   var piModalStack = function(piStack)
@@ -2612,7 +2776,7 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.provider('piHttp', [
 			function () {
 				var self = this;
-				this.baseUrl = 'http://pi.codigo.ovh';
+				this.baseUrl = '';
 				this.token = null;
 
 				var formatUrl = function(url) {
@@ -3062,6 +3226,29 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.run(runFn)
 })();
 (function(){
+	'use strict';
+
+	angular
+		.module('pi.core.app')
+		.factory('pi.core.app.appSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/api/application', model);
+			}
+
+			this.find = function(id, model) {
+				return piHttp.get('/api/application' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/api/application', model);
+			}
+
+			return this;
+		}]);
+
+})();
+(function(){
 	angular
 		.module('pi.core.article')
 		.factory('pi.core.article.articleCategorySvc', ['piHttp', function(piHttp){
@@ -3080,6 +3267,34 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
 			this.find = function(model) {
 				return piHttp.get('/article-category', {params: model});
+			};
+			return this;
+		}]);
+})();
+
+(function(){
+	angular
+		.module('pi.core.article')
+		.factory('pi.core.article.articleSerieSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/article-serie', model);
+			}
+
+			this.remove = function(id) {
+				return piHttp.post('/article-serie-remove/' + id);
+			}
+
+			this.put = function(id, model) {
+				return piHttp.post('/article-serie/' + id, model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/article-serie/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/article-serie', {params: model});
 			};
 			return this;
 		}]);
@@ -3113,29 +3328,6 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		}]);
 })();
 
-(function(){
-	'use strict';
-
-	angular
-		.module('pi.core.app')
-		.factory('pi.core.app.appSvc', ['piHttp', function(piHttp){
-
-			this.post = function(model){
-				return piHttp.post('/api/application', model);
-			}
-
-			this.find = function(id, model) {
-				return piHttp.get('/api/application' + id, model);
-			}
-
-			this.find = function(model) {
-				return piHttp.get('/api/application', model);
-			}
-
-			return this;
-		}]);
-
-})();
 (function(){
 
 	angular
@@ -3550,6 +3742,34 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
 			this.find = function(model) {
 				return piHttp.get('/question', {params: model});
+			};
+			return this;
+		}]);
+})();
+
+(function(){
+	angular
+		.module('pi.core.user')
+		.factory('pi.core.user.userSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/user', model);
+			}
+
+			this.remove = function(id) {
+				return piHttp.post('/user-remove/' + id);
+			}
+
+			this.put = function(id, model) {
+				return piHttp.post('/user/' + id, model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/user/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/user', {params: model});
 			};
 			return this;
 		}]);
