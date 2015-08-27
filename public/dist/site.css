@@ -1368,6 +1368,58 @@ ul ul ul {
   left: 0;
   right: 0; }
 
+.pi-breadcrumb {
+  background-color: #f6f6f6;
+  color: #8d8f9c;
+  /*min-height: $pi-breadcrumb-height;*/
+  margin-bottom: 1em; }
+  .pi-breadcrumb button, .pi-breadcrumb a {
+    color: #8d8f9c; }
+
+.pi-breadcrumb__wrapper {
+  max-width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  /*
+   * responsive ($pi-breadcrumb-height / 2) - $base-font-size
+   */ }
+  .pi-breadcrumb__wrapper:after {
+    content: " ";
+    display: block;
+    clear: both; }
+  @media (min-width: 1200px) {
+    .pi-breadcrumb__wrapper {
+      padding-left: 7%; } }
+
+.pi-breadcrumb__side {
+  width: 37.5%;
+  float: left;
+  margin-right: 4.16667%; }
+
+.pi-breadcrumb__feed {
+  width: 16.66667%;
+  float: left;
+  margin-right: 4.16667%;
+  text-align: center; }
+
+.pi-breadcrumb__nav {
+  margin: 5px 0px;
+  width: 37.5%;
+  float: right;
+  margin-right: 0;
+  text-align: right; }
+  .pi-breadcrumb__nav button {
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    -ms-border-radius: 25px;
+    -o-border-radius: 25px;
+    border-radius: 25px;
+    float: right;
+    margin-left: 6px; }
+
+.pi-breadcrumb__name {
+  font-size: 1.3em; }
+
 .panel {
   margin-bottom: 22px;
   border: 1px solid transparent;
