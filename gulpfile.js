@@ -24,6 +24,7 @@ var paths = {
         './bower_components/restangular/dist/restangular.js',
         './bower_components/moment/moment.js',
         './bower_components/moment/locale/pt.js',
+        './bower_components/angular-masonry/angular-masonry.js',
         './bower_components/pi-class-hover/dist/pi-class-hover.js',
         './bower_components/moment-timezone/moment-timezone.js',
         './bower_components/angular-moment/angular-moment.js',
@@ -41,7 +42,7 @@ var paths = {
         './bower_components/angular-contenteditable/angular-contenteditable.js',
         './bower_components/prism/prism.js',
         './bower_components/ng-tags-input/ng-tags-input.js',
-        './bower_components/angularjs-socialshare/dist/angular-socialshare.min.js'
+        './bower_components/angular-socialshare/dist/angular-socialshare.min.js'
     ],
     appModules: [
         './app/module.js',
@@ -85,6 +86,15 @@ gulp.task('scripts', function(){
 
     gulp.src(['./bower_components/angular/angular.js', './bower_components/angular-i18n/angular-locale_pt.js'])
       .pipe(concat('angular.js'))
+      .pipe(gulp.dest('./public/dist'));
+
+    gulp.src([
+        './bower_components/outlayer/item.js',
+        './bower_components/outlayer/outlayer.js',
+        './bower_components/masonry/masonry.js',
+        './bower_components/imagesloaded/imagesloaded.js'
+      ])
+      .pipe(concat('masonry.js'))
       .pipe(gulp.dest('./public/dist'));
 
     gulp.src([

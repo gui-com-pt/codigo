@@ -990,7 +990,8 @@ p.pi-card__content {
 
 .pi-card__thumb {
   position: relative;
-  min-height: 40px; }
+  min-height: 40px;
+  min-width: 110px; }
 
 .pi-card__thumb-anchor {
   display: block; }
@@ -1161,6 +1162,9 @@ a.pi-card__title {
 
 .list-group__item > .button, .list-group__item > .badge {
   float: right; }
+
+.pi-nav > .pi-list__right {
+  margin-left: auto; }
 
 .page-view__wrapper {
   overflow: hidden;

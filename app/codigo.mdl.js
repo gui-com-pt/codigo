@@ -16,7 +16,7 @@
   angular
     .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
       'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select',
-      'piClassHover', 'ngTagsInput', '720kb.socialshare']);
+      'piClassHover', 'ngTagsInput', '720kb.socialshare', 'wu.masonry']);
 
   angular
     .module('codigo')

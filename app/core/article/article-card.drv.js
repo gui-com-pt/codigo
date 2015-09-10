@@ -1,19 +1,19 @@
 (function(){
-
+    var nutritionCard = function(ApiIsAuthorService, $rootScope)  {
+        var link = function(scope, elem, attrs){
+        }
+        return {
+          scope: {
+              'article': '='
+          },
+          replace: true,
+          templateUrl: 'core/article/article-card.tpl.html',
+          link: link
+        }
+    };
+    nutritionCard.$inject = ['ApiIsAuthorService', '$rootScope'];
     angular
         .module('codigo.core.article')
-        .controller('codigo.core.article.articleCardCtrl', [function(){
+        .directive('codigoArticleCard', nutritionCard);
 
-        }])
-        .directive('codigoArticleCard', [function(){
-
-            return {
-                scope: {
-                    'article': '='
-                },
-                replace: true,
-                templateUrl: 'core/article/article-card.tpl.html',
-                controller: 'codigo.core.article.articleCardCtrl'
-            }
-        }]);
 })();

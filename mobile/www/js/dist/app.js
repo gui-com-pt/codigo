@@ -16,7 +16,7 @@
   angular
     .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
       'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select',
-      'piClassHover', 'ngTagsInput', '720kb.socialshare']);
+      'piClassHover', 'ngTagsInput', '720kb.socialshare', 'wu.masonry']);
 
   angular
     .module('codigo')
@@ -269,24 +269,25 @@
 		}]);
 })();
 (function(){
-
+    var nutritionCard = function(ApiIsAuthorService, $rootScope)  {
+        var link = function(scope, elem, attrs){
+        }
+        return {
+          scope: {
+              'article': '='
+          },
+          replace: true,
+          templateUrl: 'core/article/article-card.tpl.html',
+          link: link
+        }
+    };
+    nutritionCard.$inject = ['ApiIsAuthorService', '$rootScope'];
     angular
         .module('codigo.core.article')
-        .controller('codigo.core.article.articleCardCtrl', [function(){
+        .directive('codigoArticleCard', nutritionCard);
 
-        }])
-        .directive('codigoArticleCard', [function(){
-
-            return {
-                scope: {
-                    'article': '='
-                },
-                replace: true,
-                templateUrl: 'core/article/article-card.tpl.html',
-                controller: 'codigo.core.article.articleCardCtrl'
-            }
-        }]);
 })();
+
 (function(){
     var SportsNewsCreateCtrl = function(articleSvc, $state, $rootScope){
         var self = this;
