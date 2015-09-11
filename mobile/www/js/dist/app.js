@@ -1,6 +1,192 @@
 (function(){
 "use restrict";
 
+var boot = function(){
+         var initInjector = angular.injector(['ng']);
+          var $http = initInjector.get('$http');
+          var _response;
+
+          $http.get('/api/init').then(
+              function(response) {
+                  _response = response;
+                  angular.module('config', []).constant('codigoModel', _response.data);
+
+                  angular.element(document).ready(function() {
+                      angular.bootstrap(document, ['codigo']);
+                  });
+              }
+          );
+  }
+
+  boot();
+
+  angular
+    .module('pi-auth', ['pi']);
+
+  angular
+    .module('pi-auth')
+    .provider('piConfiguration', function(){
+      var config = function(){
+        var m = {};
+        m.providers = ['basic'];
+        m.loginUri = '/login';
+        m.logoutUri = '/logout';
+
+        return m;
+      };
+
+      var provider = function(){
+        var me = config();
+        var configs = {};
+        configs['default'] = me;
+
+        me.config = function(configName) {
+          var c = configs[configName];
+          if(!c) {
+            c = config();
+            configs[configName] = c;
+          }
+          return c;
+        };
+
+        me.$get = ['$q', function($q){
+          var deferred = $q.defer();
+
+          return function(configName) {
+            return configs[configName];
+          }
+        }];
+
+        return me;
+
+      };
+
+      return provider();
+    })
+    .controller('registerCtrl', ['$scope', 'piConfiguration', 'accountApi', function($scope, piConfiguration, accountApi){
+      $scope.init = function(configName) {
+        var config = piConfiguration(configName);
+      }
+
+      $scope.register = function(firstName, lastName, email, password, passwordConfirm, meta) {
+        var req = {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password
+        };
+
+        if(meta) {
+          req = angular.extend(req, meta)
+        }
+
+        accountApi.register(req)
+          .then(function(res){
+            window.location = '/';
+          }, function(res){
+            alert('erro no login');
+          });
+      }
+    }])
+    .directive('piRegister', ['$document', function($document){
+      return {
+        controller: 'registerCtrl',
+        controllerAs: 'ctrl',
+        transclude: true,
+        replace: true,
+        template: '<div ng-transclude></div>',
+        compile: function compile(tElement, tAttrs, transclude) {
+           return {
+              pre: function preLink(scope, elemt, attrs, controller){
+
+              },
+              post: function postLink(scope, elem, attrs, ctrl) {
+                var btn = angular.element(elem[0].querySelector('[login-submit]')),
+                    mail = angular.element(elem[0].querySelector('[login-email]')),
+                    pw = angular.element(elem[0].querySelector('[login-password]'));
+
+                    if(navigator.appVersion.indexOf("Trident") != -1){
+                        terminal.addClass('damn-ie');
+                    }
+
+                    var config = attrs['piConfig'];
+                    scope.init(config || 'default');
+
+                    var mouseover = false;
+
+                    elem.on('mouseover', function(){
+                      mouseover = true;
+                    });
+
+                    btn.on('click', function(){
+                      scope.login(mail.val(), pw.val());
+                    })
+
+                    elem.on('mouseleave', function(){
+                      mouseover = false;
+                    });
+              }
+            }
+          }
+    }
+    }])
+    .controller('loginCtrl', ['$scope', 'piConfiguration', 'accountApi', function($scope, piConfiguration, accountApi){
+      $scope.init = function(configName) {
+        var config = piConfiguration(configName);
+      }
+
+      $scope.login = function(email, password) {
+        accountApi.login(email, password)
+          .then(function(res){
+            window.location = '/';
+          }, function(res){
+            alert('erro no login');
+          });
+      }
+    }])
+    .directive('piAuth', ['$document', function($document){
+      return {
+        controller: 'loginCtrl',
+        controllerAs: 'ctrl',
+        transclude: true,
+        replace: true,
+        template: '<div ng-transclude></div>',
+        compile: function compile(tElement, tAttrs, transclude) {
+           return {
+              pre: function preLink(scope, elemt, attrs, controller){
+
+              },
+              post: function postLink(scope, elem, attrs, ctrl) {
+                var btn = angular.element(elem[0].querySelector('[login-submit]')),
+                    mail = angular.element(elem[0].querySelector('[login-email]')),
+                    pw = angular.element(elem[0].querySelector('[login-password]'));
+
+                    if(navigator.appVersion.indexOf("Trident") != -1){
+                        terminal.addClass('damn-ie');
+                    }
+
+                    var config = attrs['piConfig'];
+                    scope.init(config || 'default');
+
+                    var mouseover = false;
+
+                    elem.on('mouseover', function(){
+                      mouseover = true;
+                    });
+
+                    btn.on('click', function(){
+                      scope.login(mail.val(), pw.val());
+                    })
+
+                    elem.on('mouseleave', function(){
+                      mouseover = false;
+                    });
+              }
+            }
+          }
+    }
+    }]);
+
     angular
         .module('templates', []);
 
@@ -16,7 +202,7 @@
   angular
     .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
       'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select',
-      'piClassHover', 'ngTagsInput', '720kb.socialshare', 'wu.masonry']);
+      'piClassHover', 'ngTagsInput', '720kb.socialshare', 'wu.masonry', 'pi-auth', 'config']);
 
   angular
     .module('codigo')
@@ -75,6 +261,12 @@
                   controller: 'codigo.core.homeCtrl',
                   controllerAs: 'ctrl'
               })
+              .state('login', {
+                url: '/login',
+                templateUrl: 'core/login.tpl.html',
+                controller: 'codigo.core.loginCtrl',
+                controllerAs: 'ctrl'
+              })
               .state('question-list',{
                   url: '/perguntas',
                   templateUrl: 'core/question/question-list.tpl.html',
@@ -131,8 +323,11 @@
               });
 
       }])
-    .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state',
-          function($rootScope, categorySvc, $state){
+    .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state', 'codigoModel',
+          function($rootScope, categorySvc, $state, codigoModel){
+
+            $rootScope.isAuthenticated = codigoModel.isAuthenticated;
+            $rootScope.codigoModel = codigoModel;
 
           $rootScope.search = function(value) {
             $state.go('article-list', {name: value, categoryId: null});
@@ -216,6 +411,86 @@
         .module('codigo')
         .controller('codigo.core.homeCtrl', SportsNewsListCtrl);
 })();
+(function(){
+    var SportsNewsListCtrl = function(articleSvc, $scope){
+        var self = this;
+
+
+        self.loginError = function(){
+          alert('erro no login');
+        }
+
+        self.loginSuccess = function(){
+          alert('success');
+        }
+    };
+
+    SportsNewsListCtrl.$inject = ['pi.core.article.articleSvc', '$scope'];
+
+    angular
+        .module('codigo')
+        .controller('codigo.core.loginCtrl', SportsNewsListCtrl);
+})();
+(function(){
+  angular
+  .module('codigo')
+  .directive('piLoginSubmit', [function(){
+    var linkFn = function(scope, element, attrs, piLoginCtrl)
+        {
+            element.bind('click', function(){
+                piLoginCtrl.submit();
+            })
+        };
+
+        return {
+            replace: false,
+            link: linkFn,
+            require:'^piLogin'
+        }
+  }])
+  .directive('piLogin', ['accountApi', function(accountApi){
+    var linkFn = function(scope, elem, attrs)
+		{
+
+		};
+    var ctrl = function($scope){
+      $scope.submit = function()
+			{
+				var successFn = function(res)
+					{
+						$scope.onSuccess(res);
+					},
+					errorFn = function(res)
+					{
+						$scope.onError(res);
+					};
+
+				accountApi.login($scope.email, $scope.password)
+					.then(successFn, errorFn);
+			};
+
+      this.submit = $scope.submit;
+
+			$scope.cancel = function()
+			{
+
+			};
+    };
+    ctrl.$inject = ['$scope'];
+
+		return {
+			scope: {
+				'piConfig': '=piConfig',
+        'onSuccess': '&',
+        'onError': '&'
+			},
+			link: linkFn,
+      controller: ctrl,
+      replace: false
+		};
+  }]);
+})();
+
 (function(){
 	
 	angular

@@ -1,4 +1,4 @@
-<html ng-app="codigo">
+<html>
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
@@ -17,15 +17,15 @@
     <script src="dist/app.min.js"></script>
 
     <script src="dist/templates.js"></script>
-    
+
 </head>
 <body>
   <div class="pi-nav__wrapper pi-nav__wrapper--fixed">
       <div class="pi-nav">
       <ul>
             <li><a ui-sref="home">codigo.ovh</a></li>
-            <li><a ui-sref="question-list">Perguntas</a></li>
-            <li><a href="">Gestão</a>
+            <li ng-show="$root.isAuthenticated"><a ui-sref="question-list">Perguntas</a></li>
+            <li ng-show="$root.isAuthenticated"><a href="">Gestão</a>
                 <ul>
                     <li><a ui-sref="article-create">Criar Artigo</a></li>
                     <li><a ui-sref="category-list">Categorias</a></li>
