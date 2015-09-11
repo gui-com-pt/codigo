@@ -10,7 +10,7 @@
                 </div>
                 <div class="pi-form__group">
                     <ui-select required ng-model="ctrl.categorySelect" theme="selectize">
-                        <ui-select-match placeholder="Localidade">{{$select.selected.displayName}}</ui-select-match>
+                        <ui-select-match placeholder="Categorias">{{$select.selected.displayName}}</ui-select-match>
                         <ui-select-choices repeat="cat in $root.categories | filter: $select.search">
                             <span ng-bind="cat.displayName | highlight: $select.search"></span>
                         </ui-select-choices>
