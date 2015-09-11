@@ -1,5 +1,28 @@
 (function(){
 "use restrict";
+function getCookie(cname) {
+   var name = cname + "=",
+       ca = document.cookie.split(';'),
+       i,
+       c,
+       ca_length = ca.length;
+   for (i = 0; i < ca_length; i += 1) {
+       c = ca[i];
+       while (c.charAt(0) === ' ') {
+           c = c.substring(1);
+       }
+       if (c.indexOf(name) !== -1) {
+           return c.substring(name.length, c.length);
+       }
+   }
+   return "";
+}
+
+function setCookie(variable, value, expires_seconds) {
+   var d = new Date();
+   d = new Date(d.getTime() + 1000 * expires_seconds);
+   document.cookie = variable + '=' + value + '; expires=' + d.toGMTString() + ';';
+}
 
 var boot = function(){
          var initInjector = angular.injector(['ng']);
@@ -333,30 +356,6 @@ var boot = function(){
       }])
     .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state', 'codigoModel',
           function($rootScope, categorySvc, $state, codigoModel){
-            function getCookie(cname) {
-               var name = cname + "=",
-                   ca = document.cookie.split(';'),
-                   i,
-                   c,
-                   ca_length = ca.length;
-               for (i = 0; i < ca_length; i += 1) {
-                   c = ca[i];
-                   while (c.charAt(0) === ' ') {
-                       c = c.substring(1);
-                   }
-                   if (c.indexOf(name) !== -1) {
-                       return c.substring(name.length, c.length);
-                   }
-               }
-               return "";
-           }
-
-           function setCookie(variable, value, expires_seconds) {
-               var d = new Date();
-               d = new Date(d.getTime() + 1000 * expires_seconds);
-               document.cookie = variable + '=' + value + '; expires=' + d.toGMTString() + ';';
-           }
-
             $rootScope.isAuthenticated = codigoModel.isAuthenticated;
             $rootScope.codigoModel = codigoModel;
 
