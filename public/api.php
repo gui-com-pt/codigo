@@ -280,7 +280,7 @@ class DemoHost extends AppHost {
   	$this->registerService(new InitService());
 
     $db = $container->get('OdmConfiguration');
-    $db->setDefaultDb('fitting');
+    $db->setDefaultDb('codigo');
   }
 }
 
