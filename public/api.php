@@ -15,7 +15,7 @@ use SpotEvents\ServiceInterface\Data\EventRepository;
 use SpotEvents\ServiceInterface\Data\NutritionRepository;
 use SpotEvents\ServiceInterface\Data\ModalityRepository;
 
-require '../vendor/autoload.php';
+require '../../pi-framework/vendor/autoload.php';
 
 class MongoCursorException extends \Exception {
 
@@ -269,7 +269,7 @@ class DemoHost extends AppHost {
   public function configure(IContainer $container)
   {
     header('P3P: policyref="/w3c/p3p.xml", CP="ALL IND DSP COR ADM CONo CUR CUSo IVAo IVDo PSA PSD TAI TELo OUR SAMo CNT COM INT NAV ONL PHY PRE PUR UNI"');
-  	$this->config()->domain('beta.codigo.ovh');
+  	$this->config()->domain('codigo.pi');
   	$conf = new FileSystemConfiguration();
   	$conf->storeDir(__DIR__ . '/cdn');
   	$this->config()->staticFolder(__DIR__ . '/cdn');
@@ -280,7 +280,7 @@ class DemoHost extends AppHost {
   	$this->registerService(new InitService());
 
     $db = $container->get('OdmConfiguration');
-    $db->setDefaultDb('codigo');
+    $db->setDefaultDb('fitting');
   }
 }
 

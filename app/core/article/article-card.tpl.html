@@ -29,5 +29,5 @@
         </div>
     </div>
     <a class="pi-card__title" ui-sref="article-view({id: article.id})" ng-bind="article.name"></a>
-    <div class="pi-card__date"> há 3 horas</div>
+    <div class="pi-card__date" am-time-ago="article.datePublished | amFromUnix"></div>
 </div>

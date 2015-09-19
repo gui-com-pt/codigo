@@ -1061,9 +1061,9 @@ a.pi-card__title {
   font-size: 18px;
   color: inherit; }
 
-.list-group, .list-group-primary, .list-group-secondary, .list-group-danger, .list-group-info, .list-group-highlight, .list-group-default {
+.list-group, .pi-list, .list-group-primary, .pi-list-primary, .list-group-secondary, .pi-list-secondary, .list-group-danger, .pi-list-danger, .list-group-info, .pi-list-info, .list-group-highlight, .pi-list-highlight, .list-group-default, .pi-list-default {
   padding-left: 0px; }
-  .list-group > li, .list-group-primary > li, .list-group-secondary > li, .list-group-danger > li, .list-group-info > li, .list-group-highlight > li, .list-group-default > li, .list-group > .list-group__item, .list-group-primary > .list-group__item, .list-group-secondary > .list-group__item, .list-group-danger > .list-group__item, .list-group-info > .list-group__item, .list-group-highlight > .list-group__item, .list-group-default > .list-group__item {
+  .list-group > li, .pi-list > li, .list-group-primary > li, .pi-list-primary > li, .list-group-secondary > li, .pi-list-secondary > li, .list-group-danger > li, .pi-list-danger > li, .list-group-info > li, .pi-list-info > li, .list-group-highlight > li, .pi-list-highlight > li, .list-group-default > li, .pi-list-default > li, .list-group > .list-group__item, .pi-list > .list-group__item, .list-group-primary > .list-group__item, .pi-list-primary > .list-group__item, .list-group-secondary > .list-group__item, .pi-list-secondary > .list-group__item, .list-group-danger > .list-group__item, .pi-list-danger > .list-group__item, .list-group-info > .list-group__item, .pi-list-info > .list-group__item, .list-group-highlight > .list-group__item, .pi-list-highlight > .list-group__item, .list-group-default > .list-group__item, .pi-list-default > .list-group__item {
     overflow: hidden;
     *zoom: 1;
     padding: 15px;
@@ -1073,9 +1073,9 @@ a.pi-card__title {
     /* the border */
     border: solid 1px #f6f6f6;
     background-color: #fff; }
-    .list-group > li > a, .list-group-primary > li > a, .list-group-secondary > li > a, .list-group-danger > li > a, .list-group-info > li > a, .list-group-highlight > li > a, .list-group-default > li > a, .list-group > .list-group__item > a, .list-group-primary > .list-group__item > a, .list-group-secondary > .list-group__item > a, .list-group-danger > .list-group__item > a, .list-group-info > .list-group__item > a, .list-group-highlight > .list-group__item > a, .list-group-default > .list-group__item > a {
+    .list-group > li > a, .pi-list > li > a, .list-group-primary > li > a, .pi-list-primary > li > a, .list-group-secondary > li > a, .pi-list-secondary > li > a, .list-group-danger > li > a, .pi-list-danger > li > a, .list-group-info > li > a, .pi-list-info > li > a, .list-group-highlight > li > a, .pi-list-highlight > li > a, .list-group-default > li > a, .pi-list-default > li > a, .list-group > .list-group__item > a, .pi-list > .list-group__item > a, .list-group-primary > .list-group__item > a, .pi-list-primary > .list-group__item > a, .list-group-secondary > .list-group__item > a, .pi-list-secondary > .list-group__item > a, .list-group-danger > .list-group__item > a, .pi-list-danger > .list-group__item > a, .list-group-info > .list-group__item > a, .pi-list-info > .list-group__item > a, .list-group-highlight > .list-group__item > a, .pi-list-highlight > .list-group__item > a, .list-group-default > .list-group__item > a, .pi-list-default > .list-group__item > a {
       display: block; }
-    .list-group > li:first-child, .list-group-primary > li:first-child, .list-group-secondary > li:first-child, .list-group-danger > li:first-child, .list-group-info > li:first-child, .list-group-highlight > li:first-child, .list-group-default > li:first-child, .list-group > .list-group__item:first-child, .list-group-primary > .list-group__item:first-child, .list-group-secondary > .list-group__item:first-child, .list-group-danger > .list-group__item:first-child, .list-group-info > .list-group__item:first-child, .list-group-highlight > .list-group__item:first-child, .list-group-default > .list-group__item:first-child {
+    .list-group > li:first-child, .pi-list > li:first-child, .list-group-primary > li:first-child, .pi-list-primary > li:first-child, .list-group-secondary > li:first-child, .pi-list-secondary > li:first-child, .list-group-danger > li:first-child, .pi-list-danger > li:first-child, .list-group-info > li:first-child, .pi-list-info > li:first-child, .list-group-highlight > li:first-child, .pi-list-highlight > li:first-child, .list-group-default > li:first-child, .pi-list-default > li:first-child, .list-group > .list-group__item:first-child, .pi-list > .list-group__item:first-child, .list-group-primary > .list-group__item:first-child, .pi-list-primary > .list-group__item:first-child, .list-group-secondary > .list-group__item:first-child, .pi-list-secondary > .list-group__item:first-child, .list-group-danger > .list-group__item:first-child, .pi-list-danger > .list-group__item:first-child, .list-group-info > .list-group__item:first-child, .pi-list-info > .list-group__item:first-child, .list-group-highlight > .list-group__item:first-child, .pi-list-highlight > .list-group__item:first-child, .list-group-default > .list-group__item:first-child, .pi-list-default > .list-group__item:first-child {
       -webkit-border-radius: 4px;
       -moz-border-radius: 4px;
       -ms-border-radius: 4px;
@@ -1086,71 +1086,71 @@ a.pi-card__title {
       -ms-border-radius: 4px;
       -o-border-radius: 4px;
       border-radius: 4px; }
-    .list-group > li:hover, .list-group-primary > li:hover, .list-group-secondary > li:hover, .list-group-danger > li:hover, .list-group-info > li:hover, .list-group-highlight > li:hover, .list-group-default > li:hover, .list-group > .list-group__item:hover, .list-group-primary > .list-group__item:hover, .list-group-secondary > .list-group__item:hover, .list-group-danger > .list-group__item:hover, .list-group-info > .list-group__item:hover, .list-group-highlight > .list-group__item:hover, .list-group-default > .list-group__item:hover {
+    .list-group > li:hover, .pi-list > li:hover, .list-group-primary > li:hover, .pi-list-primary > li:hover, .list-group-secondary > li:hover, .pi-list-secondary > li:hover, .list-group-danger > li:hover, .pi-list-danger > li:hover, .list-group-info > li:hover, .pi-list-info > li:hover, .list-group-highlight > li:hover, .pi-list-highlight > li:hover, .list-group-default > li:hover, .pi-list-default > li:hover, .list-group > .list-group__item:hover, .pi-list > .list-group__item:hover, .list-group-primary > .list-group__item:hover, .pi-list-primary > .list-group__item:hover, .list-group-secondary > .list-group__item:hover, .pi-list-secondary > .list-group__item:hover, .list-group-danger > .list-group__item:hover, .pi-list-danger > .list-group__item:hover, .list-group-info > .list-group__item:hover, .pi-list-info > .list-group__item:hover, .list-group-highlight > .list-group__item:hover, .pi-list-highlight > .list-group__item:hover, .list-group-default > .list-group__item:hover, .pi-list-default > .list-group__item:hover {
       background-color: #f6f6f6;
       cursor: pointer; }
-  .list-group > .list-group__item-primary, .list-group-primary > .list-group__item-primary, .list-group-secondary > .list-group__item-primary, .list-group-danger > .list-group__item-primary, .list-group-info > .list-group__item-primary, .list-group-highlight > .list-group__item-primary, .list-group-default > .list-group__item-primary {
+  .list-group > .list-group__item-primary, .pi-list > .list-group__item-primary, .list-group-primary > .list-group__item-primary, .pi-list-primary > .list-group__item-primary, .list-group-secondary > .list-group__item-primary, .pi-list-secondary > .list-group__item-primary, .list-group-danger > .list-group__item-primary, .pi-list-danger > .list-group__item-primary, .list-group-info > .list-group__item-primary, .pi-list-info > .list-group__item-primary, .list-group-highlight > .list-group__item-primary, .pi-list-highlight > .list-group__item-primary, .list-group-default > .list-group__item-primary, .pi-list-default > .list-group__item-primary {
     background-color: #0e57c8;
     color: #000000; }
-    .list-group > .list-group__item-primary a, .list-group-primary > .list-group__item-primary a, .list-group-secondary > .list-group__item-primary a, .list-group-danger > .list-group__item-primary a, .list-group-info > .list-group__item-primary a, .list-group-highlight > .list-group__item-primary a, .list-group-default > .list-group__item-primary a {
+    .list-group > .list-group__item-primary a, .pi-list > .list-group__item-primary a, .list-group-primary > .list-group__item-primary a, .pi-list-primary > .list-group__item-primary a, .list-group-secondary > .list-group__item-primary a, .pi-list-secondary > .list-group__item-primary a, .list-group-danger > .list-group__item-primary a, .pi-list-danger > .list-group__item-primary a, .list-group-info > .list-group__item-primary a, .pi-list-info > .list-group__item-primary a, .list-group-highlight > .list-group__item-primary a, .pi-list-highlight > .list-group__item-primary a, .list-group-default > .list-group__item-primary a, .pi-list-default > .list-group__item-primary a {
       color: #000000; }
-  .list-group > .list-group__item-secondary, .list-group-primary > .list-group__item-secondary, .list-group-secondary > .list-group__item-secondary, .list-group-danger > .list-group__item-secondary, .list-group-info > .list-group__item-secondary, .list-group-highlight > .list-group__item-secondary, .list-group-default > .list-group__item-secondary {
+  .list-group > .list-group__item-secondary, .pi-list > .list-group__item-secondary, .list-group-primary > .list-group__item-secondary, .pi-list-primary > .list-group__item-secondary, .list-group-secondary > .list-group__item-secondary, .pi-list-secondary > .list-group__item-secondary, .list-group-danger > .list-group__item-secondary, .pi-list-danger > .list-group__item-secondary, .list-group-info > .list-group__item-secondary, .pi-list-info > .list-group__item-secondary, .list-group-highlight > .list-group__item-secondary, .pi-list-highlight > .list-group__item-secondary, .list-group-default > .list-group__item-secondary, .pi-list-default > .list-group__item-secondary {
     background-color: #01a1c5;
     color: #000000; }
-    .list-group > .list-group__item-secondary a, .list-group-primary > .list-group__item-secondary a, .list-group-secondary > .list-group__item-secondary a, .list-group-danger > .list-group__item-secondary a, .list-group-info > .list-group__item-secondary a, .list-group-highlight > .list-group__item-secondary a, .list-group-default > .list-group__item-secondary a {
+    .list-group > .list-group__item-secondary a, .pi-list > .list-group__item-secondary a, .list-group-primary > .list-group__item-secondary a, .pi-list-primary > .list-group__item-secondary a, .list-group-secondary > .list-group__item-secondary a, .pi-list-secondary > .list-group__item-secondary a, .list-group-danger > .list-group__item-secondary a, .pi-list-danger > .list-group__item-secondary a, .list-group-info > .list-group__item-secondary a, .pi-list-info > .list-group__item-secondary a, .list-group-highlight > .list-group__item-secondary a, .pi-list-highlight > .list-group__item-secondary a, .list-group-default > .list-group__item-secondary a, .pi-list-default > .list-group__item-secondary a {
       color: #000000; }
-  .list-group > .list-group__item-danger, .list-group-primary > .list-group__item-danger, .list-group-secondary > .list-group__item-danger, .list-group-danger > .list-group__item-danger, .list-group-info > .list-group__item-danger, .list-group-highlight > .list-group__item-danger, .list-group-default > .list-group__item-danger {
+  .list-group > .list-group__item-danger, .pi-list > .list-group__item-danger, .list-group-primary > .list-group__item-danger, .pi-list-primary > .list-group__item-danger, .list-group-secondary > .list-group__item-danger, .pi-list-secondary > .list-group__item-danger, .list-group-danger > .list-group__item-danger, .pi-list-danger > .list-group__item-danger, .list-group-info > .list-group__item-danger, .pi-list-info > .list-group__item-danger, .list-group-highlight > .list-group__item-danger, .pi-list-highlight > .list-group__item-danger, .list-group-default > .list-group__item-danger, .pi-list-default > .list-group__item-danger {
     background-color: #da3826;
     color: #000000; }
-    .list-group > .list-group__item-danger a, .list-group-primary > .list-group__item-danger a, .list-group-secondary > .list-group__item-danger a, .list-group-danger > .list-group__item-danger a, .list-group-info > .list-group__item-danger a, .list-group-highlight > .list-group__item-danger a, .list-group-default > .list-group__item-danger a {
+    .list-group > .list-group__item-danger a, .pi-list > .list-group__item-danger a, .list-group-primary > .list-group__item-danger a, .pi-list-primary > .list-group__item-danger a, .list-group-secondary > .list-group__item-danger a, .pi-list-secondary > .list-group__item-danger a, .list-group-danger > .list-group__item-danger a, .pi-list-danger > .list-group__item-danger a, .list-group-info > .list-group__item-danger a, .pi-list-info > .list-group__item-danger a, .list-group-highlight > .list-group__item-danger a, .pi-list-highlight > .list-group__item-danger a, .list-group-default > .list-group__item-danger a, .pi-list-default > .list-group__item-danger a {
       color: #000000; }
-  .list-group > .list-group__item-info, .list-group-primary > .list-group__item-info, .list-group-secondary > .list-group__item-info, .list-group-danger > .list-group__item-info, .list-group-info > .list-group__item-info, .list-group-highlight > .list-group__item-info, .list-group-default > .list-group__item-info {
+  .list-group > .list-group__item-info, .pi-list > .list-group__item-info, .list-group-primary > .list-group__item-info, .pi-list-primary > .list-group__item-info, .list-group-secondary > .list-group__item-info, .pi-list-secondary > .list-group__item-info, .list-group-danger > .list-group__item-info, .pi-list-danger > .list-group__item-info, .list-group-info > .list-group__item-info, .pi-list-info > .list-group__item-info, .list-group-highlight > .list-group__item-info, .pi-list-highlight > .list-group__item-info, .list-group-default > .list-group__item-info, .pi-list-default > .list-group__item-info {
     background-color: yellow;
     color: #000000; }
-    .list-group > .list-group__item-info a, .list-group-primary > .list-group__item-info a, .list-group-secondary > .list-group__item-info a, .list-group-danger > .list-group__item-info a, .list-group-info > .list-group__item-info a, .list-group-highlight > .list-group__item-info a, .list-group-default > .list-group__item-info a {
+    .list-group > .list-group__item-info a, .pi-list > .list-group__item-info a, .list-group-primary > .list-group__item-info a, .pi-list-primary > .list-group__item-info a, .list-group-secondary > .list-group__item-info a, .pi-list-secondary > .list-group__item-info a, .list-group-danger > .list-group__item-info a, .pi-list-danger > .list-group__item-info a, .list-group-info > .list-group__item-info a, .pi-list-info > .list-group__item-info a, .list-group-highlight > .list-group__item-info a, .pi-list-highlight > .list-group__item-info a, .list-group-default > .list-group__item-info a, .pi-list-default > .list-group__item-info a {
       color: #000000; }
-  .list-group > .list-group__item-highlight, .list-group-primary > .list-group__item-highlight, .list-group-secondary > .list-group__item-highlight, .list-group-danger > .list-group__item-highlight, .list-group-info > .list-group__item-highlight, .list-group-highlight > .list-group__item-highlight, .list-group-default > .list-group__item-highlight {
+  .list-group > .list-group__item-highlight, .pi-list > .list-group__item-highlight, .list-group-primary > .list-group__item-highlight, .pi-list-primary > .list-group__item-highlight, .list-group-secondary > .list-group__item-highlight, .pi-list-secondary > .list-group__item-highlight, .list-group-danger > .list-group__item-highlight, .pi-list-danger > .list-group__item-highlight, .list-group-info > .list-group__item-highlight, .pi-list-info > .list-group__item-highlight, .list-group-highlight > .list-group__item-highlight, .pi-list-highlight > .list-group__item-highlight, .list-group-default > .list-group__item-highlight, .pi-list-default > .list-group__item-highlight {
     background-color: #da3826;
     color: #000000; }
-    .list-group > .list-group__item-highlight a, .list-group-primary > .list-group__item-highlight a, .list-group-secondary > .list-group__item-highlight a, .list-group-danger > .list-group__item-highlight a, .list-group-info > .list-group__item-highlight a, .list-group-highlight > .list-group__item-highlight a, .list-group-default > .list-group__item-highlight a {
+    .list-group > .list-group__item-highlight a, .pi-list > .list-group__item-highlight a, .list-group-primary > .list-group__item-highlight a, .pi-list-primary > .list-group__item-highlight a, .list-group-secondary > .list-group__item-highlight a, .pi-list-secondary > .list-group__item-highlight a, .list-group-danger > .list-group__item-highlight a, .pi-list-danger > .list-group__item-highlight a, .list-group-info > .list-group__item-highlight a, .pi-list-info > .list-group__item-highlight a, .list-group-highlight > .list-group__item-highlight a, .pi-list-highlight > .list-group__item-highlight a, .list-group-default > .list-group__item-highlight a, .pi-list-default > .list-group__item-highlight a {
       color: #000000; }
-  .list-group > .list-group__item-default, .list-group-primary > .list-group__item-default, .list-group-secondary > .list-group__item-default, .list-group-danger > .list-group__item-default, .list-group-info > .list-group__item-default, .list-group-highlight > .list-group__item-default, .list-group-default > .list-group__item-default {
+  .list-group > .list-group__item-default, .pi-list > .list-group__item-default, .list-group-primary > .list-group__item-default, .pi-list-primary > .list-group__item-default, .list-group-secondary > .list-group__item-default, .pi-list-secondary > .list-group__item-default, .list-group-danger > .list-group__item-default, .pi-list-danger > .list-group__item-default, .list-group-info > .list-group__item-default, .pi-list-info > .list-group__item-default, .list-group-highlight > .list-group__item-default, .pi-list-highlight > .list-group__item-default, .list-group-default > .list-group__item-default, .pi-list-default > .list-group__item-default {
     background-color: #f6f6f6;
     color: #000000; }
-    .list-group > .list-group__item-default a, .list-group-primary > .list-group__item-default a, .list-group-secondary > .list-group__item-default a, .list-group-danger > .list-group__item-default a, .list-group-info > .list-group__item-default a, .list-group-highlight > .list-group__item-default a, .list-group-default > .list-group__item-default a {
+    .list-group > .list-group__item-default a, .pi-list > .list-group__item-default a, .list-group-primary > .list-group__item-default a, .pi-list-primary > .list-group__item-default a, .list-group-secondary > .list-group__item-default a, .pi-list-secondary > .list-group__item-default a, .list-group-danger > .list-group__item-default a, .pi-list-danger > .list-group__item-default a, .list-group-info > .list-group__item-default a, .pi-list-info > .list-group__item-default a, .list-group-highlight > .list-group__item-default a, .pi-list-highlight > .list-group__item-default a, .list-group-default > .list-group__item-default a, .pi-list-default > .list-group__item-default a {
       color: #000000; }
-  .list-group > .list-group__item-active, .list-group-primary > .list-group__item-active, .list-group-secondary > .list-group__item-active, .list-group-danger > .list-group__item-active, .list-group-info > .list-group__item-active, .list-group-highlight > .list-group__item-active, .list-group-default > .list-group__item-active {
+  .list-group > .list-group__item-active, .pi-list > .list-group__item-active, .list-group-primary > .list-group__item-active, .pi-list-primary > .list-group__item-active, .list-group-secondary > .list-group__item-active, .pi-list-secondary > .list-group__item-active, .list-group-danger > .list-group__item-active, .pi-list-danger > .list-group__item-active, .list-group-info > .list-group__item-active, .pi-list-info > .list-group__item-active, .list-group-highlight > .list-group__item-active, .pi-list-highlight > .list-group__item-active, .list-group-default > .list-group__item-active, .pi-list-default > .list-group__item-active {
     background-color: #0e57c8;
     color: #000000;
     border: #0e57c8; }
-    .list-group > .list-group__item-active a, .list-group-primary > .list-group__item-active a, .list-group-secondary > .list-group__item-active a, .list-group-danger > .list-group__item-active a, .list-group-info > .list-group__item-active a, .list-group-highlight > .list-group__item-active a, .list-group-default > .list-group__item-active a {
+    .list-group > .list-group__item-active a, .pi-list > .list-group__item-active a, .list-group-primary > .list-group__item-active a, .pi-list-primary > .list-group__item-active a, .list-group-secondary > .list-group__item-active a, .pi-list-secondary > .list-group__item-active a, .list-group-danger > .list-group__item-active a, .pi-list-danger > .list-group__item-active a, .list-group-info > .list-group__item-active a, .pi-list-info > .list-group__item-active a, .list-group-highlight > .list-group__item-active a, .pi-list-highlight > .list-group__item-active a, .list-group-default > .list-group__item-active a, .pi-list-default > .list-group__item-active a {
       color: #000000; }
 
-.list-group-primary > li, .list-group-primary > .list-group__item {
+.list-group-primary > li, .list-group-primary > .list-group__item, .list-group-primary > .pi-list__item, .pi-list-primary > li, .pi-list-primary > .list-group__item, .pi-list-primary > .pi-list__item {
   background-color: #0e57c8;
   color: #000000; }
 
-.list-group-secondary > li, .list-group-secondary > .list-group__item {
+.list-group-secondary > li, .list-group-secondary > .list-group__item, .list-group-secondary > .pi-list__item, .pi-list-secondary > li, .pi-list-secondary > .list-group__item, .pi-list-secondary > .pi-list__item {
   background-color: #01a1c5;
   color: #000000; }
 
-.list-group-danger > li, .list-group-danger > .list-group__item {
+.list-group-danger > li, .list-group-danger > .list-group__item, .list-group-danger > .pi-list__item, .pi-list-danger > li, .pi-list-danger > .list-group__item, .pi-list-danger > .pi-list__item {
   background-color: #da3826;
   color: #000000; }
 
-.list-group-info > li, .list-group-info > .list-group__item {
+.list-group-info > li, .list-group-info > .list-group__item, .list-group-info > .pi-list__item, .pi-list-info > li, .pi-list-info > .list-group__item, .pi-list-info > .pi-list__item {
   background-color: yellow;
   color: #000000; }
 
-.list-group-highlight > li, .list-group-highlight > .list-group__item {
+.list-group-highlight > li, .list-group-highlight > .list-group__item, .list-group-highlight > .pi-list__item, .pi-list-highlight > li, .pi-list-highlight > .list-group__item, .pi-list-highlight > .pi-list__item {
   background-color: #da3826;
   color: #000000; }
 
-.list-group-default > li, .list-group-default > .list-group__item {
+.list-group-default > li, .list-group-default > .list-group__item, .list-group-default > .pi-list__item, .pi-list-default > li, .pi-list-default > .list-group__item, .pi-list-default > .pi-list__item {
   background-color: #f6f6f6;
   color: #000000; }
 
-.list-group__item > .avatar {
+.list-group__item > .avatar, .pi-list__item > .avatar {
   max-width: 15%;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
@@ -1160,7 +1160,8 @@ a.pi-card__title {
   border: solid 1px #f6f6f6;
   float: left; }
 
-.list-group__item > .button, .list-group__item > .badge {
+.list-group__item > .button, .list-group__item > .badge,
+.pi-list__item > .button, .pi-list__item > .badge {
   float: right; }
 
 .pi-nav > .pi-list__right {
@@ -5279,6 +5280,24 @@ pre[class*="language-"] {
   float: right;
   margin-right: 0; }
 
+/*
+ * copy to PI - temporary
+ */
+.pi-nav .pi-form__group {
+  margin-bottom: 0; }
+
+.comment-none {
+  margin-top: 3em;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center; }
+
+.pi-breadcrumb {
+  margin-bottom: 0; }
+
+.pi-breadcrumb a, .pi-breadcrumb button, .pi-breadcrumb .button-primary {
+  color: #fff; }
+
 body {
   margin-top: 42px; }
 
@@ -5291,18 +5310,10 @@ body {
   min-height: auto;
   font-weight: normal; }
 
-.home__recent, .question__list {
-  overflow: hidden;
-  *zoom: 1; }
-  .home__recent > .pi-card, .question__list > .pi-card {
-    background-color: #f6f6f6;
-    width: 28.57143%;
-    float: left;
-    margin-right: 7.14286%; }
-    .home__recent > .pi-card:nth-child(3n), .question__list > .pi-card:nth-child(3n) {
-      width: 28.57143%;
-      float: right;
-      margin-right: 0; }
+.pi-card__tumb {
+  /*max-width: 570px;*/
+  min-height: 40px;
+  min-width: 120px; }
 
 .pi-card__social-list {
   text-align: center; }
@@ -5329,12 +5340,6 @@ body {
 
 .ui-select-choices-content {
   background-color: #fff; }
-
-.cod__view {
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 45px; }
 
 button, input[type="button"] {
   -webkit-border-radius: first-value-of(4px) first-value-of(4px);
@@ -5363,108 +5368,58 @@ button, input[type="button"] {
   button:hover, input[type="button"]:hover {
     background-color: #f1a837; }
 
-/*
- * Card Sets
- *
-.card-set__wrapper {
-  @include clearfix();
-}
-
-.card-set {
-
-  @include span(1 of 6);
-
-  &:nth-child(6) {
-    @include span(1 of 6 last);
-  }
-}
-
-.card-set > p {
-
-}
-
-
-.card-set__img {
-  position: relative;
-  > img {
-    width: 100%;
-  }
-}
-.card-set--hover > .card-set__img >.card-set__img-hover {
-  display: block;
-}
-.card-set__img-hover {
-  display: none;
-  background-color: #000;
-  color: #fff;
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-}
-
-ul.card-set__list {
-  li > {
-    list-style: none
-  }
-}
-.card-set__list {
-  border: solid 1px #f0f0f0;
-  @include clearfix();
-  > li > a, > a {
-    display: block
-  }
-}
-
-.card-set__list > li, .card-set__list-item {
-  padding: 5px;
-
-}
-
-.card-set__list-avatar {
-  @include span(1 of 6);
-  > img {
-    @include border-radius(50%);
-    width: 100%;
-  }
-}
-.card-set__content {
-  @include span(5 of 6 last);
-}
-.card-set__author {
-  background-color: $color-gray;
-  color: $color-gray-dark;
-  @include clearfix();
-}
-.card-set__author-avatar {
-  @include span(1 of 7);
-  > img {
-    @include border-radius(50%);
-  }
-}
-.card-set__author-likes {
-  @include span(6 of 7 last);
-  text-align: right;
-}
-*/
-/*
- * Profile Edit
- */
-.profile-edit__wrapper {
+.noauth-form {
   max-width: 95%;
   margin-left: auto;
   margin-right: auto; }
-  .profile-edit__wrapper:after {
+  .noauth-form:after {
     content: " ";
     display: block;
     clear: both; }
 
-@media (min-width: 1200px) {
-  .profile-edit__side {
-    width: 21.05263%;
+.noauth-form__login--social {
+  text-align: center; }
+  .noauth-form__login--social > i {
+    font-size: 16px;
+    font-size: 3vw; }
+
+.wrapper {
+  overflow: hidden;
+  *zoom: 1;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 45px; }
+
+@media (min-width: 400px) {
+  .sidebar-right {
+    width: 16.66667%;
+    float: right;
+    margin-right: 0; }
+  .content {
+    width: 79.16667%;
     float: left;
-    margin-right: 5.26316%; } }
+    margin-right: 4.16667%; } }
 
 @media (min-width: 1200px) {
-  .profile-edit__content {
+  .masonry-brick__wrapper > .masonry-brick {
+    width: 25%; }
+  .sidebar-right {
+    width: 18.36735%;
+    float: right;
+    margin-right: 0; }
+  .content {
+    width: 79.59184%;
+    float: left;
+    margin-right: 2.04082%; }
+  .noauth-form__login {
+    width: 21.05263%;
+    float: left;
+    margin-right: 5.26316%; }
+  .noauth-form__signup {
     width: 73.68421%;
     float: right;
     margin-right: 0; } }
+
+.sidebar-right > .pi-card {
+  width: 100%; }

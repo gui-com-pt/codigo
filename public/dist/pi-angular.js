@@ -53,6 +53,29 @@
 	angular
 		.module('pi.core.question', ['pi.core']);
 })();
+function getCookie(cname) {
+   var name = cname + "=",
+       ca = document.cookie.split(';'),
+       i,
+       c,
+       ca_length = ca.length;
+   for (i = 0; i < ca_length; i += 1) {
+       c = ca[i];
+       while (c.charAt(0) === ' ') {
+           c = c.substring(1);
+       }
+       if (c.indexOf(name) !== -1) {
+           return c.substring(name.length, c.length);
+       }
+   }
+   return "";
+}
+
+function setCookie(variable, value, expires_seconds) {
+   var d = new Date();
+   d = new Date(d.getTime() + 1000 * expires_seconds);
+   document.cookie = variable + '=' + value + '; expires=' + d.toGMTString() + ';';
+}
 
 angular
 	.module('pi.chat', []);
@@ -62,7 +85,7 @@ angular
 })();
 (function(){
 	angular.
-		module('pi.ui-extensions', ['ui.router']);
+		module('pi.ui-extensions', ['ui.router', 'pi']);
 })();
 (function(){
   angular
@@ -103,6 +126,175 @@ angular
           templateUrl: 'admin/event-edit.html'
         });
     }]);
+})();
+
+(function(){
+  angular
+    .module('pi.auth', ['pi']);
+
+  angular
+    .module('pi.auth')
+    .provider('piConfiguration', function(){
+      var config = function(){
+        var m = {};
+        m.providers = ['basic'];
+        m.loginUri = '/login';
+        m.logoutUri = '/logout';
+
+        return m;
+      };
+
+      var provider = function(){
+        var me = config();
+        var configs = {};
+        configs['default'] = me;
+
+        me.config = function(configName) {
+          var c = configs[configName];
+          if(!c) {
+            c = config();
+            configs[configName] = c;
+          }
+          return c;
+        };
+
+        me.$get = ['$q', function($q){
+          var deferred = $q.defer();
+
+          return function(configName) {
+            return configs[configName];
+          }
+        }];
+
+        return me;
+
+      };
+
+      return provider();
+    })
+    .controller('registerCtrl', ['$scope', 'piConfiguration', 'accountApi', function($scope, piConfiguration, accountApi){
+      $scope.init = function(configName) {
+        var config = piConfiguration(configName);
+      }
+
+      $scope.register = function(firstName, lastName, email, password, passwordConfirm, meta) {
+        var req = {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password
+        };
+
+        if(meta) {
+          req = angular.extend(req, meta)
+        }
+
+        accountApi.register(req)
+          .then(function(res){
+            window.location = '/';
+          }, function(res){
+            alert('erro no login');
+          });
+      }
+    }])
+    .directive('piRegister', ['$document', function($document){
+      return {
+        controller: 'registerCtrl',
+        controllerAs: 'ctrl',
+        transclude: true,
+        replace: true,
+        template: '<div ng-transclude></div>',
+        compile: function compile(tElement, tAttrs, transclude) {
+           return {
+              pre: function preLink(scope, elemt, attrs, controller){
+
+              },
+              post: function postLink(scope, elem, attrs, ctrl) {
+                var btn = angular.element(elem[0].querySelector('[login-submit]')),
+                    mail = angular.element(elem[0].querySelector('[login-email]')),
+                    pw = angular.element(elem[0].querySelector('[login-password]'));
+
+                    if(navigator.appVersion.indexOf("Trident") != -1){
+                        terminal.addClass('damn-ie');
+                    }
+
+                    var config = attrs['piConfig'];
+                    scope.init(config || 'default');
+
+                    var mouseover = false;
+
+                    elem.on('mouseover', function(){
+                      mouseover = true;
+                    });
+
+                    btn.on('click', function(){
+                      scope.login(mail.val(), pw.val());
+                    })
+
+                    elem.on('mouseleave', function(){
+                      mouseover = false;
+                    });
+              }
+            }
+          }
+    }
+    }])
+    .controller('loginCtrl', ['$scope', 'piConfiguration', 'accountApi', function($scope, piConfiguration, accountApi){
+      $scope.init = function(configName) {
+        var config = piConfiguration(configName);
+      }
+
+      $scope.login = function(email, password) {
+        accountApi.login(email, password)
+          .then(function(res){
+            window.location = '/';
+          }, function(res){
+            alert('erro no login');
+          });
+      }
+    }])
+    .directive('piAuth', ['$document', function($document){
+      return {
+        controller: 'loginCtrl',
+        controllerAs: 'ctrl',
+        transclude: true,
+        replace: true,
+        template: '<div ng-transclude></div>',
+        compile: function compile(tElement, tAttrs, transclude) {
+           return {
+              pre: function preLink(scope, elemt, attrs, controller){
+
+              },
+              post: function postLink(scope, elem, attrs, ctrl) {
+                var btn = angular.element(elem[0].querySelector('[login-submit]')),
+                    mail = angular.element(elem[0].querySelector('[login-email]')),
+                    pw = angular.element(elem[0].querySelector('[login-password]'));
+
+                    if(navigator.appVersion.indexOf("Trident") != -1){
+                        terminal.addClass('damn-ie');
+                    }
+
+                    var config = attrs['piConfig'];
+                    scope.init(config || 'default');
+
+                    var mouseover = false;
+
+                    elem.on('mouseover', function(){
+                      mouseover = true;
+                    });
+
+                    btn.on('click', function(){
+                      scope.login(mail.val(), pw.val());
+                    })
+
+                    elem.on('mouseleave', function(){
+                      mouseover = false;
+                    });
+              }
+            }
+          }
+    }
+  }]);
 })();
 
 (function(){
@@ -742,6 +934,32 @@ angular
 		.factory('AccountRecoverService', AccountRecoverService);
 })();
 (function(){
+  angular
+    .module('pi')
+    .directive('bindHtmlCompile', ['$compile', function ($compile) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                scope.$watch(function () {
+                    return scope.$eval(attrs.bindHtmlCompile);
+                }, function (value) {
+                    // Incase value is a TrustedValueHolderType, sometimes it
+                    // needs to be explicitly called into a string in order to
+                    // get the HTML string.
+                    element.html(value && value.toString());
+                    // If scope is provided use it, otherwise use parent scope
+                    var compileScope = scope;
+                    if (attrs.bindHtmlScope) {
+                        compileScope = scope.$eval(attrs.bindHtmlScope);
+                    }
+                    $compile(element.contents())(compileScope);
+                });
+            }
+        };
+    }]);
+})();
+
+(function(){
 	var PiBreadcrumb = function(PiBreadcrumbService)
 	{
 		var link = function(scope, elem, attrs)
@@ -814,19 +1032,22 @@ angular
 	piCommentResource.$inject = ['$resource'];
 
 	var piCommentWindow = function(piCommentResource) {
-		
+
 
 		var link = function(scope, elem, attrs) {
-			
-			
-			
+
+
+
 		}
 
 		var ctrl = function($scope, $q) {
 			var resource = piCommentResource.create($scope.namespace, $scope.id);
-
+			$scope.signup = {};
+			$scope.login = {};
 			$scope.comments = resource.query({});
-			
+			$scope.showForm = false;
+			$scope.showLoginFormExtended = false;
+
 			this.send = function(message) {
                 var deferred = $q.defer();
 				resource.save({message: message, id: $scope.id}, function(res){
@@ -834,6 +1055,14 @@ angular
                     deferred.resolve(res);
                 });
                 return deferred.promise;
+			}
+
+			this.keypressLogin = function(){
+				$scope.showLoginFormExtended = true;
+			}
+
+			this.showSignupForm = function(){
+				$scope.showForm = true;
 			}
 		};
 		return {
@@ -849,7 +1078,7 @@ angular
 	piCommentWindow.$inject = ['piCommentResource', '$q'];
 
 	var piCommentMessage = function() {
-		
+
 		return {
 			templateUrl: 'html/pi/comment-message.html',
 			replace: true,
@@ -859,13 +1088,21 @@ angular
 		}
 	};
 
-	var piCommentForm = function() {
+	var piCommentForm = function($rootScope) {
 		var link = function(scope, elem, attrs, piCommentWindow) {
 			scope.send = function() {
 				piCommentWindow.send(scope.message)
                     .then(function(res){
                         scope.message = '';
                     });
+			}
+			var triggred = false;
+			if(!$rootScope.isAuthenticated) {
+				scope.writting = function(){
+					if(triggred) return;
+					piCommentWindow.showSignupForm();
+					triggred = true;
+				}
 			}
 		};
 
@@ -887,9 +1124,10 @@ angular
 		.factory('piCommentResource', piCommentResource)
 		.directive('piCommentWindow', piCommentWindow)
 		.directive('piCommentMessage', piCommentMessage)
-		.directive('piCommentForm', piCommentForm)
+		.directive('piCommentForm', ['$rootScope', piCommentForm])
 		.directive('piCommentReplyForm', piCommentReplyForm);
 })();
+
 (function(){
 
 	var piFormMaker = function(){
@@ -1103,6 +1341,23 @@ angular
   angular
       .module('pi')
       .directive('piMeta', PiMetaDirective);
+})();
+
+(function(){
+  angular
+    .module('pi')
+    .directive('ngPrism', ['$interpolate', function($interpolate){
+            return {
+                restrict: 'AEC',
+                template: '<pre><code ng-transclude></code></pre>',
+                replace: true,
+                transclude: true,
+                link: function (scope, elm) {
+                    var tmp = $interpolate(elm.find('code').text())(scope);
+                    elm.find('code').html(Prism.highlightElement(tmp).value);
+                }
+            };
+        }]);
 })();
 
 (function(){
@@ -1859,6 +2114,165 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 			ok: 200
 		})
 		.factory('apiResponseProvider', ['apiException', fn]);
+})();
+(function(){
+    angular
+        .module('pi')
+        .directive('piLayerHover', ['piLayer', '$timeout', 'piLayerStack', function(piLayer, $timeout, piLayerStack){
+
+            return {
+                link: function(scope, elem, attrs) {
+
+                    var waiting = false,
+                        waitingShow = false,
+                        instance = null,
+                        showTimer = null;
+
+                    elem.on('mouseenter', function(){
+                        waitingShow = true;
+
+                        var topPos  = elem.offset().top;
+                        var leftPos = elem.offset().left;
+
+                        showTimer  = $timeout(function(){
+                            waitingShow = false;
+                            instance = piLayer.open({
+                                namespace: scope.piNamespace,
+                                entity: scope.piEntity,
+                                top: topPos,
+                                left: leftPos,
+                                width: elem.width()
+                            })
+                        }, 700);
+
+
+                    });
+
+                    var clearFn = function(){
+                        if(waitingShow) {
+                            $timeout.cancel(showTimer)
+                        }
+                        waiting = true;
+                        $timeout(function(){
+                            scope.$apply(function(){
+                                if(!_.isNull(instance)) {
+                                    instance.close();
+                                }
+                            });
+                        }, 3000)
+                    }
+                    elem.on('mouseleave', clearFn);
+                    elem.on('blur', clearFn);
+                },
+                scope: {
+                    piNamespace: '=',
+                    piEntity: '='
+                }
+            }
+        }])
+        .directive('piLayerWindow', ['piLayerStack', function(piLayerStack){
+
+            return {
+
+                controller: function($scope){
+                    $scope.visible = false;
+                    $scope.current = piLayerStack.getTop();
+
+                    $scope.closeCurrent = function(){
+                        piLayerStack.dismiss($scope.current);
+                        if(piLayerStack.length() > 0) {
+                            $scope.current = piLayerStack.getTop();
+                        } else {
+                            $scope.current = null;
+                            $scope.visible = false;
+                        }
+                    };
+
+                    piLayerStack.onAdded(function(layer, opts){
+                        currentLayer = layer;
+                        if(!_.isUndefined($scope.current)) {
+                            $scope.closeCurrent();
+                        }
+
+                        $scope.$apply(function(){
+                            $scope.visible = true;
+                            $scope.current = opts.entity;
+                            $scope.top = opts.top;
+
+                            $scope.left = opts.left - opts.width;
+                        });
+                    });
+
+
+                }
+            }
+        }])
+        .factory('piLayer', ['piLayerStack', '$q', function(piLayerStack, $q){
+            this.open = function(opts) {
+                var resultDeferred = $q.defer(),
+                    openDeferred = $q.defer(),
+                    instance = {
+                        result: resultDeferred.promise,
+                        opened: openDeferred.promise,
+                        close: function(result) {
+                            piLayerStack.close(instance);
+                        },
+                        dismiss: function(reason) {
+                            piLayerStack.dismiss(instance);
+                        }
+                    };
+
+                piLayerStack.open(instance, opts);
+
+                return instance;
+            };
+
+            return this;
+        }])
+        .factory('piLayerStack', ['piStack', function(piStack){
+            var stack = {};
+            var callable;
+            var layersVisibled = piStack.create();
+
+            var open = function(instance, opts) {
+                layersVisibled.add(instance, opts);
+                if(!_.isUndefined(callable)){
+                    callable(instance, opts);
+                }
+
+                return instance;
+            }
+
+            var close = function(instance) {
+                layersVisibled.remove(instance);
+            }
+
+            var dismiss = function(instance) {
+                layersVisibled.remove(instance);
+            }
+
+            var getTop = function() {
+                return layersVisibled.top();
+            }
+
+            var getLength = function(){
+                return layersVisibled.length();
+            }
+
+            return {
+                length: getLength,
+                open: open,
+                onAdded: function(c) {
+                    return callable = c;
+                },
+                length: function(){
+                    return layersVisibled.length();
+                },
+                dismiss: dismiss,
+                close: close,
+                getTop: getTop
+            }
+        }]);
 })();
 (function(){
   var piModalStack = function(piStack)
@@ -3067,6 +3481,38 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.run(runFn)
 })();
 (function(){
+	angular
+		.module('pi.ui-extensions')
+		.provider('uiStateProtector', [function(){
+	        
+	        var self = this;
+	        
+	        
+	        /*
+	         * Defalt visitor state
+	         */
+	        this.visitor = 'login';
+	        /*
+	         * Restricted states cannot seen by visitors
+	         */
+	        this.restricted = [];
+	        this.restrictAll = true;
+	        
+	        
+	        this.$get = ['$rootScope', '$state', function($rootScope, $state){
+	          $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+	            if(!$rootScope.isAuthenticated && self.restrictAll && toState.name !== self.visitor) {
+	                  event.preventDefault(); 
+	                  $state.go(self.visitor);
+	            }
+	            
+	          });
+	        }];
+	        
+	        return this;
+	      }]);
+})();
+(function(){
 	'use strict';
 
 	angular
@@ -3077,12 +3523,16 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 				return piHttp.post('/api/application', model);
 			}
 
-			this.find = function(id, model) {
-				return piHttp.get('/api/application' + id, model);
+			this.get = function(id, model) {
+				return piHttp.get('/api/application/' + id, model);
 			}
 
 			this.find = function(model) {
 				return piHttp.get('/api/application', model);
+			}
+
+			this.put = function(id, model){
+				return piHttp.post('/api/application/' + id, model);
 			}
 
 			return this;
@@ -3109,6 +3559,11 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 			this.find = function(model) {
 				return piHttp.get('/article-category', {params: model});
 			};
+
+			this.put = function(id, model) {
+				return piHttp.post('/article-serie/' + id, model);
+			};
+
 			return this;
 		}]);
 })();
@@ -3594,23 +4049,23 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.factory('pi.core.user.userSvc', ['piHttp', function(piHttp){
 
 			this.post = function(model){
-				return piHttp.post('/user', model);
+				return piHttp.post('/api/user', model);
 			}
 
 			this.remove = function(id) {
-				return piHttp.post('/user-remove/' + id);
+				return piHttp.post('/api/user-remove/' + id);
 			}
 
 			this.put = function(id, model) {
-				return piHttp.post('/user/' + id, model);
+				return piHttp.post('/api/user/' + id, model);
 			}
 
 			this.get = function(id, model) {
-				return piHttp.get('/user/' + id, model);
+				return piHttp.get('/api/user/' + id, model);
 			}
 
 			this.find = function(model) {
-				return piHttp.get('/user', {params: model});
+				return piHttp.get('/api/user', {params: model});
 			};
 			return this;
 		}]);

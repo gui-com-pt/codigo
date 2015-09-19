@@ -1,3 +1,5 @@
-<div infinite-scroll="ctrl.query()" infinite-scroll-disabled="ctrl.queryModel.busy" infinite-scroll-immediate-check="true" class="home__recent">
-    <div ng-repeat="news in ctrl.news"  codigo-article-card article="news"></div>
+<div masonry infinite-scroll="ctrl.query()" infinite-scroll-disabled="ctrl.queryModel.busy" infinite-scroll-immediate-check="true" class="masonry-brick__wrapper">
+  <div class="masonry-brick" ng-repeat="news in ctrl.news">
+    <div codigo-article-card article="news"></div>
+  </div>
 </div>

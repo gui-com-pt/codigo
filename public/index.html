@@ -15,15 +15,22 @@
     <script src="dist/pi-angular.js"></script>
     <script src="dist/app.js"></script>
     <script src="dist/app.min.js"></script>
-
     <script src="dist/templates.js"></script>
-
+    <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-41887317-1', 'auto');
+      ga('send', 'pageview');
+    </script>
 </head>
 <body>
   <div class="pi-nav__wrapper pi-nav__wrapper--fixed">
       <div class="pi-nav">
       <ul>
-            <li><a ui-sref="home">codigo.ovh</a></li>
+            <li><a ui-sref="article-list({categoryId: ''})" ui-sref-opts="{reload: true}">codigo.ovh</a></li>
+            <li><a ui-sref="learn">aprende a programar</a></li>
             <li ng-show="$root.isAuthenticated"><a ui-sref="question-list">Perguntas</a></li>
             <li ng-show="$root.isAuthenticated"><a href="">Gestão</a>
                 <ul>
@@ -38,11 +45,9 @@
               <li>
                   <form ng-submit="$root.search(searchModel)">
                       <div class="pi-form__btn-group">
+                          <div ng-show="current.name != 'home'" class="pi-breadcrumb" pi-breadcrumb></div>
                           <div class="pi-form__group">
                               <input type="text" ng-model="searchModel" placeholder="Pesquisar" class="pi-form__control" />
-                          </div>
-                          <div class="pi-form__group">
-                              <button type="submit" class="button-primary"><i class="icon ion-android-search"></i></button>
                           </div>
                       </div>
                   </form>
@@ -57,35 +62,69 @@
     </ul>
     </div>
   </div>
-  <div ng-show="current.name != 'home'" class="pi-breadcrumb" pi-breadcrumb></div>
 
+  <div class="wrapper">
+    <ui-view class="content"></ui-view>
+    <div class="sidebar-right">
+      <div codigo-sidebar></div>
+    </div>
 
-  <div class="cod__view">
-
-      <ui-view></ui-view>
   </div>
   <script type="text/ng-template" id="html/pi/comment-window.html">
-      <h3>Comentários</h3>
+      <h3><span ng-bind="comments.length"></span> Comentários</h3>
       <div pi-comment-form></div>
+      <div ng-show="showForm" class="noauth-form">
+        <div class="noauth-form__login">
+        <h4>Entra com</h4>
+          <div class="noauth-form__login--social">
+            <i class="icon ion-social-facebook-outline"></i>
+            <i class="icon ion-social-google-outline"></i>
+            <i class="icon ion-social-twitter-outline"></i>
+          </div>
+          <div class="pi-form__group">
+            <input ng-model="login.email" type="text" placeholder="Email" class="pi-form__control" />
+          </div>
+          <form ng-show="login.email.length > 0" ng-submit="login()">
+            <div class="pi-form__group">
+              <input ng-model="login.password" type="password" placeholder="Password" class="pi-form__control"/>
+            </div>
+            <div class="pi-form__footer">
+              <button class="button-primary button-block" type="submit">Entrar</button>
+            </div>
+          </form>
+
+        </div>
+        <div class="noauth-form__signup">
+          <h4>Ou regista-te</h4>
+          <div class="pi-form__group">
+            <input ng-model="signup.name" type="text" placeholder="Nome" class="pi-form__control" />
+          </div>
+          <div ng-show="signup.name.length > 0">
+            <div class="pi-form__group">
+              <input ng-model="signup.name" type="text" placeholder="Email" class="pi-form__control" />
+            </div>
+            <div class="pi-form__group">
+              <input ng-model="signup.name" type="password" placeholder="Password" class="pi-form__control" />
+            </div>
+            <div class="pi-form__footer">
+              By signing up, you agree to the Disqus <a href="">Basic Rules</a>, <a href="">Terms of Service</a>, and <a href="">Privacy Policy</a>.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="comment-none" ng-if="comments.length === 0">Sê o primeiro a comentar</div>
       <div ng-repeat="comment in comments | reverse" pi-comment-message comment="comment"></div>
    </script>
 <script type="text/ng-template" id="/html/pi/breadcrumb.html">
-<div class="pi-breadcrumb__wrapper">
-    <div class="pi-breadcrumb__side">
-        &nbsp;
-    </div>
-    <!--<div class="pi-breadcrumb__feed">
-        <div class="feed-photo-create">
-            <div class="feed-photo-create" feed-photo-create></div>
-            <!--<button class="feed-photo-create" feed-animal-create></button>
-            <button class="feed-photo-create" feed-running-create></button>
-            <button class="feed-photo-create" feed-bike-create></button>-->
-        <!--</div>
-    </div>-->
-    <div class="pi-breadcrumb__nav">
-        <button class="btn btn-primary btn-xs btn-transparent" href="" ng-click="previousState()"><i class="fa fa-arrow-circle-left"></i> Retroceder</a></button>
-        <button class="btn btn-primary btn-xs btn-transparent" ng-repeat="item in $root.menuItems" ng-if="item.isAnchor" ui-sref="{{item.state}}"><span class="subMenu-icon" ng-if="item.icon"><i class="{{item.icon}}"></i> </span><span ng-bind="item.label"></span></button>
-        <button class="btn btn-primary btn-xs btn-transparent" ng-repeat="item in $root.menuItems" ng-if="item.isButton && item != null" href="#" ng-click="item.action()"><i class="{{item.icon}}"></i> <span ng-bind="item.label"></span></button>
+  <div class="pi-form__group">
+    <button class="btn btn-primary btn-xs btn-transparent" href="" ng-click="previousState()"><i class="fa fa-arrow-circle-left"></i> Retroceder</a></button>
+  </div>
+  <div class="pi-form__group" ng-repeat="item in $root.menuItems" ng-if="item.isAnchor" >
+    <button class="btn btn-primary btn-xs btn-transparent" ui-sref="{{item.state}}"><span class="subMenu-icon" ng-if="item.icon"><i class="{{item.icon}}"></i> </span><span ng-bind="item.label"></span></button>
+  </button>
+  <div class="pi-form__group" ng-repeat="item in $root.menuItems" ng-if="item.isButton && item != null">
+    <button class="btn btn-primary btn-xs btn-transparent" href="#" ng-click="item.action()"><i class="{{item.icon}}"></i> <span ng-bind="item.label"></span></button>
+  </div>
 
     </div>
 </div>
@@ -103,11 +142,11 @@
       </div>
   </script>
   <script type="text/ng-template" id="html/pi/comment-form.html">
-      <div class="fit-form" class="pi-comment-form">
-          <form class="fit-form__group" ng-submit="send(message)">
-              <textarea rows="4" ng-model="message" class="fit-form__group-control"></textarea>
+      <div class="pi-form pi-comment-form">
+          <form class="pi-form__group" ng-submit="send(message)">
+              <textarea ng-keypress="writting()" rows="4" ng-model="message" class="pi-form__control"></textarea>
       </div>
-      <div class="fit-form__footer">
+      <div class="pi-form__footer" ng-show="$root.isAuthenticated">
           <button type="button" ng-click="send(message)">Enviar Comentário</button>
       </div>
       </div>

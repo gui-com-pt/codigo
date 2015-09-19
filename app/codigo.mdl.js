@@ -1,28 +1,5 @@
 (function(){
 "use restrict";
-function getCookie(cname) {
-   var name = cname + "=",
-       ca = document.cookie.split(';'),
-       i,
-       c,
-       ca_length = ca.length;
-   for (i = 0; i < ca_length; i += 1) {
-       c = ca[i];
-       while (c.charAt(0) === ' ') {
-           c = c.substring(1);
-       }
-       if (c.indexOf(name) !== -1) {
-           return c.substring(name.length, c.length);
-       }
-   }
-   return "";
-}
-
-function setCookie(variable, value, expires_seconds) {
-   var d = new Date();
-   d = new Date(d.getTime() + 1000 * expires_seconds);
-   document.cookie = variable + '=' + value + '; expires=' + d.toGMTString() + ';';
-}
 
 var boot = function(){
          var initInjector = angular.injector(['ng']);
@@ -43,173 +20,6 @@ var boot = function(){
 
   boot();
 
-  angular
-    .module('pi-auth', ['pi']);
-
-  angular
-    .module('pi-auth')
-    .provider('piConfiguration', function(){
-      var config = function(){
-        var m = {};
-        m.providers = ['basic'];
-        m.loginUri = '/login';
-        m.logoutUri = '/logout';
-
-        return m;
-      };
-
-      var provider = function(){
-        var me = config();
-        var configs = {};
-        configs['default'] = me;
-
-        me.config = function(configName) {
-          var c = configs[configName];
-          if(!c) {
-            c = config();
-            configs[configName] = c;
-          }
-          return c;
-        };
-
-        me.$get = ['$q', function($q){
-          var deferred = $q.defer();
-
-          return function(configName) {
-            return configs[configName];
-          }
-        }];
-
-        return me;
-
-      };
-
-      return provider();
-    })
-    .controller('registerCtrl', ['$scope', 'piConfiguration', 'accountApi', function($scope, piConfiguration, accountApi){
-      $scope.init = function(configName) {
-        var config = piConfiguration(configName);
-      }
-
-      $scope.register = function(firstName, lastName, email, password, passwordConfirm, meta) {
-        var req = {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: password
-        };
-
-        if(meta) {
-          req = angular.extend(req, meta)
-        }
-
-        accountApi.register(req)
-          .then(function(res){
-            window.location = '/';
-          }, function(res){
-            alert('erro no login');
-          });
-      }
-    }])
-    .directive('piRegister', ['$document', function($document){
-      return {
-        controller: 'registerCtrl',
-        controllerAs: 'ctrl',
-        transclude: true,
-        replace: true,
-        template: '<div ng-transclude></div>',
-        compile: function compile(tElement, tAttrs, transclude) {
-           return {
-              pre: function preLink(scope, elemt, attrs, controller){
-
-              },
-              post: function postLink(scope, elem, attrs, ctrl) {
-                var btn = angular.element(elem[0].querySelector('[login-submit]')),
-                    mail = angular.element(elem[0].querySelector('[login-email]')),
-                    pw = angular.element(elem[0].querySelector('[login-password]'));
-
-                    if(navigator.appVersion.indexOf("Trident") != -1){
-                        terminal.addClass('damn-ie');
-                    }
-
-                    var config = attrs['piConfig'];
-                    scope.init(config || 'default');
-
-                    var mouseover = false;
-
-                    elem.on('mouseover', function(){
-                      mouseover = true;
-                    });
-
-                    btn.on('click', function(){
-                      scope.login(mail.val(), pw.val());
-                    })
-
-                    elem.on('mouseleave', function(){
-                      mouseover = false;
-                    });
-              }
-            }
-          }
-    }
-    }])
-    .controller('loginCtrl', ['$scope', 'piConfiguration', 'accountApi', function($scope, piConfiguration, accountApi){
-      $scope.init = function(configName) {
-        var config = piConfiguration(configName);
-      }
-
-      $scope.login = function(email, password) {
-        accountApi.login(email, password)
-          .then(function(res){
-            window.location = '/';
-          }, function(res){
-            alert('erro no login');
-          });
-      }
-    }])
-    .directive('piAuth', ['$document', function($document){
-      return {
-        controller: 'loginCtrl',
-        controllerAs: 'ctrl',
-        transclude: true,
-        replace: true,
-        template: '<div ng-transclude></div>',
-        compile: function compile(tElement, tAttrs, transclude) {
-           return {
-              pre: function preLink(scope, elemt, attrs, controller){
-
-              },
-              post: function postLink(scope, elem, attrs, ctrl) {
-                var btn = angular.element(elem[0].querySelector('[login-submit]')),
-                    mail = angular.element(elem[0].querySelector('[login-email]')),
-                    pw = angular.element(elem[0].querySelector('[login-password]'));
-
-                    if(navigator.appVersion.indexOf("Trident") != -1){
-                        terminal.addClass('damn-ie');
-                    }
-
-                    var config = attrs['piConfig'];
-                    scope.init(config || 'default');
-
-                    var mouseover = false;
-
-                    elem.on('mouseover', function(){
-                      mouseover = true;
-                    });
-
-                    btn.on('click', function(){
-                      scope.login(mail.val(), pw.val());
-                    })
-
-                    elem.on('mouseleave', function(){
-                      mouseover = false;
-                    });
-              }
-            }
-          }
-    }
-    }]);
-
     angular
         .module('templates', []);
 
@@ -223,9 +33,9 @@ var boot = function(){
         .module('codigo.core.question', ['codigo.core']);
 
   angular
-    .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
-      'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select',
-      'piClassHover', 'ngTagsInput', '720kb.socialshare', 'wu.masonry', 'pi-auth', 'config']);
+    .module('codigo', ['templates', 'pi.auth', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
+      'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select', 'angularMoment',
+      'piClassHover', 'ngTagsInput', '720kb.socialshare', 'wu.masonry', 'config']);
 
   angular
     .module('codigo')
@@ -291,6 +101,12 @@ var boot = function(){
                   templateUrl: 'core/home.tpl.html',
                   controller: 'codigo.core.homeCtrl',
                   controllerAs: 'ctrl'
+              })
+              .state('learn', {
+                url: '/aprende-comigo',
+                templateUrl: 'core/learn.tpl.html',
+                controller: 'codigo.core.learnCtrl',
+                controllerAs: 'ctrl'
               })
               .state('login', {
                 url: '/login',
@@ -366,38 +182,5 @@ var boot = function(){
         .then(function(res){
           $rootScope.categories = res.data.categories;
         });
-    }])
-      .directive('ngPrism', ['$interpolate', function($interpolate){
-              return {
-                  restrict: 'AEC',
-                  template: '<pre><code ng-transclude></code></pre>',
-                  replace: true,
-                  transclude: true,
-                  link: function (scope, elm) {
-                      var tmp = $interpolate(elm.find('code').text())(scope);
-                      elm.find('code').html(Prism.highlightElement(tmp).value);
-                  }
-              };
-          }])
-      .directive('bindHtmlCompile', ['$compile', function ($compile) {
-          return {
-              restrict: 'A',
-              link: function (scope, element, attrs) {
-                  scope.$watch(function () {
-                      return scope.$eval(attrs.bindHtmlCompile);
-                  }, function (value) {
-                      // Incase value is a TrustedValueHolderType, sometimes it
-                      // needs to be explicitly called into a string in order to
-                      // get the HTML string.
-                      element.html(value && value.toString());
-                      // If scope is provided use it, otherwise use parent scope
-                      var compileScope = scope;
-                      if (attrs.bindHtmlScope) {
-                          compileScope = scope.$eval(attrs.bindHtmlScope);
-                      }
-                      $compile(element.contents())(compileScope);
-                  });
-              }
-          };
-      }]);;
+    }]);
 })();

@@ -7663,7 +7663,7 @@ angular.module('ui.bootstrap.modal', ['ui.bootstrap.transition'])
   });
 
 /**
- * @license AngularJS v1.3.18
+ * @license AngularJS v1.3.19
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -8331,899 +8331,6 @@ angular.module('ngResource', ['ng']).
 
 })(window, window.angular);
 
-'use strict';
-(function(angular){
-'use strict';
-
-var Module = angular.module('datePicker', ['angularMoment']);
-
-Module.constant('datePickerConfig', {
-  template: 'templates/datepicker.html',
-  view: 'month',
-  views: ['year', 'month', 'date', 'hours', 'minutes'],
-  step: 5
-});
-
-Module.filter('time',function () {
-  function format(date){
-    return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-  }
-
-  return function (date) {
-    if (!(date instanceof Date)) {
-      date = new Date(date);
-      if (isNaN(date.getTime())) {
-        return undefined;
-      }
-    }
-    return format(date);
-  };
-});
-
-Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function datePickerDirective(datePickerConfig, datePickerUtils) {
-
-  //noinspection JSUnusedLocalSymbols
-  return {
-    // this is a bug ?
-    require:'?ngModel',
-    template: '<div ng-include="template"></div>',
-    scope: {
-      model: '=datePicker',
-      after: '=?',
-      before: '=?'
-    },
-    link: function (scope, element, attrs, ngModel) {
-
-      var arrowClick = false;
-
-      scope.date = new Date(scope.model || new Date());
-      scope.views = datePickerConfig.views.concat();
-      scope.view = attrs.view || datePickerConfig.view;
-      scope.now = new Date();
-      scope.template = attrs.template || datePickerConfig.template;
-
-      var step = parseInt(attrs.step || datePickerConfig.step, 10);
-      var partial = !!attrs.partial;
-
-      //if ngModel, we can add min and max validators
-      if(ngModel)
-      {
-        if (angular.isDefined(attrs.minDate)) {
-          var minVal;
-          ngModel.$validators.min = function (value) {
-            return !datePickerUtils.isValidDate(value) || angular.isUndefined(minVal) || value >= minVal;
-          };
-          attrs.$observe('minDate', function (val) {
-            minVal = new Date(val);
-            ngModel.$validate();
-          });
-        }
-
-        if (angular.isDefined(attrs.maxDate)) {
-          var maxVal;
-          ngModel.$validators.max = function (value) {
-            return !datePickerUtils.isValidDate(value) || angular.isUndefined(maxVal) || value <= maxVal;
-          };
-          attrs.$observe('maxDate', function (val) {
-            maxVal = new Date(val);
-            ngModel.$validate();
-          });
-        }
-      }
-      //end min, max date validator
-
-      /** @namespace attrs.minView, attrs.maxView */
-      scope.views =scope.views.slice(
-        scope.views.indexOf(attrs.maxView || 'year'),
-        scope.views.indexOf(attrs.minView || 'minutes')+1
-      );
-
-      if (scope.views.length === 1 || scope.views.indexOf(scope.view)===-1) {
-        scope.view = scope.views[0];
-      }
-
-      scope.setView = function (nextView) {
-        if (scope.views.indexOf(nextView) !== -1) {
-          scope.view = nextView;
-        }
-      };
-
-      scope.setDate = function (date) {
-        if(attrs.disabled) {
-          return;
-        }
-        scope.date = date;
-        // change next view
-        var nextView = scope.views[scope.views.indexOf(scope.view) + 1];
-        if ((!nextView || partial) || scope.model) {
-
-          scope.model = new Date(scope.model || date);
-          //if ngModel , setViewValue and trigger ng-change, etc...
-          if(ngModel) {
-            ngModel.$setViewValue(scope.date);
-          }
-
-          var view = partial ? 'minutes' : scope.view;
-          //noinspection FallThroughInSwitchStatementJS
-          switch (view) {
-          case 'minutes':
-            scope.model.setMinutes(date.getMinutes());
-          /*falls through*/
-          case 'hours':
-            scope.model.setHours(date.getHours());
-          /*falls through*/
-          case 'date':
-            scope.model.setDate(date.getDate());
-          /*falls through*/
-          case 'month':
-            scope.model.setMonth(date.getMonth());
-          /*falls through*/
-          case 'year':
-            scope.model.setFullYear(date.getFullYear());
-          }
-          scope.$emit('setDate', scope.model, scope.view);
-        }
-
-        if (nextView) {
-          scope.setView(nextView);
-        }
-
-        if(!nextView && attrs.autoClose === 'true'){
-          element.addClass('hidden');
-          scope.$emit('hidePicker');
-        }
-      };
-
-      function update() {
-        var view = scope.view;
-
-        if (scope.model && !arrowClick) {
-          scope.date = new Date(scope.model);
-          arrowClick = false;
-        }
-        var date = scope.date;
-
-        switch (view) {
-        case 'year':
-          scope.years = datePickerUtils.getVisibleYears(date);
-          break;
-        case 'month':
-          scope.months = datePickerUtils.getVisibleMonths(date);
-          break;
-        case 'date':
-          scope.weekdays = scope.weekdays || datePickerUtils.getDaysOfWeek();
-          scope.weeks = datePickerUtils.getVisibleWeeks(date);
-          break;
-        case 'hours':
-          scope.hours = datePickerUtils.getVisibleHours(date);
-          break;
-        case 'minutes':
-          scope.minutes = datePickerUtils.getVisibleMinutes(date, step);
-          break;
-        }
-      }
-
-      function watch() {
-        if (scope.view !== 'date') {
-          return scope.view;
-        }
-        return scope.date ? scope.date.getMonth() : null;
-      }
-
-
-      scope.$watch(watch, update);
-
-      scope.next = function (delta) {
-        var date = scope.date;
-        delta = delta || 1;
-        switch (scope.view) {
-        case 'year':
-        /*falls through*/
-        case 'month':
-          date.setFullYear(date.getFullYear() + delta);
-          break;
-        case 'date':
-          /* Reverting from ISSUE #113
-          var dt = new Date(date);
-          date.setMonth(date.getMonth() + delta);
-          if (date.getDate() < dt.getDate()) {
-            date.setDate(0);
-          }
-          */
-          date.setMonth(date.getMonth() + delta);
-          break;
-        case 'hours':
-        /*falls through*/
-        case 'minutes':
-          date.setHours(date.getHours() + delta);
-          break;
-        }
-        arrowClick = true;
-        update();
-      };
-
-      scope.prev = function (delta) {
-        return scope.next(-delta || -1);
-      };
-
-      scope.isAfter = function (date) {
-        return scope.after && datePickerUtils.isAfter(date, scope.after);
-      };
-
-      scope.isBefore = function (date) {
-        return scope.before && datePickerUtils.isBefore(date, scope.before);
-      };
-
-      scope.isSameMonth = function (date) {
-        return datePickerUtils.isSameMonth(scope.model, date);
-      };
-
-      scope.isSameYear = function (date) {
-        return datePickerUtils.isSameYear(scope.model, date);
-      };
-
-      scope.isSameDay = function (date) {
-        return datePickerUtils.isSameDay(scope.model, date);
-      };
-
-      scope.isSameHour = function (date) {
-        return datePickerUtils.isSameHour(scope.model, date);
-      };
-
-      scope.isSameMinutes = function (date) {
-        return datePickerUtils.isSameMinutes(scope.model, date);
-      };
-
-      scope.isNow = function (date) {
-        var is = true;
-        var now = scope.now;
-        //noinspection FallThroughInSwitchStatementJS
-        switch (scope.view) {
-        case 'minutes':
-          is &= ~~(date.getMinutes()/step) === ~~(now.getMinutes()/step);
-        /*falls through*/
-        case 'hours':
-          is &= date.getHours() === now.getHours();
-        /*falls through*/
-        case 'date':
-          is &= date.getDate() === now.getDate();
-        /*falls through*/
-        case 'month':
-          is &= date.getMonth() === now.getMonth();
-        /*falls through*/
-        case 'year':
-          is &= date.getFullYear() === now.getFullYear();
-        }
-        return is;
-      };
-    }
-  };
-}]);
-
-'use strict';
-
-angular.module('datePicker').factory('datePickerUtils', function(){
-  var createNewDate = function(year, month, day, hour, minute) {
-    // without any arguments, the default date will be 1899-12-31T00:00:00.000Z
-    return new Date(Date.UTC(year | 0, month | 0, day | 0, hour | 0, minute | 0));
-  };
-  return {
-    getVisibleMinutes : function(date, step) {
-      date = new Date(date || new Date());
-      var year = date.getFullYear();
-      var month = date.getMonth();
-      var day = date.getDate();
-      var hour = date.getUTCHours();
-      var minutes = [];
-      var minute, pushedDate;
-      for (minute = 0 ; minute < 60 ; minute += step) {
-        pushedDate = createNewDate(year, month, day, hour, minute);
-        minutes.push(pushedDate);
-      }
-      return minutes;
-    },
-    getVisibleWeeks : function(date) {
-      date = new Date(date || new Date());
-      var startMonth = date.getMonth();
-      var startYear = date.getYear();
-      // set date to start of the week
-      date.setDate(1);
-
-      if (date.getDay() === 0) {
-        // day is sunday, let's get back to the previous week
-        date.setDate(-5);
-      } else {
-        // day is not sunday, let's get back to the start of the week
-        date.setDate(date.getDate() - (date.getDay() - 1));
-      }
-      if (date.getDate() === 1) {
-        // day is monday, let's get back to the previous week
-        date.setDate(-6);
-      }
-
-      var weeks = [];
-      var week;
-      while (weeks.length < 6) {
-        if (date.getYear() === startYear && date.getMonth() > startMonth) {
-          break;
-        }
-        week = this.getDaysOfWeek(date);
-        weeks.push(week);
-        date.setDate(date.getDate() + 7);
-      }
-      return weeks;
-    },
-    getVisibleYears : function(date) {
-      date = new Date(date || new Date());
-      date.setFullYear(date.getFullYear() - (date.getFullYear() % 10));
-      var year = date.getFullYear();
-      var years = [];
-      var pushedDate;
-      for (var i = 0; i < 12; i++) {
-        pushedDate = createNewDate(year);
-        years.push(pushedDate);
-        year++;
-      }
-      return years;
-    },
-    getDaysOfWeek : function(date) {
-      date = new Date(date || new Date());
-      date.setDate(date.getDate() - (date.getDay() - 1));
-      var year = date.getFullYear();
-      var month = date.getMonth();
-      var day = date.getDate();
-      var days = [];
-      var pushedDate;
-      for (var i = 0; i < 7; i++) {
-        pushedDate = createNewDate(year, month, day);
-        days.push(pushedDate);
-        day++;
-      }
-      return days;
-    },
-    getVisibleMonths : function(date) {
-      date = new Date(date || new Date());
-      var year = date.getFullYear();
-      var months = [];
-      var pushedDate;
-      for (var month = 0; month < 12; month++) {
-        pushedDate = createNewDate(year, month, 1);
-        months.push(pushedDate);
-      }
-      return months;
-    },
-    getVisibleHours : function(date) {
-      date = new Date(date || new Date());
-      var year = date.getFullYear();
-      var month = date.getMonth();
-      var day = date.getDate();
-      var hours = [];
-      var hour, pushedDate;
-      for (hour = 0 ; hour < 24 ; hour++) {
-        pushedDate = createNewDate(year, month, day, hour);
-        hours.push(pushedDate);
-      }
-      return hours;
-    },
-    isAfter : function(model, date) {
-      model = (model !== undefined) ? new Date(model) : model;
-      date = new Date(date);
-      return model && model.getTime() >= date.getTime();
-    },
-    isBefore : function(model, date) {
-      model = (model !== undefined) ? new Date(model) : model;
-      date = new Date(date);
-      return model.getTime() <= date.getTime();
-    },
-    isSameYear :   function(model, date) {
-      model = (model !== undefined) ? new Date(model) : model;
-      date = new Date(date);
-      return model && model.getFullYear() === date.getFullYear();
-    },
-    isSameMonth : function(model, date) {
-      model = (model !== undefined) ? new Date(model) : model;
-      date = new Date(date);
-      return this.isSameYear(model, date) && model.getMonth() === date.getMonth();
-    },
-    isSameDay : function(model, date) {
-      model = (model !== undefined) ? new Date(model) : model;
-      date = new Date(date);
-      return this.isSameMonth(model, date) && model.getDate() === date.getDate();
-    },
-    isSameHour : function(model, date) {
-      model = (model !== undefined) ? new Date(model) : model;
-      date = new Date(date);
-      return this.isSameDay(model, date) && model.getHours() === date.getHours();
-    },
-    isSameMinutes : function(model, date) {
-      model = (model !== undefined) ? new Date(model) : model;
-      date = new Date(date);
-      return this.isSameHour(model, date) && model.getMinutes() === date.getMinutes();
-    },
-    isValidDate : function(value) {
-      // Invalid Date: getTime() returns NaN
-      return value && !(value.getTime && value.getTime() !== value.getTime());
-    },
-    toMomentFormat : function(angularFormat) {
-        function replaceAll(find, replace, string) {
-          return string.replace(new RegExp(find, 'g'), replace);
-        }
-
-        var momentFormat = angularFormat;
-        momentFormat = replaceAll('y', 'Y', momentFormat);
-        momentFormat = replaceAll('d', 'D', momentFormat);
-        momentFormat = replaceAll('E', 'd', momentFormat);
-        momentFormat = replaceAll('sss', 'SSS', momentFormat);
-        momentFormat = replaceAll('w', 'W', momentFormat);
-        return momentFormat;
-      }
-  };
-});
-'use strict';
-
-var Module = angular.module('datePicker');
-
-Module.directive('dateRange', function () {
-  return {
-    templateUrl: 'templates/daterange.html',
-    scope: {
-      start: '=',
-      end: '='
-    },
-    link: function (scope, element, attrs) {
-
-      /*
-       * If no date is set on scope, set current date from user system
-       */
-      scope.start = new Date(scope.start || new Date());
-      scope.end = new Date(scope.end || new Date());
-
-      attrs.$observe('disabled', function(isDisabled){
-          scope.disableDatePickers = !!isDisabled;
-        });
-      scope.$watch('start.getTime()', function (value) {
-        if (value && scope.end && value > scope.end.getTime()) {
-          scope.end = new Date(value);
-        }
-      });
-      scope.$watch('end.getTime()', function (value) {
-        if (value && scope.start && value < scope.start.getTime()) {
-          scope.start = new Date(value);
-        }
-      });
-    }
-  };
-});
-
-'use strict';
-
-var PRISTINE_CLASS = 'ng-pristine',
-    DIRTY_CLASS = 'ng-dirty';
-
-var Module = angular.module('datePicker');
-
-Module.constant('dateTimeConfig', {
-  template: function (attrs) {
-    return '' +
-        '<div ' +
-        'date-picker="' + attrs.ngModel + '" ' +
-        (attrs.view ? 'view="' + attrs.view + '" ' : '') +
-        (attrs.maxView ? 'max-view="' + attrs.maxView + '" ' : '') +
-        (attrs.autoClose ? 'auto-close="' + attrs.autoClose + '" ' : '') +
-        (attrs.template ? 'template="' + attrs.template + '" ' : '') +
-        (attrs.minView ? 'min-view="' + attrs.minView + '" ' : '') +
-        (attrs.partial ? 'partial="' + attrs.partial + '" ' : '') +
-        (attrs.step ? 'step="' + attrs.step + '" ' : '') +
-        'class="date-picker-date-time"></div>';
-  },
-  format: 'yyyy-MM-dd HH:mm',
-  views: ['date', 'year', 'month', 'hours', 'minutes'],
-  autoClose: false,
-  position: 'relative'
-});
-
-Module.directive('dateTimeAppend', function () {
-  return {
-    link: function (scope, element) {
-      element.bind('click', function () {
-        element.find('input')[0].focus();
-      });
-    }
-  };
-});
-
-Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', 'moment',
-                function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils, moment) {
-  var body = $document.find('body');
-  var dateFilter = $filter('date');
-
-  return {
-    require: 'ngModel',
-    scope:true,
-    link: function (scope, element, attrs, ngModel) {
-      var format = attrs.format || dateTimeConfig.format;
-      var parentForm = element.inheritedData('$formController');
-      var views = $parse(attrs.views)(scope) || dateTimeConfig.views.concat();
-      var view = attrs.view || views[0];
-      var index = views.indexOf(view);
-      var dismiss = attrs.autoClose ? $parse(attrs.autoClose)(scope) : dateTimeConfig.autoClose;
-      var picker = null;
-      var position = attrs.position || dateTimeConfig.position;
-      var container = null;
-
-      if (index === -1) {
-        views.splice(index, 1);
-      }
-
-      views.unshift(view);
-
-
-      function formatter(value) {
-        return dateFilter(value, format);
-      }
-
-      function parser(viewValue) {
-        if(viewValue.length === format.length) {
-          var date = moment(viewValue, datePickerUtils.toMomentFormat(format));
-          if(date.isValid()) {
-            clear();
-            return date.toDate();
-          }
-          return undefined;
-        }
-        return undefined;
-      }
-
-      ngModel.$formatters.push(formatter);
-      ngModel.$parsers.unshift(parser);
-
-
-      //min. max date validators
-      if (angular.isDefined(attrs.minDate)) {
-        var minVal;
-        ngModel.$validators.min = function (value) {
-            return !datePickerUtils.isValidDate(value) || angular.isUndefined(minVal) || value >= minVal;
-          };
-        attrs.$observe('minDate', function (val) {
-            minVal = new Date(val);
-            ngModel.$validate();
-          });
-      }
-
-      if (angular.isDefined(attrs.maxDate)) {
-        var maxVal;
-        ngModel.$validators.max = function (value) {
-            return !datePickerUtils.isValidDate(value) || angular.isUndefined(maxVal) || value <= maxVal;
-          };
-        attrs.$observe('maxDate', function (val) {
-            maxVal = new Date(val);
-            ngModel.$validate();
-          });
-      }
-      //end min, max date validator
-
-      var template = dateTimeConfig.template(attrs);
-
-      function updateInput(event) {
-        event.stopPropagation();
-        if (ngModel.$pristine) {
-          ngModel.$dirty = true;
-          ngModel.$pristine = false;
-          element.removeClass(PRISTINE_CLASS).addClass(DIRTY_CLASS);
-          if (parentForm) {
-            parentForm.$setDirty();
-          }
-          ngModel.$render();
-        }
-      }
-
-      function clear() {
-        if (picker) {
-          picker.remove();
-          picker = null;
-        }
-        if (container) {
-          container.remove();
-          container = null;
-        }
-      }
-
-      function showPicker() {
-        if (picker) {
-          return;
-        }
-        // create picker element
-        picker = $compile(template)(scope);
-        scope.$digest();
-
-        scope.$on('setDate', function (event, date, view) {
-          updateInput(event);
-          if (dismiss && views[views.length - 1] === view) {
-            clear();
-          }
-        });
-
-        scope.$on('hidePicker', function () {
-          element.triggerHandler('blur');
-        });
-
-        scope.$on('$destroy', clear);
-
-        // move picker below input element
-
-        if (position === 'absolute') {
-          var pos = angular.extend(element.offset(), { height: element[0].offsetHeight });
-          picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: position});
-          body.append(picker);
-        } else {
-          // relative
-          container = angular.element('<div date-picker-wrapper></div>');
-          element[0].parentElement.insertBefore(container[0], element[0]);
-          container.append(picker);
-//          this approach doesn't work
-//          element.before(picker);
-          picker.css({top: element[0].offsetHeight + 'px', display: 'block'});
-        }
-
-        picker.bind('mousedown', function (evt) {
-          evt.preventDefault();
-        });
-      }
-
-      element.bind('focus', showPicker);
-      element.bind('blur', clear);
-    }
-  };
-}]);
-
-angular.module("datePicker").run(["$templateCache", function($templateCache) {
-
-  $templateCache.put("templates/datepicker.html",
-    "<div ng-switch=\"view\">\r" +
-    "\n" +
-    "  <div ng-switch-when=\"date\">\r" +
-    "\n" +
-    "    <table>\r" +
-    "\n" +
-    "      <thead>\r" +
-    "\n" +
-    "      <tr>\r" +
-    "\n" +
-    "        <th ng-click=\"prev()\">&lsaquo;</th>\r" +
-    "\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('month')\" ng-bind=\"date|date:'yyyy MMMM'\"></th>\r" +
-    "\n" +
-    "        <th ng-click=\"next()\">&rsaquo;</i></th>\r" +
-    "\n" +
-    "      </tr>\r" +
-    "\n" +
-    "      <tr>\r" +
-    "\n" +
-    "        <th ng-repeat=\"day in weekdays\" style=\"overflow: hidden\" ng-bind=\"day|date:'EEE'\"></th>\r" +
-    "\n" +
-    "      </tr>\r" +
-    "\n" +
-    "      </thead>\r" +
-    "\n" +
-    "      <tbody>\r" +
-    "\n" +
-    "      <tr ng-repeat=\"week in weeks\">\r" +
-    "\n" +
-    "        <td ng-repeat=\"day in week\">\r" +
-    "\n" +
-    "          <span\r" +
-    "\n" +
-    "            ng-class=\"{'now':isNow(day),'active':isSameDay(day),'disabled':(day.getMonth()!=date.getMonth()),'after':isAfter(day),'before':isBefore(day)}\"\r" +
-    "\n" +
-    "            ng-click=\"setDate(day)\" ng-bind=\"day.getDate()\"></span>\r" +
-    "\n" +
-    "        </td>\r" +
-    "\n" +
-    "      </tr>\r" +
-    "\n" +
-    "      </tbody>\r" +
-    "\n" +
-    "    </table>\r" +
-    "\n" +
-    "  </div>\r" +
-    "\n" +
-    "  <div ng-switch-when=\"year\">\r" +
-    "\n" +
-    "    <table>\r" +
-    "\n" +
-    "      <thead>\r" +
-    "\n" +
-    "      <tr>\r" +
-    "\n" +
-    "        <th ng-click=\"prev(10)\">&lsaquo;</th>\r" +
-    "\n" +
-    "        <th colspan=\"5\" class=\"switch\"ng-bind=\"years[0].getFullYear()+' - '+years[years.length-1].getFullYear()\"></th>\r" +
-    "\n" +
-    "        <th ng-click=\"next(10)\">&rsaquo;</i></th>\r" +
-    "\n" +
-    "      </tr>\r" +
-    "\n" +
-    "      </thead>\r" +
-    "\n" +
-    "      <tbody>\r" +
-    "\n" +
-    "      <tr>\r" +
-    "\n" +
-    "        <td colspan=\"7\">\r" +
-    "\n" +
-    "          <span ng-class=\"{'active':isSameYear(year),'now':isNow(year)}\"\r" +
-    "\n" +
-    "                ng-repeat=\"year in years\"\r" +
-    "\n" +
-    "                ng-click=\"setDate(year)\" ng-bind=\"year.getFullYear()\"></span>\r" +
-    "\n" +
-    "        </td>\r" +
-    "\n" +
-    "      </tr>\r" +
-    "\n" +
-    "      </tbody>\r" +
-    "\n" +
-    "    </table>\r" +
-    "\n" +
-    "  </div>\r" +
-    "\n" +
-    "  <div ng-switch-when=\"month\">\r" +
-    "\n" +
-    "    <table>\r" +
-    "\n" +
-    "      <thead>\r" +
-    "\n" +
-    "      <tr>\r" +
-    "\n" +
-    "        <th ng-click=\"prev()\">&lsaquo;</th>\r" +
-    "\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('year')\" ng-bind=\"date|date:'yyyy'\"></th>\r" +
-    "\n" +
-    "        <th ng-click=\"next()\">&rsaquo;</i></th>\r" +
-    "\n" +
-    "      </tr>\r" +
-    "\n" +
-    "      </thead>\r" +
-    "\n" +
-    "      <tbody>\r" +
-    "\n" +
-    "      <tr>\r" +
-    "\n" +
-    "        <td colspan=\"7\">\r" +
-    "\n" +
-    "          <span ng-repeat=\"month in months\"\r" +
-    "\n" +
-    "                ng-class=\"{'active':isSameMonth(month),'after':isAfter(month),'before':isBefore(month),'now':isNow(month)}\"\r" +
-    "\n" +
-    "                ng-click=\"setDate(month)\"\r" +
-    "\n" +
-    "                ng-bind=\"month|date:'MMM'\"></span>\r" +
-    "\n" +
-    "        </td>\r" +
-    "\n" +
-    "      </tr>\r" +
-    "\n" +
-    "      </tbody>\r" +
-    "\n" +
-    "    </table>\r" +
-    "\n" +
-    "  </div>\r" +
-    "\n" +
-    "  <div ng-switch-when=\"hours\">\r" +
-    "\n" +
-    "    <table>\r" +
-    "\n" +
-    "      <thead>\r" +
-    "\n" +
-    "      <tr>\r" +
-    "\n" +
-    "        <th ng-click=\"prev(24)\">&lsaquo;</th>\r" +
-    "\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('date')\" ng-bind=\"date|date:'dd MMMM yyyy'\"></th>\r" +
-    "\n" +
-    "        <th ng-click=\"next(24)\">&rsaquo;</i></th>\r" +
-    "\n" +
-    "      </tr>\r" +
-    "\n" +
-    "      </thead>\r" +
-    "\n" +
-    "      <tbody>\r" +
-    "\n" +
-    "      <tr>\r" +
-    "\n" +
-    "        <td colspan=\"7\">\r" +
-    "\n" +
-    "          <span ng-repeat=\"hour in hours\"\r" +
-    "\n" +
-    "                ng-class=\"{'now':isNow(hour),'active':isSameHour(hour)}\"\r" +
-    "\n" +
-    "                ng-click=\"setDate(hour)\" ng-bind=\"hour|time\"></span>\r" +
-    "\n" +
-    "        </td>\r" +
-    "\n" +
-    "      </tr>\r" +
-    "\n" +
-    "      </tbody>\r" +
-    "\n" +
-    "    </table>\r" +
-    "\n" +
-    "  </div>\r" +
-    "\n" +
-    "  <div ng-switch-when=\"minutes\">\r" +
-    "\n" +
-    "    <table>\r" +
-    "\n" +
-    "      <thead>\r" +
-    "\n" +
-    "      <tr>\r" +
-    "\n" +
-    "        <th ng-click=\"prev()\">&lsaquo;</th>\r" +
-    "\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('hours')\" ng-bind=\"date|date:'dd MMMM yyyy'\"></th>\r" +
-    "\n" +
-    "        <th ng-click=\"next()\">&rsaquo;</i></th>\r" +
-    "\n" +
-    "      </tr>\r" +
-    "\n" +
-    "      </thead>\r" +
-    "\n" +
-    "      <tbody>\r" +
-    "\n" +
-    "      <tr>\r" +
-    "\n" +
-    "        <td colspan=\"7\">\r" +
-    "\n" +
-    "          <span ng-repeat=\"minute in minutes\"\r" +
-    "\n" +
-    "                ng-class=\"{active:isSameMinutes(minute),'now':isNow(minute)}\"\r" +
-    "\n" +
-    "                ng-click=\"setDate(minute)\"\r" +
-    "\n" +
-    "                ng-bind=\"minute|time\"></span>\r" +
-    "\n" +
-    "        </td>\r" +
-    "\n" +
-    "      </tr>\r" +
-    "\n" +
-    "      </tbody>\r" +
-    "\n" +
-    "    </table>\r" +
-    "\n" +
-    "  </div>\r" +
-    "\n" +
-    "</div>\r" +
-    "\n"
-  );
-
-  $templateCache.put("templates/daterange.html",
-    "<div>\r" +
-    "\n" +
-    "    <table>\r" +
-    "\n" +
-    "        <tr>\r" +
-    "\n" +
-    "            <td valign=\"top\">\r" +
-    "\n" +
-    "                <div date-picker=\"start\" ng-disabled=\"disableDatePickers\"  class=\"date-picker\" date after=\"start\" before=\"end\" min-view=\"date\" max-view=\"date\"></div>\r" +
-    "\n" +
-    "            </td>\r" +
-    "\n" +
-    "            <td valign=\"top\">\r" +
-    "\n" +
-    "                <div date-picker=\"end\" ng-disabled=\"disableDatePickers\"  class=\"date-picker\" date after=\"start\" before=\"end\"  min-view=\"date\" max-view=\"date\"></div>\r" +
-    "\n" +
-    "            </td>\r" +
-    "\n" +
-    "        </tr>\r" +
-    "\n" +
-    "    </table>\r" +
-    "\n" +
-    "</div>\r" +
-    "\n"
-  );
-
-}]);
-})(angular);
 /**
  * Restful Resources service for AngularJS apps
  * @version v1.3.1 - 2014-01-29 * @link https://github.com/mgonto/restangular
@@ -14320,13 +13427,17 @@ module.provider('Restangular', function() {
 	return moment;
 }));
 
-/* angular-moment.js / v0.10.3 / (c) 2013, 2014, 2015 Uri Shaked / MIT Licence */
+/* angular-moment.js / v1.0.0-beta.1 / (c) 2013, 2014, 2015 Uri Shaked / MIT Licence */
 
 'format amd';
 /* global define */
 
 (function () {
 	'use strict';
+
+	function isUndefinedOrNull(val) {
+		return angular.isUndefined(val) || val === null;
+	}
 
 	function angularMoment(angular, moment) {
 
@@ -14351,13 +13462,19 @@ module.provider('Restangular', function() {
 				 * @ngdoc property
 				 * @name angularMoment.config.angularMomentConfig#preprocess
 				 * @propertyOf angularMoment.config:angularMomentConfig
-				 * @returns {string} The default preprocessor to apply
+				 * @returns {function} A preprocessor function that will be applied on all incoming dates
 				 *
 				 * @description
-				 * Defines a default preprocessor to apply (e.g. 'unix', 'etc', ...). The default value is null,
-				 * i.e. no preprocessor will be applied.
+				 * Defines a preprocessor function to apply on all input dates (e.g. the input of `am-time-ago`,
+				 * `amCalendar`, etc.). The function must return a `moment` object.
+				 *
+				 * @example
+				 *   // Causes angular-moment to always treat the input values as unix timestamps
+				 *   angularMomentConfig.preprocess = function(value) {
+				 * 	   return moment.unix(value);
+				 *   }
 				 */
-				preprocess: null, // e.g. 'unix', 'utc', ...
+				preprocess: null,
 
 				/**
 				 * @ngdoc property
@@ -14368,8 +13485,10 @@ module.provider('Restangular', function() {
 				 * @description
 				 * The default timezone (e.g. 'Europe/London'). Empty string by default (does not apply
 				 * any timezone shift).
+				 *
+				 * NOTE: This option requires moment-timezone >= 0.3.0.
 				 */
-				timezone: '',
+				timezone: null,
 
 				/**
 				 * @ngdoc property
@@ -14393,7 +13512,7 @@ module.provider('Restangular', function() {
 				 * @description
 				 * Specifies whether the filters included with angular-moment are stateful.
 				 * Stateful filters will automatically re-evaluate whenever you change the timezone
-				 * or language settings, but may negatively impact performance. true by default.
+				 * or locale settings, but may negatively impact performance. true by default.
 				 */
 				statefulFilters: true
 			})
@@ -14482,18 +13601,16 @@ module.provider('Restangular', function() {
 		 *
 		 * @restrict A
 		 */
-			.directive('amTimeAgo', ['$window', 'moment', 'amMoment', 'amTimeAgoConfig', 'angularMomentConfig', function ($window, moment, amMoment, amTimeAgoConfig, angularMomentConfig) {
+			.directive('amTimeAgo', ['$window', 'moment', 'amMoment', 'amTimeAgoConfig', function ($window, moment, amMoment, amTimeAgoConfig) {
 
 				return function (scope, element, attr) {
 					var activeTimeout = null;
 					var currentValue;
-					var currentFormat = angularMomentConfig.format;
 					var withoutSuffix = amTimeAgoConfig.withoutSuffix;
 					var titleFormat = amTimeAgoConfig.titleFormat;
 					var fullDateThreshold = amTimeAgoConfig.fullDateThreshold;
 					var fullDateFormat = amTimeAgoConfig.fullDateFormat;
 					var localDate = new Date().getTime();
-					var preprocess = angularMomentConfig.preprocess;
 					var modelName = attr.amTimeAgo;
 					var currentFrom;
 					var isTimeElement = ('TIME' === element[0].nodeName.toUpperCase());
@@ -14560,14 +13677,14 @@ module.provider('Restangular', function() {
 					function updateMoment() {
 						cancelTimer();
 						if (currentValue) {
-							var momentValue = amMoment.preprocessDate(currentValue, preprocess, currentFormat);
+							var momentValue = amMoment.preprocessDate(currentValue);
 							updateTime(momentValue);
 							updateDateTimeAttr(momentValue.toISOString());
 						}
 					}
 
 					scope.$watch(modelName, function (value) {
-						if ((typeof value === 'undefined') || (value === null) || (value === '')) {
+						if (isUndefinedOrNull(value) || (value === '')) {
 							cancelTimer();
 							if (currentValue) {
 								element.text('');
@@ -14583,7 +13700,7 @@ module.provider('Restangular', function() {
 
 					if (angular.isDefined(attr.amFrom)) {
 						scope.$watch(attr.amFrom, function (value) {
-							if ((typeof value === 'undefined') || (value === null) || (value === '')) {
+							if (isUndefinedOrNull(value) || (value === '')) {
 								currentFrom = null;
 							} else {
 								currentFrom = moment(value);
@@ -14602,18 +13719,6 @@ module.provider('Restangular', function() {
 							}
 						});
 					}
-
-					attr.$observe('amFormat', function (format) {
-						if (typeof format !== 'undefined') {
-							currentFormat = format;
-							updateMoment();
-						}
-					});
-
-					attr.$observe('amPreprocess', function (newValue) {
-						preprocess = newValue;
-						updateMoment();
-					});
 
 					attr.$observe('amFullDateThreshold', function (newValue) {
 						fullDateThreshold = newValue;
@@ -14641,19 +13746,7 @@ module.provider('Restangular', function() {
 		 * @module angularMoment
 		 */
 			.service('amMoment', ['moment', '$rootScope', '$log', 'angularMomentConfig', function (moment, $rootScope, $log, angularMomentConfig) {
-				/**
-				 * @ngdoc property
-				 * @name angularMoment:amMoment#preprocessors
-				 * @module angularMoment
-				 *
-				 * @description
-				 * Defines the preprocessors for the preprocessDate method. By default, the following preprocessors
-				 * are defined: utc, unix.
-				 */
-				this.preprocessors = {
-					utc: moment.utc,
-					unix: moment.unix
-				};
+				var defaultTimezone = null;
 
 				/**
 				 * @ngdoc function
@@ -14685,11 +13778,19 @@ module.provider('Restangular', function() {
 				 * Changes the default timezone for amCalendar, amDateFormat and amTimeAgo. Also broadcasts an
 				 * `amMoment:timezoneChanged` event on $rootScope.
 				 *
+				 * Note: this method works only if moment-timezone > 0.3.0 is loaded
+				 *
 				 * @param {string} timezone Timezone name (e.g. UTC)
 				 */
 				this.changeTimezone = function (timezone) {
+					if (moment.tz && moment.tz.setDefault) {
+						moment.tz.setDefault(timezone);
+						$rootScope.$broadcast('amMoment:timezoneChanged');
+					} else {
+						$log.warn('angular-moment: changeTimezone() works only with moment-timezone.js v0.3.0 or greater.');
+					}
 					angularMomentConfig.timezone = timezone;
-					$rootScope.$broadcast('amMoment:timezoneChanged');
+					defaultTimezone = timezone;
 				};
 
 				/**
@@ -14699,62 +13800,120 @@ module.provider('Restangular', function() {
 				 *
 				 * @description
 				 * Preprocess a given value and convert it into a Moment instance appropriate for use in the
-				 * am-time-ago directive and the filters.
+				 * am-time-ago directive and the filters. The behavior of this function can be overriden by
+				 * setting `angularMomentConfig.preprocess`.
 				 *
 				 * @param {*} value The value to be preprocessed
-				 * @param {string} preprocess The name of the preprocessor the apply (e.g. utc, unix)
-				 * @param {string=} format Specifies how to parse the value (see {@link http://momentjs.com/docs/#/parsing/string-format/})
-				 * @return {Moment} A value that can be parsed by the moment library
+				 * @return {Moment} A `moment` object
 				 */
-				this.preprocessDate = function (value, preprocess, format) {
-					if (angular.isUndefined(preprocess)) {
-						preprocess = angularMomentConfig.preprocess;
+				this.preprocessDate = function (value) {
+					// Configure the default timezone if needed
+					if (defaultTimezone !== angularMomentConfig.timezone) {
+						this.changeTimezone(angularMomentConfig.timezone);
 					}
-					if (this.preprocessors[preprocess]) {
-						return this.preprocessors[preprocess](value, format);
+
+					if (angularMomentConfig.preprocess) {
+						return angularMomentConfig.preprocess(value);
 					}
-					if (preprocess) {
-						$log.warn('angular-moment: Ignoring unsupported value for preprocess: ' + preprocess);
-					}
+
 					if (!isNaN(parseFloat(value)) && isFinite(value)) {
 						// Milliseconds since the epoch
 						return moment(parseInt(value, 10));
 					}
+
 					// else just returns the value as-is.
+					return moment(value);
+				};
+			}])
+
+		/**
+		 * @ngdoc filter
+		 * @name angularMoment.filter:amParse
+		 * @module angularMoment
+		 */
+			.filter('amParse', ['moment', function (moment) {
+				return function (value, format) {
 					return moment(value, format);
 				};
+			}])
 
-				/**
-				 * @ngdoc function
-				 * @name angularMoment.service.amMoment#applyTimezone
-				 * @methodOf angularMoment.service.amMoment
-				 *
-				 * @description
-				 * Apply a timezone onto a given moment object. It can be a named timezone (e.g. 'America/Phoenix') or an offset from UTC (e.g. '+0300')
-				 * moment-timezone.js is needed when a named timezone is used, otherwise, it'll not apply any timezone shift.
-				 *
-				 * @param {Moment} aMoment a moment() instance to apply the timezone shift to
-				 * @param {string=} timezone The timezone to apply. If none given, will apply the timezone
-				 *        configured in angularMomentConfig.timezone. It can be a named timezone (e.g. 'America/Phoenix') or an offset from UTC (e.g. '+0300')
-				 *
-				 * @returns {Moment} The given moment with the timezone shift applied
-				 */
-				this.applyTimezone = function (aMoment, timezone) {
-					timezone = timezone || angularMomentConfig.timezone;
+		/**
+		 * @ngdoc filter
+		 * @name angularMoment.filter:amFromUnix
+		 * @module angularMoment
+		 */
+			.filter('amFromUnix', ['moment', function (moment) {
+				return function (value) {
+					return moment.unix(value);
+				};
+			}])
+
+		/**
+		 * @ngdoc filter
+		 * @name angularMoment.filter:amUtc
+		 * @module angularMoment
+		 */
+			.filter('amUtc', ['moment', function (moment) {
+				return function (value) {
+					return moment.utc(value);
+				};
+			}])
+
+		/**
+		 * @ngdoc filter
+		 * @name angularMoment.filter:amUtcOffset
+		 * @module angularMoment
+		 *
+		 * @description
+		 * Adds a UTC offset to the given timezone object. The offset can be a number of minutes, or a string such as
+		 * '+0300', '-0300' or 'Z'.
+		 */
+			.filter('amUtcOffset', ['amMoment', function (amMoment) {
+				function amUtcOffset(value, offset) {
+					return amMoment.preprocessDate(value).utcOffset(offset);
+				}
+
+				return amUtcOffset;
+			}])
+
+		/**
+		 * @ngdoc filter
+		 * @name angularMoment.filter:amLocal
+		 * @module angularMoment
+		 */
+			.filter('amLocal', ['moment', function (moment) {
+				return function (value) {
+					return moment.isMoment(value) ? value.local() : null;
+				};
+			}])
+
+		/**
+		 * @ngdoc filter
+		 * @name angularMoment.filter:amTimezone
+		 * @module angularMoment
+		 *
+		 * @description
+		 * Apply a timezone onto a given moment object, e.g. 'America/Phoenix').
+		 *
+		 * You need to include moment-timezone.js for timezone support.
+		 */
+			.filter('amTimezone', ['amMoment', 'angularMomentConfig', '$log', function (amMoment, angularMomentConfig, $log) {
+				function amTimezone(value, timezone) {
+					var aMoment = amMoment.preprocessDate(value);
+
 					if (!timezone) {
 						return aMoment;
 					}
 
-					if (timezone.match(/^Z|[+-]\d\d:?\d\d$/i)) {
-						aMoment = aMoment.utcOffset(timezone);
-					} else if (aMoment.tz) {
-						aMoment = aMoment.tz(timezone);
+					if (aMoment.tz) {
+						return aMoment.tz(timezone);
 					} else {
-						$log.warn('angular-moment: named timezone specified but moment.tz() is undefined. Did you forget to include moment-timezone.js?');
+						$log.warn('angular-moment: named timezone specified but moment.tz() is undefined. Did you forget to include moment-timezone.js ?');
+						return aMoment;
 					}
+				}
 
-					return aMoment;
-				};
+				return amTimezone;
 			}])
 
 		/**
@@ -14763,18 +13922,13 @@ module.provider('Restangular', function() {
 		 * @module angularMoment
 		 */
 			.filter('amCalendar', ['moment', 'amMoment', 'angularMomentConfig', function (moment, amMoment, angularMomentConfig) {
-				function amCalendarFilter(value, preprocess, timezone) {
-					if (typeof value === 'undefined' || value === null) {
+				function amCalendarFilter(value) {
+					if (isUndefinedOrNull(value)) {
 						return '';
 					}
 
-					value = amMoment.preprocessDate(value, preprocess);
-					var date = moment(value);
-					if (!date.isValid()) {
-						return '';
-					}
-
-					return amMoment.applyTimezone(date, timezone).calendar();
+					var date = amMoment.preprocessDate(value);
+					return date.isValid() ? date.calendar() : '';
 				}
 
 				// Since AngularJS 1.3, filters have to explicitly define being stateful
@@ -14790,29 +13944,19 @@ module.provider('Restangular', function() {
 		 * @module angularMoment
 		 */
 			.filter('amDifference', ['moment', 'amMoment', 'angularMomentConfig', function (moment, amMoment, angularMomentConfig) {
-				function amDifferenceFilter(value, otherValue, unit, usePrecision, preprocessValue, preprocessOtherValue) {
-					if (typeof value === 'undefined' || value === null) {
+				function amDifferenceFilter(value, otherValue, unit, usePrecision) {
+					if (isUndefinedOrNull(value)) {
 						return '';
 					}
 
-					value = amMoment.preprocessDate(value, preprocessValue);
-					var date = moment(value);
-					if (!date.isValid()) {
+					var date = amMoment.preprocessDate(value);
+					var date2 = !isUndefinedOrNull(otherValue) ? amMoment.preprocessDate(otherValue) : moment();
+
+					if (!date.isValid() || !date2.isValid()) {
 						return '';
 					}
 
-					var date2;
-					if (typeof otherValue === 'undefined' || otherValue === null) {
-						date2 = moment();
-					} else {
-						otherValue = amMoment.preprocessDate(otherValue, preprocessOtherValue);
-						date2 = moment(otherValue);
-						if (!date2.isValid()) {
-							return '';
-						}
-					}
-
-					return amMoment.applyTimezone(date).diff(amMoment.applyTimezone(date2), unit, usePrecision);
+					return date.diff(date2, unit, usePrecision);
 				}
 
 				amDifferenceFilter.$stateful = angularMomentConfig.statefulFilters;
@@ -14827,19 +13971,17 @@ module.provider('Restangular', function() {
 		 * @function
 		 */
 			.filter('amDateFormat', ['moment', 'amMoment', 'angularMomentConfig', function (moment, amMoment, angularMomentConfig) {
-				function amDateFormatFilter(value, format, preprocess, timezone, inputFormat) {
-					var currentFormat = inputFormat || angularMomentConfig.format;
-					if (typeof value === 'undefined' || value === null) {
+				function amDateFormatFilter(value, format) {
+					if (isUndefinedOrNull(value)) {
 						return '';
 					}
 
-					value = amMoment.preprocessDate(value, preprocess, currentFormat);
-					var date = moment(value);
+					var date = amMoment.preprocessDate(value);
 					if (!date.isValid()) {
 						return '';
 					}
 
-					return amMoment.applyTimezone(date, timezone).format(format);
+					return date.format(format);
 				}
 
 				amDateFormatFilter.$stateful = angularMomentConfig.statefulFilters;
@@ -14855,7 +13997,7 @@ module.provider('Restangular', function() {
 		 */
 			.filter('amDurationFormat', ['moment', 'angularMomentConfig', function (moment, angularMomentConfig) {
 				function amDurationFormatFilter(value, format, suffix) {
-					if (typeof value === 'undefined' || value === null) {
+					if (isUndefinedOrNull(value)) {
 						return '';
 					}
 
@@ -14874,25 +14016,25 @@ module.provider('Restangular', function() {
 		 * @function
 		 */
 			.filter('amTimeAgo', ['moment', 'amMoment', 'angularMomentConfig', function (moment, amMoment, angularMomentConfig) {
-				function amTimeAgoFilter(value, preprocess, suffix, from) {
+				function amTimeAgoFilter(value, suffix, from) {
 					var date, dateFrom;
 
-					if (typeof value === 'undefined' || value === null) {
+					if (isUndefinedOrNull(value)) {
 						return '';
 					}
 
-					value = amMoment.preprocessDate(value, preprocess);
+					value = amMoment.preprocessDate(value);
 					date = moment(value);
 					if (!date.isValid()) {
 						return '';
 					}
 
 					dateFrom = moment(from);
-					if (typeof from !== 'undefined' && dateFrom.isValid()) {
-						return amMoment.applyTimezone(date).from(dateFrom, suffix);
+					if (!isUndefinedOrNull(from) && dateFrom.isValid()) {
+						return date.from(dateFrom, suffix);
 					}
 
-					return amMoment.applyTimezone(date).fromNow(suffix);
+					return date.fromNow(suffix);
 				}
 
 				amTimeAgoFilter.$stateful = angularMomentConfig.statefulFilters;
@@ -14909,7 +14051,7 @@ module.provider('Restangular', function() {
 			.filter('amSubtract', ['moment', 'angularMomentConfig', function (moment, angularMomentConfig) {
 				function amSubtractFilter(value, amount, type) {
 
-					if (typeof value === 'undefined' || value === null) {
+					if (isUndefinedOrNull(value)) {
 						return '';
 					}
 
@@ -14930,7 +14072,7 @@ module.provider('Restangular', function() {
 			.filter('amAdd', ['moment', 'angularMomentConfig', function (moment, angularMomentConfig) {
 				function amAddFilter(value, amount, type) {
 
-					if (typeof value === 'undefined' || value === null) {
+					if (isUndefinedOrNull(value)) {
 						return '';
 					}
 
@@ -14946,7 +14088,7 @@ module.provider('Restangular', function() {
 	if (typeof define === 'function' && define.amd) {
 		define(['angular', 'moment'], angularMoment);
 	} else if (typeof module !== 'undefined' && module && module.exports) {
-		angularMoment(angular, require('moment'));
+		angularMoment(require('angular'), require('moment'));
 		module.exports = 'angularMoment';
 	} else {
 		angularMoment(angular, (typeof global !== 'undefined' ? global : window).moment);

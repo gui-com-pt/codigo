@@ -1,8 +1,9 @@
 <div class="page-view__wrapper">
     <div class="page-view__side">
         <img ng-src="{{ctrl.sportsNews.image}}" />
-        <ul>
-            <li><i class="icon ion-android-calendar"></i> Criado há 3 horas</li>
+        <ul class="pi-list">
+            <li><i class="icon ion-android-calendar"></i> Criado <span am-time-ago="ctrl.sportsNews.datePublished | amFromUnix"></span></li>
+            <li><i class="icon ion-person"></i> Por <span ng-bind="ctrl.sportsNews.author.displayName"></span></li>
         </ul>
         <ul ng-show="ctrl.sportsNews.meta.length > 0">
             <li ng-repeat="meta in ctrl.sportsNews.meta"><b ng-bind="meta.displayName"></b><br><span ng-bind="meta.value"></span></li>
@@ -11,7 +12,18 @@
     <div class="page-view__content">
         <h2 ng-bind="ctrl.sportsNews.name"></h2>
         <div bind-html-compile="ctrl.sportsNews.articleBody"></div>
-        <div pi-comment-window namespace="sportsnews" id="{{ctrl.id}}"></div>
-        <button ui-sref="article-save({id: ctrl.id})">editar</button>
+        <div class="comments">
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'guilhermecardoso';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Este site utiliza o AngularJS. Tens de ter o javascript activado no teu navegador.</noscript>
+        </div>
+        <!--<div pi-comment-window namespace="sportsnews" id="{{ctrl.id}}"></div>-->
     </div>
 </div>

@@ -34,7 +34,7 @@
 
             self.queryModel.busy = true;
             articleSvc.find(getQueryModel()).then(function(r){
-                if(r.data.articles.length < 1) return;
+                if(!_.isArray(r.data.articles) || r.data.articles.length < 1) return;
 
                 angular.forEach(r.data.articles, function(event){
                     self.news.push(event);
