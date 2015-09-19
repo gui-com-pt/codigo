@@ -39,7 +39,9 @@ var boot = function(){
 
   angular
     .module('codigo')
-      .config(['$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', function($stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider){
+      .config(['$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', '$urlRouterProvider', function($stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider, $urlRouterProvider){
+        $urlRouterProvider.otherwise('/');
+
         if(_.isString(getCookie('Authorization'))){
           var c = getCookie('Authorization');
           if(_.isString(c) && c.length > 4) {
@@ -97,7 +99,7 @@ var boot = function(){
 
           $stateProvider
               .state('home', {
-                  url: '/',
+                  url: '/not-active',
                   templateUrl: 'core/home.tpl.html',
                   controller: 'codigo.core.homeCtrl',
                   controllerAs: 'ctrl'
@@ -145,7 +147,7 @@ var boot = function(){
                   controllerAs: 'ctrl'
               })
               .state('article-list', {
-                  url: '/artigos?name&categoryId',
+                  url: '/?name&categoryId',
                   templateUrl: 'core/article/article-list.tpl.html',
                   controller: 'codigo.core.article.articleListCtrl',
                   controllerAs: 'ctrl'
