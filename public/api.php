@@ -15,7 +15,7 @@ use SpotEvents\ServiceInterface\Data\EventRepository;
 use SpotEvents\ServiceInterface\Data\NutritionRepository;
 use SpotEvents\ServiceInterface\Data\ModalityRepository;
 
-require '../vendor/autoload.php';
+require '../../pi-framework/vendor/autoload.php';
 
 class MongoCursorException extends \Exception {
 
