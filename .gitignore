@@ -2,3 +2,5 @@ public/cdn/
 bower_components/
 node_modules/
 vendor/
+.idea/
+.sass-cache/
