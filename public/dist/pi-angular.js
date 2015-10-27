@@ -85,7 +85,7 @@ angular
 })();
 (function(){
 	angular.
-		module('pi.ui-extensions', ['ui.router', 'pi']);
+		module('pi.ui-extensions', ['ui.router']);
 })();
 (function(){
   angular
@@ -1032,22 +1032,19 @@ angular
 	piCommentResource.$inject = ['$resource'];
 
 	var piCommentWindow = function(piCommentResource) {
-
+		
 
 		var link = function(scope, elem, attrs) {
-
-
-
+			
+			
+			
 		}
 
 		var ctrl = function($scope, $q) {
 			var resource = piCommentResource.create($scope.namespace, $scope.id);
-			$scope.signup = {};
-			$scope.login = {};
-			$scope.comments = resource.query({});
-			$scope.showForm = false;
-			$scope.showLoginFormExtended = false;
 
+			$scope.comments = resource.query({});
+			
 			this.send = function(message) {
                 var deferred = $q.defer();
 				resource.save({message: message, id: $scope.id}, function(res){
@@ -1055,14 +1052,6 @@ angular
                     deferred.resolve(res);
                 });
                 return deferred.promise;
-			}
-
-			this.keypressLogin = function(){
-				$scope.showLoginFormExtended = true;
-			}
-
-			this.showSignupForm = function(){
-				$scope.showForm = true;
 			}
 		};
 		return {
@@ -1078,7 +1067,7 @@ angular
 	piCommentWindow.$inject = ['piCommentResource', '$q'];
 
 	var piCommentMessage = function() {
-
+		
 		return {
 			templateUrl: 'html/pi/comment-message.html',
 			replace: true,
@@ -1088,21 +1077,13 @@ angular
 		}
 	};
 
-	var piCommentForm = function($rootScope) {
+	var piCommentForm = function() {
 		var link = function(scope, elem, attrs, piCommentWindow) {
 			scope.send = function() {
 				piCommentWindow.send(scope.message)
                     .then(function(res){
                         scope.message = '';
                     });
-			}
-			var triggred = false;
-			if(!$rootScope.isAuthenticated) {
-				scope.writting = function(){
-					if(triggred) return;
-					piCommentWindow.showSignupForm();
-					triggred = true;
-				}
 			}
 		};
 
@@ -1124,10 +1105,9 @@ angular
 		.factory('piCommentResource', piCommentResource)
 		.directive('piCommentWindow', piCommentWindow)
 		.directive('piCommentMessage', piCommentMessage)
-		.directive('piCommentForm', ['$rootScope', piCommentForm])
+		.directive('piCommentForm', piCommentForm)
 		.directive('piCommentReplyForm', piCommentReplyForm);
 })();
-
 (function(){
 
 	var piFormMaker = function(){
@@ -3481,38 +3461,6 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.run(runFn)
 })();
 (function(){
-	angular
-		.module('pi.ui-extensions')
-		.provider('uiStateProtector', [function(){
-	        
-	        var self = this;
-	        
-	        
-	        /*
-	         * Defalt visitor state
-	         */
-	        this.visitor = 'login';
-	        /*
-	         * Restricted states cannot seen by visitors
-	         */
-	        this.restricted = [];
-	        this.restrictAll = true;
-	        
-	        
-	        this.$get = ['$rootScope', '$state', function($rootScope, $state){
-	          $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-	            if(!$rootScope.isAuthenticated && self.restrictAll && toState.name !== self.visitor) {
-	                  event.preventDefault(); 
-	                  $state.go(self.visitor);
-	            }
-	            
-	          });
-	        }];
-	        
-	        return this;
-	      }]);
-})();
-(function(){
 	'use strict';
 
 	angular
@@ -4049,23 +3997,23 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.factory('pi.core.user.userSvc', ['piHttp', function(piHttp){
 
 			this.post = function(model){
-				return piHttp.post('/api/user', model);
+				return piHttp.post('/user', model);
 			}
 
 			this.remove = function(id) {
-				return piHttp.post('/api/user-remove/' + id);
+				return piHttp.post('/user-remove/' + id);
 			}
 
 			this.put = function(id, model) {
-				return piHttp.post('/api/user/' + id, model);
+				return piHttp.post('/user/' + id, model);
 			}
 
 			this.get = function(id, model) {
-				return piHttp.get('/api/user/' + id, model);
+				return piHttp.get('/user/' + id, model);
 			}
 
 			this.find = function(model) {
-				return piHttp.get('/api/user', {params: model});
+				return piHttp.get('/user', {params: model});
 			};
 			return this;
 		}]);

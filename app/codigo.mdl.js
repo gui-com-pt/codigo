@@ -39,8 +39,9 @@ var boot = function(){
 
   angular
     .module('codigo')
-      .config(['$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', '$urlRouterProvider', function($stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider, $urlRouterProvider){
+      .config(['$locationProvider', '$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', '$urlRouterProvider', function($locationProvider, $stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider, $urlRouterProvider){
         $urlRouterProvider.otherwise('/');
+        $locationProvider.hashPrefix('!');
 
         if(_.isString(getCookie('Authorization'))){
           var c = getCookie('Authorization');
