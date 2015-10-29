@@ -2,11 +2,11 @@
 	angular
 		.module('codigo.core')
 		.factory('facebookMetaService', [function(){
-			var _meta = [];
+			var _meta = {};
 
 			return {
 				clean: function(){
-					_meta = [];
+					_meta = {}
 				},
 				set: function(title, description, image) {
 					_meta['og:locale'] = 'pt_PT';
@@ -22,9 +22,9 @@
 		.directive('facebookMeta', [function(){
 			return {
 				replace: true,
-				template: '<meta ng-repeat="meta in $root.metas" property="meta[0]" content="meta[1]">',
+				template: '<meta ng-repeat="(key, value) in $root.metas" property="{{key}}" content="{{value}}">',
 				controller: ['$rootScope', '$scope', 'facebookMetaService', function($rootScope, $scope, facebookMetaService) {
-					facebookMetaService.set('Codigo', 'Programação', 'http://codigo.ovh/logo.png');
+					facebookMetaService.set('Codigo', 'Site de Programação', 'http://codigo.ovh/logo.png');
 					$rootScope.metas = facebookMetaService.meta();
 				}]
 			}
