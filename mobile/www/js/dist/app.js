@@ -186,7 +186,7 @@ var boot = function(){
                 }
               );
             });
-             
+
           $rootScope.search = function(value) {
             $state.go('article-list', {name: value, categoryId: null});
           }
@@ -194,7 +194,17 @@ var boot = function(){
         .then(function(res){
           $rootScope.categories = res.data.categories;
         });
-    }]);
+    }])
+    .directive('googleAdSense', function () {
+        return {
+            restrict: 'A',
+            replace: true,       
+            template: '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6136620122922126" data-ad-slot="8722359494" data-ad-format="auto"></ins>',
+            controller: function () {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+        };
+    });
 })();
 
 (function(){
