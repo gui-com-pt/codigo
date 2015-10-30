@@ -173,11 +173,20 @@ var boot = function(){
               });
 
       }])
-    .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state', 'codigoModel',
-          function($rootScope, categorySvc, $state, codigoModel){
+    .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state', 'codigoModel', '$window',
+          function($rootScope, categorySvc, $state, codigoModel, $window){
             $rootScope.isAuthenticated = codigoModel.isAuthenticated;
             $rootScope.codigoModel = codigoModel;
 
+
+             $rootScope.$on('$locationChangeStart', function () {
+              Object.keys($window).filter(function(k) { return k.indexOf('google') >= 0 }).forEach(
+                function(key) {
+                  delete($window[key]);
+                }
+              );
+            });
+             
           $rootScope.search = function(value) {
             $state.go('article-list', {name: value, categoryId: null});
           }
