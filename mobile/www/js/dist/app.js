@@ -42,6 +42,7 @@ var boot = function(){
       .config(['$locationProvider', '$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', '$urlRouterProvider', function($locationProvider, $stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider, $urlRouterProvider){
         $urlRouterProvider.otherwise('/');
         $locationProvider.hashPrefix('!');
+        $locationProvider.html5Mode(true);
 
         if(_.isString(getCookie('Authorization'))){
           var c = getCookie('Authorization');
