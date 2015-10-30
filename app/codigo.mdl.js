@@ -6,7 +6,7 @@ var boot = function(){
           var $http = initInjector.get('$http');
           var _response;
 
-          $http.get('/api/init').then(
+          $http.get('http://api.codigo.ovh/api/init').then(
               function(response) {
                   _response = response;
                   angular.module('config', []).constant('codigoModel', _response.data);
@@ -39,8 +39,9 @@ var boot = function(){
 
   angular
     .module('codigo')
-      .config(['$locationProvider', '$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', '$urlRouterProvider', function($locationProvider, $stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider, $urlRouterProvider){
+      .config(['piHttpProvider', '$locationProvider', '$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', '$urlRouterProvider', function(piHttpProvider, $locationProvider, $stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider, $urlRouterProvider){
         $urlRouterProvider.otherwise('/');
+        piHttpProvider.setBaseUrl('http://api.codigo.ovh');
         $locationProvider.hashPrefix('!');
         //$locationProvider.html5Mode(true);
 
