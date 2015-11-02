@@ -12,6 +12,7 @@ var tasks = requireDir('./bower_components/pi-gulp-tasks/tasks');
 var paths = {
     dependencies: [
         './bower_components/ui-router/release/angular-ui-router.js',
+        './bower_components/angular-bind-html-compile/angular-bind-html-compile.js',
         './bower_components/underscore/underscore.js',
         './bower_components/pi-class-hover/dist/pi-class-hover.js',
         './bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
