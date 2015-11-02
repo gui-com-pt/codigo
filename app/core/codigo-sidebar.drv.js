@@ -13,9 +13,11 @@
           scope.articles = [];
 
           articleSvc.find({}).then(function(r){
+
               if(!_.isArray(r.data.articles) || r.data.articles.length < 1) return;
 
-              angular.forEach(r.data.articles, function(event){
+              var articles = _.shuffle(r.data.articles);
+              angular.forEach(articles, function(event){
                   scope.articles.push(event);
               });
 

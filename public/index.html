@@ -32,7 +32,7 @@
   <div class="pi-nav__wrapper pi-nav__wrapper--fixed">
       <div class="pi-nav">
       <ul>
-            <li><a ui-sref="article-list({categoryId: ''})" ui-sref-opts="{reload: true}">codigo.ovh</a></li>
+            <li><a ui-sref="article-list({categoryId: null, name: null})" ui-sref-opts="{reload: true}">codigo.ovh</a></li>
             <li><a ui-sref="learn">aprende a programar</a></li>
             <li ng-show="$root.isAuthenticated"><a ui-sref="question-list">Perguntas</a></li>
             <li ng-show="$root.isAuthenticated"><a href="">Gestão</a>
@@ -61,7 +61,7 @@
   <div class="pi-nav__wrapper pi-nav__sub">
   <div class="pi-nav">
   <ul>
-    <li ng-repeat="cat in $root.categories"><a ui-sref="article-list({categoryId: cat.id})" ng-bind="cat.displayName"></a></li>
+    <li ng-repeat="cat in $root.categories"><a ui-sref="article-list({categoryId: cat.id, name: null})" ng-bind="cat.displayName"></a></li>
     </ul>
     </div>
   </div>
@@ -121,7 +121,7 @@
    </script>
 <script type="text/ng-template" id="/html/pi/breadcrumb.html">
   <div class="pi-form__group">
-    <button class="btn btn-primary btn-xs btn-transparent" href="" ng-click="previousState()"><i class="fa fa-arrow-circle-left"></i> Retroceder</a></button>
+    <button class="btn btn-primary btn-xs pi-breadcrumb__btn-search" href="" ng-click="previousState()"><i class="fa fa-arrow-circle-left"></i> </a></button>
   </div>
   <div class="pi-form__group" ng-repeat="item in $root.menuItems" ng-if="item.isAnchor" >
     <button class="btn btn-primary btn-xs btn-transparent" ui-sref="{{item.state}}"><span class="subMenu-icon" ng-if="item.icon"><i class="{{item.icon}}"></i> </span><span ng-bind="item.label"></span></button>

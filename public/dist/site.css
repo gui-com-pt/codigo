@@ -5280,17 +5280,18 @@ pre[class*="language-"] {
   float: right;
   margin-right: 0; }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important; }
+
 /*
  * copy to PI - temporary
  */
-.pi-nav .pi-form__group {
-  margin-bottom: 0; }
-
-.pi-breadcrumb {
-  margin-bottom: 0; }
-
-.pi-breadcrumb a, .pi-breadcrumb button, .pi-breadcrumb .button-primary {
-  color: #fff; }
+.pi-nav {
+  padding-top: 7px; }
+  .pi-nav .pi-form__group {
+    margin-bottom: 0; }
+  .pi-nav > ul {
+    max-width: 100%; }
 
 body {
   margin-top: 42px; }
@@ -5421,5 +5422,20 @@ button, input[type="button"] {
     float: right;
     margin-right: 0; } }
 
-.sidebar-right > .pi-card {
-  width: 100%; }
+.sidebar-right {
+  border-left: solid 1px #ccc;
+  padding-left: 10px; }
+  .sidebar-right > .pi-card {
+    width: 100%; }
+
+.pi-breadcrumb__btn-search {
+  background-color: transparent;
+  color: #8d8f9c; }
+
+.pi-breadcrumb {
+  margin-bottom: 0; }
+
+.pi-breadcrumb a, .pi-breadcrumb button, .pi-breadcrumb .button-primary {
+  color: #8d8f9c; }
+  .pi-breadcrumb a:hover, .pi-breadcrumb button:hover, .pi-breadcrumb .button-primary:hover {
+    background-color: transparent; }

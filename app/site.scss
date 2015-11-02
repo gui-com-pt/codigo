@@ -17,29 +17,26 @@ $susy: (
 @import "prism";
 @import "core/comment";
 
-
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
 
 /*
  * copy to PI - temporary
  */
 
 .pi-nav{
+  padding-top: 7px;
   .pi-form__group {
     margin-bottom: 0;
+  }
+
+  > ul {
+    max-width: 100%;
   }
 }
 
 
-
-
-.pi-breadcrumb {
-  margin-bottom: 0;
-}
-.pi-breadcrumb   {
-  a, button, .button-primary {
-  color: #fff;
-}
-}
 body {
   margin-top: 42px;
 }
@@ -154,6 +151,30 @@ button, input[type="button"] {
   }
 }
 
-.sidebar-right > .pi-card {
-  width: 100%;
+
+.sidebar-right {
+  border-left: solid 1px #ccc;
+  padding-left: 10px;
+  
+  > .pi-card {
+    width: 100%;
+  }
+}
+
+
+.pi-breadcrumb__btn-search {
+  background-color: transparent;
+  color: #8d8f9c;
+}
+.pi-breadcrumb {
+  margin-bottom: 0;
+}
+.pi-breadcrumb   {
+  a, button, .button-primary {
+    color: #8d8f9c;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
 }
