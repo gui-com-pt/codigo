@@ -225,7 +225,7 @@ var boot = function(){
         return {
             restrict: 'A',
             replace: true,       
-            template: '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6136620122922126" data-ad-slot="8722359494" data-ad-format="auto"></ins>',
+            template: '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1750926490246398" data-ad-slot="5417208575" data-ad-format="auto"></ins>',
             controller: function () {
                 (adsbygoogle = window.adsbygoogle || []).push({});
             }
