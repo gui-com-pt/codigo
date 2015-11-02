@@ -1,6 +1,28 @@
 (function(){
 "use restrict";
+function getCookie(cname) {
+        var name = cname + "=",
+            ca = document.cookie.split(';'),
+            i,
+            c,
+            ca_length = ca.length;
+        for (i = 0; i < ca_length; i += 1) {
+            c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) !== -1) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
 
+    function setCookie(variable, value, expires_seconds) {
+        var d = new Date();
+        d = new Date(d.getTime() + 1000 * expires_seconds);
+        document.cookie = variable + '=' + value + '; expires=' + d.toGMTString() + ';';
+    }
 var boot = function(){
          var initInjector = angular.injector(['ng']);
           var $http = initInjector.get('$http');
@@ -33,8 +55,8 @@ var boot = function(){
         .module('codigo.core.question', ['codigo.core']);
 
   angular
-    .module('codigo', ['templates', 'pi.auth', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
-      'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select', 'angularMoment',
+    .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
+      'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select', 'angularMoment', 'pi',
       'piClassHover', 'ngTagsInput', '720kb.socialshare', 'wu.masonry', 'config']);
 
   angular
