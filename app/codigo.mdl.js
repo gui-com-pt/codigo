@@ -61,9 +61,17 @@ var boot = function(){
 
   angular
     .module('codigo')
-      .config(['piHttpProvider', '$locationProvider', '$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', '$urlRouterProvider', function(piHttpProvider, $locationProvider, $stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider, $urlRouterProvider){
+      .config(['facebookMetaServiceProvider', 'piHttpProvider', '$locationProvider', '$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', '$urlRouterProvider', function(facebookMetaServiceProvider, piHttpProvider, $locationProvider, $stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider, $urlRouterProvider){
+        
         $urlRouterProvider.otherwise('/');
+        
         piHttpProvider.setBaseUrl('http://api.codigo.ovh');
+
+        facebookMetaServiceProvider.setAuthor('https://www.facebook.com/living.with.jesus');
+        facebookMetaServiceProvider.setPublisher('https://www.facebook.com/codigo.ovh');
+        facebookMetaServiceProvider.setSiteName('Codigo');
+        facebookMetaServiceProvider.setType('article');
+        facebookMetaServiceProvider.setLocale('pt_PT');
         $locationProvider.hashPrefix('!');
         //$locationProvider.html5Mode(true);
 

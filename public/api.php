@@ -269,7 +269,7 @@ class DemoHost extends AppHost {
   public function configure(IContainer $container)
   {
     header('P3P: policyref="/w3c/p3p.xml", CP="ALL IND DSP COR ADM CONo CUR CUSo IVAo IVDo PSA PSD TAI TELo OUR SAMo CNT COM INT NAV ONL PHY PRE PUR UNI"');
-  	$this->config()->domain('codigo.pi');
+  	$this->config()->domain('codigo.ovh');
   	$conf = new FileSystemConfiguration();
   	$conf->storeDir(__DIR__ . '/cdn');
   	$this->config()->staticFolder(__DIR__ . '/cdn');

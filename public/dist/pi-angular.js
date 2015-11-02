@@ -1469,35 +1469,6 @@ var INTEGER_REGEXP = /^\-?\d*$/;
         .directive('uploadThumbnail', UploadThumbnail);
 
 })();
-/**
- * Filter to reverse a list
- * @ngdoc filter
- * @name reserve
- * @kind function
- *
- * @description
- * Reverse a array without replacing the original array since slice is used to return the array 
- *
- * @return {Array}
- *
- * @example
- * <div ng-repeat="verses in bibles.kingJames | reverse">
- * 	<em ng-bind="verse.number"></em> <span ng-bind="verse.message"></span>
- * </div>
- */
-(function(){
-	
-	var reverseFilter = function(){
-
-	  return function(items) {
-	    return items ? items.slice().reverse() : [];
-	  };
-
-	};
-
-	angular.module('pi')
-		.filter('reverse', reverseFilter);
-})();
 (function(){
 
 	var piFileManager = function(){
@@ -1572,6 +1543,35 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 	}
 
 	
+})();
+/**
+ * Filter to reverse a list
+ * @ngdoc filter
+ * @name reserve
+ * @kind function
+ *
+ * @description
+ * Reverse a array without replacing the original array since slice is used to return the array 
+ *
+ * @return {Array}
+ *
+ * @example
+ * <div ng-repeat="verses in bibles.kingJames | reverse">
+ * 	<em ng-bind="verse.number"></em> <span ng-bind="verse.message"></span>
+ * </div>
+ */
+(function(){
+	
+	var reverseFilter = function(){
+
+	  return function(items) {
+	    return items ? items.slice().reverse() : [];
+	  };
+
+	};
+
+	angular.module('pi')
+		.filter('reverse', reverseFilter);
 })();
 (function(){
 		'use strict';
@@ -2722,6 +2722,82 @@ var INTEGER_REGEXP = /^\-?\d*$/;
     angular
     	.module('pi')
     	.factory('dataPagingBase', pagingFn)
+})();
+(function(){
+	angular
+		.module('pi')
+		.provider('facebookMetaService', [function(){
+
+			var _meta = {},
+				_author = 'https://www.facebook.com/living.with.jesus',
+				_publisher = 'https://www.facebook.com/codigo.ovh',
+				_locale = 'pt_PT',
+				_type = 'article',
+				_siteName = 'Codigo',
+				_image = '';
+
+			var setDefault = function() {
+				_meta = {
+					'og:site_name': _siteName,
+					'og:type': _type,
+					'og:locale': _locale,
+					'og:image': _image,
+					'article:author': _author,
+					'article:publisher': _publisher
+				};
+			}
+
+			setDefault();
+
+			return {
+				$get: function() {
+					return {
+						clean: function(){
+							setDefault();
+						},
+						set: function(title, description, image) {
+							_meta['og:locale'] = 'pt_PT';
+							_meta['og:title'] = title;
+							_meta['og:description'] = description;
+							_meta['og:image'] = image;
+						},
+						meta: function(){
+							return _meta;
+						}
+					}
+				},
+				setImage: function(image) {
+					_image = image;
+				},
+				setAuthor: function(author){
+					_author = author;
+				},
+				setPublisher: function(publisher) {
+					_publisher = publisher;
+				},
+				setLocale: function(locale) {
+					_locale = locale;
+				},
+				setType: function(type) {
+					_type = type;
+				},
+				setSiteName: function(siteName) {
+					_siteName = siteName;
+				}
+			}
+
+			
+		}])
+		.directive('facebookMeta', [function(){
+			return {
+				replace: true,
+				template: '<meta ng-repeat="(key, value) in $root.metas" property="{{key}}" content="{{value}}">',
+				controller: ['$rootScope', '$scope', 'facebookMetaService', function($rootScope, $scope, facebookMetaService) {
+					facebookMetaService.set('Codigo', 'Site de Programação', 'http://codigo.ovh/logo.png');
+					$rootScope.metas = facebookMetaService.meta();
+				}]
+			}
+		}])
 })();
 (function(){
     var fn = function($resource, fittingModel, piHttp) {
