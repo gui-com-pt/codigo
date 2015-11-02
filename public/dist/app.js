@@ -197,8 +197,10 @@ var boot = function(){
               });
 
       }])
-    .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state', 'codigoModel', '$window',
-          function($rootScope, categorySvc, $state, codigoModel, $window){
+    .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state', 'codigoModel', '$window', '$location',
+          function($rootScope, categorySvc, $state, codigoModel, $window, $location){
+            $rootScope.$location = $location;
+
             $rootScope.isAuthenticated = codigoModel.isAuthenticated;
             $rootScope.codigoModel = codigoModel;
 
