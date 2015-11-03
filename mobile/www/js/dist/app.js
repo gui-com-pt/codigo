@@ -212,6 +212,9 @@ var boot = function(){
             $rootScope.isAuthenticated = codigoModel.isAuthenticated;
             $rootScope.codigoModel = codigoModel;
 
+            $rootScope.$on("$stateChangeSuccess", function (event, currentState, previousState) {
+                $window.scrollTo(0, 0);
+            });
 
              $rootScope.$on('$locationChangeStart', function () {
               Object.keys($window).filter(function(k) { return k.indexOf('google') >= 0 }).forEach(
