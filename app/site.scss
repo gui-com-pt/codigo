@@ -1,5 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700);
+
 @import "variables";
+
 $susy: (
         container: 95%
 );
@@ -16,7 +18,7 @@ $susy: (
 @import "sass/ng-tags-bootstrap";
 @import "prism";
 @import "core/comment";
-
+$breakpoint-site: 900px;
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
@@ -121,7 +123,14 @@ button, input[type="button"] {
   margin-right: auto;
   padding-top: $pi-nav-height + 5px;
 }
+.masonry-brick__wrapper  > .masonry-brick {
+  width: 100%;
+}
 @include breakpoint($breakpoint-medium) {
+  .masonry-brick__wrapper  > .masonry-brick {
+    width: 50%;
+  }
+
 	.sidebar-right {
 		@include span(1 of 5 last);
 	}

@@ -5392,7 +5392,12 @@ button, input[type="button"] {
   margin-right: auto;
   padding-top: 45px; }
 
+.masonry-brick__wrapper > .masonry-brick {
+  width: 100%; }
+
 @media (min-width: 400px) {
+  .masonry-brick__wrapper > .masonry-brick {
+    width: 50%; }
   .sidebar-right {
     width: 16.66667%;
     float: right;
@@ -5402,7 +5407,7 @@ button, input[type="button"] {
     float: left;
     margin-right: 4.16667%; } }
 
-@media (min-width: 1200px) {
+@media (min-width: 900px) {
   .masonry-brick__wrapper > .masonry-brick {
     width: 25%; }
   .sidebar-right {
