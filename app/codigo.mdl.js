@@ -28,7 +28,7 @@ var boot = function(){
           var $http = initInjector.get('$http');
           var _response;
 
-          $http.get('http://beta.codigo.ovh/api/init').then(
+          $http.get('https://beta.codigo.ovh/api/init').then(
               function(response) {
                   _response = response;
                   angular.module('config', []).constant('codigoModel', _response.data);
