@@ -65,7 +65,7 @@ var boot = function(){
         
         $urlRouterProvider.otherwise('/');
         
-        piHttpProvider.setBaseUrl('http://beta.codigo.ovh');
+        piHttpProvider.setBaseUrl('https://beta.codigo.ovh');
 
         facebookMetaServiceProvider.setAuthor('https://www.facebook.com/living.with.jesus');
         facebookMetaServiceProvider.setPublisher('https://www.facebook.com/codigo.ovh');
