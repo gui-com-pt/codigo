@@ -28,7 +28,7 @@ var boot = function(){
           var $http = initInjector.get('$http');
           var _response;
 
-          $http.get('http://api.codigo.ovh/api/init').then(
+          $http.get('http://beta.codigo.ovh/api/init').then(
               function(response) {
                   _response = response;
                   angular.module('config', []).constant('codigoModel', _response.data);
@@ -65,7 +65,7 @@ var boot = function(){
         
         $urlRouterProvider.otherwise('/');
         
-        piHttpProvider.setBaseUrl('http://api.codigo.ovh');
+        piHttpProvider.setBaseUrl('http://beta.codigo.ovh');
 
         facebookMetaServiceProvider.setAuthor('https://www.facebook.com/living.with.jesus');
         facebookMetaServiceProvider.setPublisher('https://www.facebook.com/codigo.ovh');
