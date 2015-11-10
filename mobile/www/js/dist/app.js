@@ -55,14 +55,18 @@ var boot = function(){
         .module('codigo.core.question', ['codigo.core']);
 
   angular
-    .module('codigo', ['templates', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
+    .module('codigo', ['templates', 'pi.core', 'pi.adsense', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
       'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select', 'angularMoment', 'pi',
       'piClassHover', 'ngTagsInput', '720kb.socialshare', 'wu.masonry', 'config', 'angular-bind-html-compile']);
 
   angular
     .module('codigo')
-      .config(['facebookMetaServiceProvider', 'piHttpProvider', '$locationProvider', '$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', '$urlRouterProvider', function(facebookMetaServiceProvider, piHttpProvider, $locationProvider, $stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider, $urlRouterProvider){
+      .config(['googleAdSenseServiceProvider', 'facebookMetaServiceProvider', 'piHttpProvider', '$locationProvider', '$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', '$urlRouterProvider', function(googleAdSenseServiceProvider, facebookMetaServiceProvider, piHttpProvider, $locationProvider, $stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider, $urlRouterProvider){
         
+        googleAdSenseServiceProvider.setClient('ca-pub-1750926490246398');
+        googleAdSenseServiceProvider.setSlot('5417208575');
+        googleAdSenseServiceProvider.setFormat('auto');
+
         $urlRouterProvider.otherwise('/');
         
         piHttpProvider.setBaseUrl('https://beta.codigo.ovh');
@@ -216,13 +220,7 @@ var boot = function(){
                 $window.scrollTo(0, 0);
             });
 
-             $rootScope.$on('$locationChangeStart', function () {
-              Object.keys($window).filter(function(k) { return k.indexOf('google') >= 0 }).forEach(
-                function(key) {
-                  delete($window[key]);
-                }
-              );
-            });
+             
 
           $rootScope.search = function(value) {
             $state.go('article-list', {name: value, categoryId: null});
@@ -231,17 +229,7 @@ var boot = function(){
         .then(function(res){
           $rootScope.categories = res.data.categories;
         });
-    }])
-    .directive('googleAdSense', function () {
-        return {
-            restrict: 'A',
-            replace: true,       
-            template: '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1750926490246398" data-ad-slot="5417208575" data-ad-format="auto"></ins>',
-            controller: function () {
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-        };
-    });
+    }]);
 })();
 
 (function(){
