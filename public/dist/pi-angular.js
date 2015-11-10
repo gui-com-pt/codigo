@@ -2830,13 +2830,7 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.module('pi.adsense')
 		.run(['$rootScope', '$window', function($rootScope, $window){
 
-			$rootScope.$on('$locationChangeStart', function () {
-              Object.keys($window).filter(function(k) { return k.indexOf('google') >= 0 }).forEach(
-                function(key) {
-                  delete($window[key]);
-                }
-              );
-            });
+			
 		}])
 		.provider('googleAdSenseService', [function(){
 	      var self = this;

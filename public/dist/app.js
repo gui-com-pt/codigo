@@ -67,8 +67,6 @@ var boot = function(){
         googleAdSenseServiceProvider.setSlot('5417208575');
         googleAdSenseServiceProvider.setFormat('auto');
 
-        $urlRouterProvider.otherwise('/');
-        
         piHttpProvider.setBaseUrl('https://beta.codigo.ovh');
 
         facebookMetaServiceProvider.setAuthor('https://www.facebook.com/living.with.jesus');
@@ -76,18 +74,20 @@ var boot = function(){
         facebookMetaServiceProvider.setSiteName('Codigo');
         facebookMetaServiceProvider.setType('article');
         facebookMetaServiceProvider.setLocale('pt_PT');
+
+        $urlRouterProvider.otherwise('/');
         $locationProvider.hashPrefix('!');
         //$locationProvider.html5Mode(true);
 
         if(_.isString(getCookie('Authorization'))){
-          var c = getCookie('Authorization');
-          if(_.isString(c) && c.length > 4) {
-              //var cookie = JSON.parse(decodeURIComponent(c));
-              //if(!_.isUndefined(cookie.token))
-                  $httpProvider.defaults.headers.common["WWW-Authenticate"] = 'Basic ' + c;
-          }
+            var c = getCookie('Authorization');
+            if(_.isString(c) && c.length > 4) {
+                //var cookie = JSON.parse(decodeURIComponent(c));
+                //if(!_.isUndefined(cookie.token))
+                    $httpProvider.defaults.headers.common["WWW-Authenticate"] = 'Basic ' + c;
+            }
 
-      }
+        }
           tagsInputConfigProvider
             .setDefaults('tagsInput', {
               placeholder: 'Nova Tag',
@@ -212,7 +212,13 @@ var boot = function(){
     .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state', 'codigoModel', '$window', '$location',
           function($rootScope, categorySvc, $state, codigoModel, $window, $location){
             $rootScope.$location = $location;
-
+            $rootScope.$on('$locationChangeStart', function () {
+              Object.keys($window).filter(function(k) { return k.indexOf('google') >= 0 }).forEach(
+                function(key) {
+                  delete($window[key]);
+                }
+              );
+            });
             $rootScope.isAuthenticated = codigoModel.isAuthenticated;
             $rootScope.codigoModel = codigoModel;
 
