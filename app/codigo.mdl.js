@@ -67,7 +67,7 @@ var boot = function(){
         googleAdSenseServiceProvider.setSlot('5417208575');
         googleAdSenseServiceProvider.setFormat('auto');
 
-        piHttpProvider.setBaseUrl('https://beta.codigo.ovh');
+        piHttpProvider.setBaseUrl('https://codigo.ovh/api');
 
         facebookMetaServiceProvider.setAuthor('https://www.facebook.com/living.with.jesus');
         facebookMetaServiceProvider.setPublisher('https://www.facebook.com/codigo.ovh');
@@ -212,13 +212,7 @@ var boot = function(){
     .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state', 'codigoModel', '$window', '$location',
           function($rootScope, categorySvc, $state, codigoModel, $window, $location){
             $rootScope.$location = $location;
-            $rootScope.$on('$locationChangeStart', function () {
-              Object.keys($window).filter(function(k) { return k.indexOf('google') >= 0 }).forEach(
-                function(key) {
-                  delete($window[key]);
-                }
-              );
-            });
+            
             $rootScope.isAuthenticated = codigoModel.isAuthenticated;
             $rootScope.codigoModel = codigoModel;
 
