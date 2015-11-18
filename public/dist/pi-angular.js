@@ -56,6 +56,29 @@
 	angular
 		.module('pi.core.question', ['pi.core']);
 })();
+function getCookie(cname) {
+   var name = cname + "=",
+       ca = document.cookie.split(';'),
+       i,
+       c,
+       ca_length = ca.length;
+   for (i = 0; i < ca_length; i += 1) {
+       c = ca[i];
+       while (c.charAt(0) === ' ') {
+           c = c.substring(1);
+       }
+       if (c.indexOf(name) !== -1) {
+           return c.substring(name.length, c.length);
+       }
+   }
+   return "";
+}
+
+function setCookie(variable, value, expires_seconds) {
+   var d = new Date();
+   d = new Date(d.getTime() + 1000 * expires_seconds);
+   document.cookie = variable + '=' + value + '; expires=' + d.toGMTString() + ';';
+}
 
 angular
 	.module('pi.chat', []);
@@ -106,6 +129,175 @@ angular
           templateUrl: 'admin/event-edit.html'
         });
     }]);
+})();
+
+(function(){
+  angular
+    .module('pi.auth', ['pi']);
+
+  angular
+    .module('pi.auth')
+    .provider('piConfiguration', function(){
+      var config = function(){
+        var m = {};
+        m.providers = ['basic'];
+        m.loginUri = '/login';
+        m.logoutUri = '/logout';
+
+        return m;
+      };
+
+      var provider = function(){
+        var me = config();
+        var configs = {};
+        configs['default'] = me;
+
+        me.config = function(configName) {
+          var c = configs[configName];
+          if(!c) {
+            c = config();
+            configs[configName] = c;
+          }
+          return c;
+        };
+
+        me.$get = ['$q', function($q){
+          var deferred = $q.defer();
+
+          return function(configName) {
+            return configs[configName];
+          }
+        }];
+
+        return me;
+
+      };
+
+      return provider();
+    })
+    .controller('registerCtrl', ['$scope', 'piConfiguration', 'accountApi', function($scope, piConfiguration, accountApi){
+      $scope.init = function(configName) {
+        var config = piConfiguration(configName);
+      }
+
+      $scope.register = function(firstName, lastName, email, password, passwordConfirm, meta) {
+        var req = {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password
+        };
+
+        if(meta) {
+          req = angular.extend(req, meta)
+        }
+
+        accountApi.register(req)
+          .then(function(res){
+            window.location = '/';
+          }, function(res){
+            alert('erro no login');
+          });
+      }
+    }])
+    .directive('piRegister', ['$document', function($document){
+      return {
+        controller: 'registerCtrl',
+        controllerAs: 'ctrl',
+        transclude: true,
+        replace: true,
+        template: '<div ng-transclude></div>',
+        compile: function compile(tElement, tAttrs, transclude) {
+           return {
+              pre: function preLink(scope, elemt, attrs, controller){
+
+              },
+              post: function postLink(scope, elem, attrs, ctrl) {
+                var btn = angular.element(elem[0].querySelector('[login-submit]')),
+                    mail = angular.element(elem[0].querySelector('[login-email]')),
+                    pw = angular.element(elem[0].querySelector('[login-password]'));
+
+                    if(navigator.appVersion.indexOf("Trident") != -1){
+                        terminal.addClass('damn-ie');
+                    }
+
+                    var config = attrs['piConfig'];
+                    scope.init(config || 'default');
+
+                    var mouseover = false;
+
+                    elem.on('mouseover', function(){
+                      mouseover = true;
+                    });
+
+                    btn.on('click', function(){
+                      scope.login(mail.val(), pw.val());
+                    })
+
+                    elem.on('mouseleave', function(){
+                      mouseover = false;
+                    });
+              }
+            }
+          }
+    }
+    }])
+    .controller('loginCtrl', ['$scope', 'piConfiguration', 'accountApi', function($scope, piConfiguration, accountApi){
+      $scope.init = function(configName) {
+        var config = piConfiguration(configName);
+      }
+
+      $scope.login = function(email, password) {
+        accountApi.login(email, password)
+          .then(function(res){
+            window.location = '/';
+          }, function(res){
+            alert('erro no login');
+          });
+      }
+    }])
+    .directive('piAuth', ['$document', function($document){
+      return {
+        controller: 'loginCtrl',
+        controllerAs: 'ctrl',
+        transclude: true,
+        replace: true,
+        template: '<div ng-transclude></div>',
+        compile: function compile(tElement, tAttrs, transclude) {
+           return {
+              pre: function preLink(scope, elemt, attrs, controller){
+
+              },
+              post: function postLink(scope, elem, attrs, ctrl) {
+                var btn = angular.element(elem[0].querySelector('[login-submit]')),
+                    mail = angular.element(elem[0].querySelector('[login-email]')),
+                    pw = angular.element(elem[0].querySelector('[login-password]'));
+
+                    if(navigator.appVersion.indexOf("Trident") != -1){
+                        terminal.addClass('damn-ie');
+                    }
+
+                    var config = attrs['piConfig'];
+                    scope.init(config || 'default');
+
+                    var mouseover = false;
+
+                    elem.on('mouseover', function(){
+                      mouseover = true;
+                    });
+
+                    btn.on('click', function(){
+                      scope.login(mail.val(), pw.val());
+                    })
+
+                    elem.on('mouseleave', function(){
+                      mouseover = false;
+                    });
+              }
+            }
+          }
+    }
+  }]);
 })();
 
 (function(){
@@ -612,6 +804,37 @@ angular
 		.module('pi.chat')
 		.directive
 })();
+(function(){
+	angular
+		.module('pi.gallery', []);
+
+	angular
+		.module('pi.gallery')
+		.directive('piGallery', [function(){
+	    	return {
+	    		templateUrl: 'core/pi-gallery.tpl.html',
+	    		scope: {
+	    			images: '='
+	    		},
+	    		replace: true,
+	    		controller: ['$scope', '$rootScope', function($scope, $rootScope){
+	    			$scope.path = "src";
+					$scope.tileWidth = 150;
+					$scope.tileHeight = 150;
+
+					$scope.displayImage = function (img) {
+						$scope.selected = $scope.images.indexOf(img);
+						$scope.selectedImg = img;
+						$scope.showModal = true;
+					};
+
+					$scope.close = function(){
+						$scope.showModal = false;
+					}
+	    		}]
+	    	}
+	    }]);
+})();
 (function() {
     angular
         .module('pi')
@@ -746,6 +969,32 @@ angular
 		.factory('AccountRecoverService', AccountRecoverService);
 })();
 (function(){
+  angular
+    .module('pi')
+    .directive('bindHtmlCompile', ['$compile', function ($compile) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                scope.$watch(function () {
+                    return scope.$eval(attrs.bindHtmlCompile);
+                }, function (value) {
+                    // Incase value is a TrustedValueHolderType, sometimes it
+                    // needs to be explicitly called into a string in order to
+                    // get the HTML string.
+                    element.html(value && value.toString());
+                    // If scope is provided use it, otherwise use parent scope
+                    var compileScope = scope;
+                    if (attrs.bindHtmlScope) {
+                        compileScope = scope.$eval(attrs.bindHtmlScope);
+                    }
+                    $compile(element.contents())(compileScope);
+                });
+            }
+        };
+    }]);
+})();
+
+(function(){
 	var PiBreadcrumb = function(PiBreadcrumbService)
 	{
 		var link = function(scope, elem, attrs)
@@ -801,7 +1050,7 @@ angular
 	var piCommentResource = function($resource) {
 		return {
 			create: function(namespace, id) {
-				return $resource('http://fitting.pt/comment/' + namespace + '/' + id,
+				return $resource('/comment/' + namespace + '/' + id,
 		            {},
 		            {
 		            'query': {
@@ -1107,6 +1356,23 @@ angular
   angular
       .module('pi')
       .directive('piMeta', PiMetaDirective);
+})();
+
+(function(){
+  angular
+    .module('pi')
+    .directive('ngPrism', ['$interpolate', function($interpolate){
+            return {
+                restrict: 'AEC',
+                template: '<pre><code ng-transclude></code></pre>',
+                replace: true,
+                transclude: true,
+                link: function (scope, elm) {
+                    var tmp = $interpolate(elm.find('code').text())(scope);
+                    elm.find('code').html(Prism.highlightElement(tmp).value);
+                }
+            };
+        }]);
 })();
 
 (function(){
@@ -1428,7 +1694,6 @@ var INTEGER_REGEXP = /^\-?\d*$/;
                 if (files && files.length) {
                     for (var i = 0; i < files.length; i++) {
                         var file = files[i];
-
                         var url = piHttp.getBaseUrl() + '/filesystem';
 
                         Upload.upload({
@@ -2830,9 +3095,17 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.module('pi.adsense')
 		.run(['$rootScope', '$window', function($rootScope, $window){
 
-			
+			$rootScope.$on('$locationChangeStart', function () {
+              Object.keys($window).filter(function(k) { return k.indexOf('google') >= 0 }).forEach(
+                function(key) {
+                  delete($window[key]);
+                }
+              );
+            });
+
 		}])
 		.provider('googleAdSenseService', [function(){
+	      
 	      var self = this;
 	      self.format = 'auto';
 
@@ -2863,8 +3136,10 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 	          self.format = value;
 	        }
 	      };
+
 	    }])
 	    .directive('googleAdSense', ['googleAdSenseService', function (googleAdSenseService) {
+	        
 	        return {
 	            restrict: 'A',
 	            replace: true,       
@@ -2876,6 +3151,7 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 	              (adsbygoogle = window.adsbygoogle || []).push({});
 	            }]
 	        };
+
 	    }]);
 })();
 /**
@@ -3393,12 +3669,16 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 				return piHttp.post('/api/application', model);
 			}
 
-			this.find = function(id, model) {
-				return piHttp.get('/api/application' + id, model);
+			this.get = function(id, model) {
+				return piHttp.get('/api/application/' + id, model);
 			}
 
 			this.find = function(model) {
 				return piHttp.get('/api/application', model);
+			}
+
+			this.put = function(id, model){
+				return piHttp.post('/api/application/' + id, model);
 			}
 
 			return this;
@@ -3425,6 +3705,11 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 			this.find = function(model) {
 				return piHttp.get('/article-category', {params: model});
 			};
+
+			this.put = function(id, model) {
+				return piHttp.post('/article-serie/' + id, model);
+			};
+
 			return this;
 		}]);
 })();
