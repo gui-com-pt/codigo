@@ -28,7 +28,7 @@ class InitService extends Service {
 
     public EventRepository $eventRepo;
 
-	<<Request, Route('/api/init')>>
+	<<Request, Route('/init')>>
 	public function get(InitRequest $request)
 	{
 		$response = new InitResponse();
