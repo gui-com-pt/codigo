@@ -39,6 +39,9 @@
 		.module('pi.core', ['pi']);
 
 	angular
+		.module('pi.gallery', []);
+	
+	angular
 		.module('pi.adsense', ['pi']);
 
 	angular
@@ -86,6 +89,16 @@ angular
 	angular
 		.module('pi.form', []);
 })();
+(function(){
+  angular
+    .module('pi.form-contact', ['pi.mandril']);
+})();
+
+(function(){
+  angular
+		.module('pi.mandril', []);
+})();
+
 (function(){
 	angular.
 		module('pi.ui-extensions', ['ui.router']);
@@ -806,9 +819,6 @@ angular
 })();
 (function(){
 	angular
-		.module('pi.gallery', []);
-
-	angular
 		.module('pi.gallery')
 		.directive('piGallery', [function(){
 	    	return {
@@ -834,6 +844,8 @@ angular
 	    		}]
 	    	}
 	    }]);
+
+	    
 })();
 (function() {
     angular
@@ -928,7 +940,7 @@ angular
 				{
 					deferred.reject(res);
 				};
-			$http.post('/api/account/recover')
+			$http.post('/account/recover')
 				.then(successFn, errorFn, {email: email});
 
 			return deferred.promise;
@@ -952,7 +964,7 @@ angular
 					deferred.reject(res);
 				};
 
-			$http.post('/api/accouunt/recover/send', model)
+			$http.post('/accouunt/recover/send', model)
 				.then(successFn, errorFn);
 
 			return deferred.promise;
@@ -1606,7 +1618,6 @@ angular
       .directive('piContentEdit', piContentEdit);
 })();
 
-
 /**
  * @ng-doc directive
  * @name scrollToId
@@ -2093,43 +2104,121 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 })();
 
 (function(){
-	var fn = function(apiException){
+  angular
+    .module('pi.form-contact')
+    .provider('piFormConfiguration', [function(){
+      var config = {
+        toName: 'Localhost',
+        toEmail: 'local@localhost',
+        fromName: 'Localhost',
+        fromEmail: 'local@localhost',
+        subject: 'Form Contact'
+      };
+      return {
+        $get: [function(){
+          this.getToName = function(){
+            return config['toName'];
+          };
 
-		var svc = function(response) {
-			this.response = response;
+          this.getToEmail = function(){
+            return config['toEmail'];
+          };
 
-			this.handle = function() {
-				if(_.isUndefined(this.response || _.isUndefined(this.response.data))) {
-					throw apiException.badRequest;
-				}
+          this.getFromName = function(){
+            return config['fromName'];
+          };
 
-				if(this.response.statusCode >= 400) {
-					
-				}
+          this.getFromEmail = function(){
+            return config['fromEmail'];
+          };
 
-				this.success = true;
-				return this.response.data;
-			};
-		};
+          this.getSubject = function(){
+            return config['subject'];
+          };
 
-		return {
-			service: svc,
-			setProvider: function(dependency) {
-				svc.setHandler(dependency);
-			}
-		}
-	};
+          return this;
+        }],
+        setToName: function(value){
+          config['toName'] = value;
+        },
+        setToEmail: function(value){
+          config['toEmail'] = value
+        },
+        setFromName: function(value){
+          config['fromName'] = value;
+        },
+        setFromEmail: function(value){
+          config['fromEmail'] = value
+        },
+        setSubject: function(value){
+          config['subject'] = value
+        }
+      }
+    }])
+    .directive('piFormContact', ['piMandril', 'piFormConfiguration', function(piMandril, piFormConfiguration){
 
-	angular
-        .module('pi')
-		.constant('apiException', {
-			badRequest: 502,
-			notFound: 404,
-			notAuthorize: 501,
-			ok: 200
-		})
-		.factory('apiResponseProvider', ['apiException', fn]);
+        return {
+            link: function(scope, elem, attrs) {
+                scope.isActive = false;
+
+                var buildFormBody = function(elems) {
+                  var msg = '';
+                  angular.forEach(elems, function(value, key){
+                    msg = msg + '<p><b>' + value.name + '</b>: ' + value.value + '</p>';
+                  });
+
+                  return msg;
+                }
+
+                var cleanElements = function(elems){
+                  angular.forEach(elems, function(value, key){
+                    elems[key].value = '';
+                  });
+                }
+
+                scope.submit = function(){
+                    var elems = elem.find('[pi-form-control]');
+                    var res = [];
+                    var msg = buildFormBody(elems);
+
+                    var toName = _.isUndefined(elem.attr('pi-form-to-name')) ? piFormConfiguration.getToEmail() : elem.attr('pi-form-to-name'),
+                        toEmail = _.isUndefined(elem.attr('pi-form-to-email')) ? piFormConfiguration.getToEmail() : elem.attr('pi-form-to-email'),
+                        subject = _.isUndefined(elem.attr('pi-form-subject')) ? piFormConfiguration.getSubject() : elem.attr('pi-form-subject');
+
+                    var fromName = elem.find('[pi-form-from-name]').length > 0 ? elem.find('[pi-form-from-name]')[0].value : piFormConfiguration.getFromName(),
+                        fromEmail = elem.find('[pi-form-from-email]').length > 0 ? elem.find('[pi-form-from-email]')[0].value : piFormConfiguration.getFromEmail();
+
+                    isActive = true;
+                    piMandril.send(fromEmail, fromName, toEmail, toName, subject, msg)
+                      .then(function(res){
+                    	   scope.formSented = true;
+                         scope.isActive = false;
+                         cleanElements(elems);
+                    	}, function(err){
+                        scope.isActive = false;
+                      });
+                }
+            },
+            controller: ['$scope', function($scope){
+              this.submit = function(){
+                $scope.submit();
+              }
+            }]
+        }
+    }])
+    .directive('piFormSubmit', [function(){
+      return {
+        require: '^piFormContact',
+        link: function(scope, elem, attrs, piFormContactCtrl) {
+          elem.bind('click', function(){
+              piFormContactCtrl.submit();
+          })
+        }
+      }
+    }]);
+
 })();
+
 (function(){
     angular
         .module('pi')
@@ -2289,6 +2378,89 @@ var INTEGER_REGEXP = /^\-?\d*$/;
             }
         }]);
 })();
+(function(){
+	var fn = function(apiException){
+
+		var svc = function(response) {
+			this.response = response;
+
+			this.handle = function() {
+				if(_.isUndefined(this.response || _.isUndefined(this.response.data))) {
+					throw apiException.badRequest;
+				}
+
+				if(this.response.statusCode >= 400) {
+					
+				}
+
+				this.success = true;
+				return this.response.data;
+			};
+		};
+
+		return {
+			service: svc,
+			setProvider: function(dependency) {
+				svc.setHandler(dependency);
+			}
+		}
+	};
+
+	angular
+        .module('pi')
+		.constant('apiException', {
+			badRequest: 502,
+			notFound: 404,
+			notAuthorize: 501,
+			ok: 200
+		})
+		.factory('apiResponseProvider', ['apiException', fn]);
+})();
+(function(){
+  (function(){
+    angular
+      .module('pi.mandril')
+      .provider('piMandril', [function(){
+      	var _token = '';
+      	return {
+      		$get: ['$q', function($q){
+
+  				this.send =  function(from, fromName, to, toName, subject, body) {
+  				      var mandrill_client = new mandrill.Mandrill(_token);
+
+  					var promise = $q.defer(),
+  						message = {
+  		                  "html": body,
+  		                  "text": body,
+  		                  "subject": subject,
+  		                  "from_email": from,
+  		                  "from_name": 'Formulário',
+  		                  "to": [{
+  		                          "email": to,
+  		                          "name": "Website",
+  		                          "type": "to"
+  		                      }]
+  		              	};
+  		              mandrill_client.messages.send({"message": message, "async": false}, function(result) {
+  		                  promise.resolve(result);
+  		              }, function(e) {
+  		                  promise.reject(e);
+  		              });
+
+  		             return promise.promise;
+      			}
+
+      			return this;
+      		}],
+      		setToken: function(value){
+      			_token = value;
+      		}
+
+      	}
+      }]);
+  })();
+})();
+
 (function(){
   var piModalStack = function(piStack)
   {
@@ -3069,7 +3241,7 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 })();
 (function(){
     var fn = function($resource, fittingModel, piHttp) {
-        return $resource(piHttp.getBaseUrl() + '/api/feed/' + fittingModel.userId,
+        return $resource(piHttp.getBaseUrl() + '/feed/' + fittingModel.userId,
             {},
             {
                 'query': {
@@ -3666,19 +3838,19 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.factory('pi.core.app.appSvc', ['piHttp', function(piHttp){
 
 			this.post = function(model){
-				return piHttp.post('/api/application', model);
+				return piHttp.post('/application', model);
 			}
 
 			this.get = function(id, model) {
-				return piHttp.get('/api/application/' + id, model);
+				return piHttp.get('/application/' + id, model);
 			}
 
 			this.find = function(model) {
-				return piHttp.get('/api/application', model);
+				return piHttp.get('/application', model);
 			}
 
 			this.put = function(id, model){
-				return piHttp.post('/api/application/' + id, model);
+				return piHttp.post('/application/' + id, model);
 			}
 
 			return this;
@@ -3777,14 +3949,14 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.factory('pi.core.chat.inboxSvc', ['piHttp', '$rootScope', function(piHttp, $rootScope){
 
 			this.post = function(model){
-				return piHttp.post('/api/inbox', model);
+				return piHttp.post('/inbox', model);
 			}
 
 			this.get = function(id) {
 				var model = {};
 				model.fromId = id;
 				model.toId = $rootScope.userId;
-				return piHttp.post('/api/inbox-view', model);
+				return piHttp.post('/inbox-view', model);
 			}
 
 			return this;
@@ -3798,19 +3970,19 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.factory('pi.core.app.eventSvc', ['piHttp', function(piHttp){
 
 			this.post = function(model){
-				return piHttp.post('/api/event', model);
+				return piHttp.post('/event', model);
 			}
 
 			this.get = function(id, model) {
-				return piHttp.get('/api/event/' + id, model);
+				return piHttp.get('/event/' + id, model);
 			}
 
 			this.find = function(model) {
-				return piHttp.get('/api/event', model);
+				return piHttp.get('/event', model);
 			};
 
 			this.remove = function(id) {
-				return piHttp.post('/api/event-remove/' + id);
+				return piHttp.post('/event-remove/' + id);
 			};
 
 			return this;
@@ -3821,19 +3993,19 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 			.factory('pi.core.app.eventSubSvc', ['piHttp', function(piHttp){
 				
 				this.post = function(model) {
-					return piHttp.post('/api/event-subscription', model);
+					return piHttp.post('/event-subscription', model);
 				}
 
 				this.get = function(id, model) {
-					return piHttp.get('/api/event-subscription/' + id);
+					return piHttp.get('/event-subscription/' + id);
 				}
 
 				this.find = function(model) {
-					return piHttp.get('/api/event-subscription', model);
+					return piHttp.get('/event-subscription', model);
 				}
 
 				this.remove = function(id) {
-					return piHttp.post('/api/event-subscription-remove/' + id);
+					return piHttp.post('/event-subscription-remove/' + id);
 				};
 
 				return this;
@@ -3844,15 +4016,15 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 			.factory('pi.core.app.eventAttendSvc', ['piHttp', function(piHttp){
 				
 				this.post = function(model) {
-					return piHttp.post('/api/event-attend', model);
+					return piHttp.post('/event-attend', model);
 				}
 
 				this.get = function(id, model) {
-					return piHttp.get('/api/event-attend/' + id);
+					return piHttp.get('/event-attend/' + id);
 				}
 
 				this.find = function(model) {
-					return piHttp.get('/api/event-attend', model);
+					return piHttp.get('/event-attend', model);
 				}
 
 				return this;
@@ -3935,15 +4107,15 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		.factory('pi.core.payment.paymentSvc', ['piHttp', function(piHttp){
 
 			this.post = function(model){
-				return piHttp.post('/api/payment/report', model);
+				return piHttp.post('/payment/report', model);
 			}
 
 			this.get = function(id, model) {
-				return piHttp.get('/api/payment/report/' + id, model);
+				return piHttp.get('/payment/report/' + id, model);
 			}
 
 			this.find = function(model) {
-				return piHttp.get('/api/payment/report', model);
+				return piHttp.get('/payment/report', model);
 			};
 
 			return this;
