@@ -77,7 +77,7 @@ var boot = function(){
 
         $urlRouterProvider.otherwise('/');
         $locationProvider.hashPrefix('!');
-        //$locationProvider.html5Mode(true);
+        $locationProvider.html5Mode(true);
 
         if(_.isString(getCookie('Authorization'))){
             var c = getCookie('Authorization');
