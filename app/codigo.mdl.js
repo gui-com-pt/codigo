@@ -62,7 +62,7 @@ var boot = function(){
   angular
     .module('codigo')
       .config(['googleAdSenseServiceProvider', 'facebookMetaServiceProvider', 'piHttpProvider', '$locationProvider', '$stateProvider', 'uiSelectConfig', '$provide', 'tagsInputConfigProvider', '$httpProvider', '$urlRouterProvider', function(googleAdSenseServiceProvider, facebookMetaServiceProvider, piHttpProvider, $locationProvider, $stateProvider, uiSelectConfig, $provide, tagsInputConfigProvider, $httpProvider, $urlRouterProvider){
-        
+
         googleAdSenseServiceProvider.setClient('ca-pub-1750926490246398');
         googleAdSenseServiceProvider.setSlot('5417208575');
         googleAdSenseServiceProvider.setFormat('auto');
@@ -212,7 +212,7 @@ var boot = function(){
     .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state', 'codigoModel', '$window', '$location',
           function($rootScope, categorySvc, $state, codigoModel, $window, $location){
             $rootScope.$location = $location;
-            
+
             $rootScope.isAuthenticated = codigoModel.isAuthenticated;
             $rootScope.codigoModel = codigoModel;
 
@@ -220,12 +220,12 @@ var boot = function(){
                 $window.scrollTo(0, 0);
             });
 
-             
+
 
           $rootScope.search = function(value) {
             $state.go('article-list', {name: value, categoryId: null});
           }
-          categorySvc.find()
+          categorySvc.find({take: 100})
         .then(function(res){
           $rootScope.categories = res.data.categories;
         });
