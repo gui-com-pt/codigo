@@ -1,7 +1,7 @@
 (function(){
     angular
         .module('codigo')
-        .controller('codigo.core.article.categoryListCtrl', ['pi.core.article.articleCategorySvc', function(articleCategorySvc){
+        .controller('codigo.core.article.categoryListCtrl', ['pi.core.article.articleCategorySvc', 'facebookMetaService', function(articleCategorySvc, facebookMetaService){
             var self = this;
 
             articleCategorySvc.find({})

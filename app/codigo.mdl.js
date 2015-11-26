@@ -68,12 +68,12 @@ var boot = function(){
         googleAdSenseServiceProvider.setFormat('auto');
 
         piHttpProvider.setBaseUrl('https://codigo.ovh/api');
-
         facebookMetaServiceProvider.setAuthor('https://www.facebook.com/living.with.jesus');
         facebookMetaServiceProvider.setPublisher('https://www.facebook.com/codigo.ovh');
         facebookMetaServiceProvider.setSiteName('Codigo');
         facebookMetaServiceProvider.setType('article');
         facebookMetaServiceProvider.setLocale('pt_PT');
+        facebookMetaServiceProvider.setImage('https://image.freepik.com/free-vector/web-programmer_23-2147502079.jpg');
 
         $urlRouterProvider.otherwise('/');
         $locationProvider.hashPrefix('!');

@@ -1,5 +1,6 @@
 (function(){
-    var SportsNewsListCtrl = function(articleSvc, $scope, $stateParams){
+    var SportsNewsListCtrl = function(articleSvc, $scope, $stateParams, facebookMetaService){
+        facebookMetaService.set('Artigos de Informática, Segurança, Programação', 'Os artigos que escrevo são daquilo que aprendo e faço, desde linguagens de programação e segurança informática a notícias e tutoriais.');
         var self = this;
 
         this.news = [];
@@ -48,7 +49,7 @@
 
     };
 
-    SportsNewsListCtrl.$inject = ['pi.core.article.articleSvc', '$scope', '$stateParams'];
+    SportsNewsListCtrl.$inject = ['pi.core.article.articleSvc', '$scope', '$stateParams', 'facebookMetaService'];
 
     angular
         .module('codigo')
