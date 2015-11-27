@@ -51,8 +51,8 @@
       <ul>
             <li><a ui-sref="article-list({categoryId: null, name: null})" ui-sref-opts="{reload: true}">codigo.ovh</a></li>
             <li><a ui-sref="learn">aprende a programar</a></li>
-            <li ng-show="$root.isAuthenticated"><a ui-sref="question-list">Perguntas</a></li>
-            <li ng-show="$root.isAuthenticated"><a href="">Gestão</a>
+            <li class="ng-cloak" ng-show="$root.isAuthenticated"><a ui-sref="question-list">Perguntas</a></li>
+            <li class="ng-cloak" ng-show="$root.isAuthenticated"><a href="">Gestão</a>
                 <ul>
                     <li><a ui-sref="article-create">Criar Artigo</a></li>
                     <li><a ui-sref="category-list">Categorias</a></li>

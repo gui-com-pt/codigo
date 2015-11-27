@@ -1,63 +1,63 @@
 (function(){
-	var settings = {
+  var settings = {
 
-	};
-	var configFn = function(FacebookProvider, $httpProvider){
+  };
+  var configFn = function(FacebookProvider, $httpProvider){
 
-		$httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-	};
+    $httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+  };
 
-	configFn.$inject = ['FacebookProvider', '$httpProvider'];
+  configFn.$inject = ['FacebookProvider', '$httpProvider'];
 
-	angular
-		.module('pi', ['ngResource', 'facebook', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.article', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product'])
-		.config(configFn)
-		.provider('pi', [function(){
-			var appId,
-				appSecret;
+  angular
+    .module('pi', ['ngResource', 'facebook', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.article', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product'])
+    .config(configFn)
+    .provider('pi', [function(){
+      var appId,
+        appSecret;
 
-			this.setAppId = function(value) {
-				appId = value;
-			}
+      this.setAppId = function(value) {
+        appId = value;
+      }
 
-			this.$get = [function(){
-				return {
-					getAppId: function() {
-						return appId;
-					}
-				}
-			}];
-		}]);
+      this.$get = [function(){
+        return {
+          getAppId: function() {
+            return appId;
+          }
+        }
+      }];
+    }]);
 })();
 (function(){
-	'use strict';
+  'use strict';
 
-	angular
-		.module('pi.ui-router', ['pi', 'ui.router']);
+  angular
+    .module('pi.ui-router', ['pi', 'ui.router']);
 
-	angular
-		.module('pi.core', ['pi']);
+  angular
+    .module('pi.core', ['pi']);
 
-	angular
-		.module('pi.gallery', []);
-	
-	angular
-		.module('pi.adsense', ['pi']);
+  angular
+    .module('pi.gallery', []);
+  
+  angular
+    .module('pi.adsense', ['pi']);
 
-	angular
-		.module('pi.core.user', ['pi.core']);
+  angular
+    .module('pi.core.user', ['pi.core']);
 
-	angular
-		.module('pi.core.likes', ['pi.core']);
+  angular
+    .module('pi.core.likes', ['pi.core']);
 
-	angular
-		.module('pi.core.product', ['pi.core']);
+  angular
+    .module('pi.core.product', ['pi.core']);
 
-	angular
-		.module('pi.core.article', ['pi.core']);
+  angular
+    .module('pi.core.article', ['pi.core']);
 
-	angular
-		.module('pi.core.question', ['pi.core']);
+  angular
+    .module('pi.core.question', ['pi.core']);
 })();
 function getCookie(cname) {
    var name = cname + "=",
@@ -84,10 +84,10 @@ function setCookie(variable, value, expires_seconds) {
 }
 
 angular
-	.module('pi.chat', []);
+  .module('pi.chat', []);
 (function(){
-	angular
-		.module('pi.form', []);
+  angular
+    .module('pi.form', []);
 })();
 (function(){
   angular
@@ -96,12 +96,12 @@ angular
 
 (function(){
   angular
-		.module('pi.mandril', []);
+    .module('pi.mandril', []);
 })();
 
 (function(){
-	angular.
-		module('pi.ui-extensions', ['ui.router']);
+  angular.
+    module('pi.ui-extensions', ['ui.router']);
 })();
 (function(){
   angular
@@ -314,28 +314,28 @@ angular
 })();
 
 (function(){
-	'use strict';
+  'use strict';
 
-	angular
-		.module('pi.core.app', ['pi.core']);
-
-})();
-(function(){
-	angular
-		.module('pi.core.chat', ['pi.core']);
-})();
-(function(){
-	'use strict';
-
-	angular
-		.module('pi.core.event', ['pi.core']);
+  angular
+    .module('pi.core.app', ['pi.core']);
 
 })();
 (function(){
-	'use strict';
+  angular
+    .module('pi.core.chat', ['pi.core']);
+})();
+(function(){
+  'use strict';
 
-	angular
-		.module('pi.core.payment', ['pi.core']);
+  angular
+    .module('pi.core.event', ['pi.core']);
+
+})();
+(function(){
+  'use strict';
+
+  angular
+    .module('pi.core.payment', ['pi.core']);
 
 })();
 
@@ -343,53 +343,53 @@ angular
  *
  */
 (function(){
-	var settings = {};
+  var settings = {};
 
-	var flags = {
-		sdk: false,
-		ready: false
-	};
+  var flags = {
+    sdk: false,
+    ready: false
+  };
 
-	var provider = function(){
-		
+  var provider = function(){
+    
       this.setAppId = function(appId){
-      	settings.appId = appId;
+        settings.appId = appId;
       };
 
       this.getAppId = function(){
-      	return appId;
+        return appId;
       };
 
       settings.locale = 'pt_PT';
 
       this.setLocale = function(locale) {
-      	settings.locale = locale;
+        settings.locale = locale;
       };
 
       this.getLocal = function(){
-      	return settings.locale;
+        return settings.locale;
       };
     
-		settings.status = true;
+    settings.status = true;
 
-		this.setStatus = function(status) {
-		  settings.status = status;
-		};
+    this.setStatus = function(status) {
+      settings.status = status;
+    };
 
-		this.getStatus = function() {
-		  return settings.status;
-		};
+    this.getStatus = function() {
+      return settings.status;
+    };
 
-	settings.version = '2.0';
-	this.setSdkVersion = function(version) {
-		settings.version = version;
-	};
+  settings.version = '2.0';
+  this.setSdkVersion = function(version) {
+    settings.version = version;
+  };
 
-	this.getSdkVersion = function(){
-		return settings.version;
-	};
+  this.getSdkVersion = function(){
+    return settings.version;
+  };
 
-	      /*
+        /*
          * load SDK
          */
         settings.loadSDK = true;
@@ -436,11 +436,11 @@ angular
       };
 
       this.like = function(postId) {
-      	FB.ui(
-		 {
-		  method: 'share',
-		  href: 'https://developers.facebook.com/docs/'
-		}, function(response){});
+        FB.ui(
+     {
+      method: 'share',
+      href: 'https://developers.facebook.com/docs/'
+    }, function(response){});
       };
 
       this.getComments = function(url) {
@@ -449,32 +449,32 @@ angular
 
       var getFn = function($q, $rootScope, $timeout, $window){
 
-      		/**
-      		 * The NgFacebook class is retrieved from Facebook Service request
-      		 */
-      		function NgFacebook(){
-      			this.appId = settings.appId;
-      		}
+          /**
+           * The NgFacebook class is retrieved from Facebook Service request
+           */
+          function NgFacebook(){
+            this.appId = settings.appId;
+          }
 
-      		NgFacebook.prototype.isReady = function(){
-      			return flags.ready;
-      		};
+          NgFacebook.prototype.isReady = function(){
+            return flags.ready;
+          };
 
-      		
+          
       };
 
       this.$get = [
-      	'$q',
-      	'$rootScope',
-      	'$timeout',
-      	'$window', getFn];
+        '$q',
+        '$rootScope',
+        '$timeout',
+        '$window', getFn];
 
-	};
+  };
 
-	angular
-		.module('pi')
-		.value('fbSettings', settings)
-		.value('fbFlags', flags)
+  angular
+    .module('pi')
+    .value('fbSettings', settings)
+    .value('fbFlags', flags)
 
 })();
 /**
@@ -483,117 +483,117 @@ angular
  * The main module provider
  */
 (function(){
-	
-	/**
-	 * Global settings
-	 *
-	 * Settings that don't belong to a specific module are stored here
-	 */	
- 	var settings = { };
+  
+  /**
+   * Global settings
+   *
+   * Settings that don't belong to a specific module are stored here
+   */ 
+  var settings = { };
 
-	var providerFn = function(){
+  var providerFn = function(){
 
-		/**
-		 * OAuth Provider
-		 */
-		settings.oAuthProviders =  [];
+    /**
+     * OAuth Provider
+     */
+    settings.oAuthProviders =  [];
 
-		this.getAuthProviders = function(){
-			return settings.oAuthProviders;
-		};
+    this.getAuthProviders = function(){
+      return settings.oAuthProviders;
+    };
 
-		this.addOAuthProvider = function(provider, appId) {
-			settings.oAuthProviders.push({
-				key: provider,
-				appId: appId
-			});
-		};
+    this.addOAuthProvider = function(provider, appId) {
+      settings.oAuthProviders.push({
+        key: provider,
+        appId: appId
+      });
+    };
 
-		this.hasOAuthProvider = function(provider){
-			angular.forEach(settings.oAuthProviders, function(value, key) {
-				if(value.key == provider)  {
-					return true;
-				}
-			});
-			return false;
-		};
+    this.hasOAuthProvider = function(provider){
+      angular.forEach(settings.oAuthProviders, function(value, key) {
+        if(value.key == provider)  {
+          return true;
+        }
+      });
+      return false;
+    };
 
-		this.getOAuthAppId = function(provider){
-			angular.forEach(settings.oAuthProviders, function(value, key) {
-				if(value.key == provider) {
-					return value.appId;
-				}
-			});
+    this.getOAuthAppId = function(provider){
+      angular.forEach(settings.oAuthProviders, function(value, key) {
+        if(value.key == provider) {
+          return value.appId;
+        }
+      });
 
-			return null;
-		};
-
-
-		/**
-		 * Rest API
-		 */
-		settings.apiBaseUrl = '/api';
-
-		this.getApiBaseUrl = function(){
-			return settings.apiBaseUrl;
-		};
-
-		this.setApiBaseUrl = function(url){
-			settings.apiBaseUrl = url;
-		};
-
-		/**
-		 * Module version
-		 */
-
-		settings.version = '0.1';
-
-		this.getVersion = function(){
-			return settings.version;
-		};
-
-		this.setVersion = function(version) {
-			settings.version = version;
-		};
-
-		/**
-		 * Pi Modules
-		 */
-		settings.modules = [];
-
-		this.getModules = function(){
-			return settings.modules;
-		};
-
-		this.addModule = function(module) {
-			settings.modules.push(module);
-		};
-
-		this.hasModule = function(module) {
-			var ex = false;
-			angular.forEach(settings.modules, function(value, vakey) {
-				if(value === module) {
-					ex = true;
-				};
-			});
-			
-			return ex;
-		};
-
-		var getFn = function(piSettings){
-
-		};
+      return null;
+    };
 
 
-		this.$get = [
-		'piSettings', getFn];
+    /**
+     * Rest API
+     */
+    settings.apiBaseUrl = '/api';
+
+    this.getApiBaseUrl = function(){
+      return settings.apiBaseUrl;
+    };
+
+    this.setApiBaseUrl = function(url){
+      settings.apiBaseUrl = url;
+    };
+
+    /**
+     * Module version
+     */
+
+    settings.version = '0.1';
+
+    this.getVersion = function(){
+      return settings.version;
+    };
+
+    this.setVersion = function(version) {
+      settings.version = version;
+    };
+
+    /**
+     * Pi Modules
+     */
+    settings.modules = [];
+
+    this.getModules = function(){
+      return settings.modules;
+    };
+
+    this.addModule = function(module) {
+      settings.modules.push(module);
+    };
+
+    this.hasModule = function(module) {
+      var ex = false;
+      angular.forEach(settings.modules, function(value, vakey) {
+        if(value === module) {
+          ex = true;
+        };
+      });
+      
+      return ex;
+    };
+
+    var getFn = function(piSettings){
+
+    };
+
+
+    this.$get = [
+    'piSettings', getFn];
 
         return this;
-	};
-	angular
+  };
+  angular
         .module('pi')
         .value('piSettings', settings)
-		.provider('piApp', providerFn);
+    .provider('piApp', providerFn);
 })();
 
 (function(){
@@ -754,98 +754,98 @@ angular
 })();
 
 (function(){
-	'use strict';
+  'use strict';
 
-	var chat = function(){
-		var appKey = '',
-			appSecret = '',
-			appId = '',
-			inbox = [];
+  var chat = function(){
+    var appKey = '',
+      appSecret = '',
+      appId = '',
+      inbox = [];
 
-		var receiveMessage = function(sender, message, datetime){
+    var receiveMessage = function(sender, message, datetime){
 
-		}
+    }
 
-		var sendMessage = function(sender, message){
+    var sendMessage = function(sender, message){
 
-		}
+    }
 
-		return {
-			setAppKey: function(value){
-				appKey = value;
-			},
-			setAppSecret: function(value){
-				appSecret = value;
-			},
-			setAppId: function(value){
-				appId = value;
-			},
-			$get: function(){
+    return {
+      setAppKey: function(value){
+        appKey = value;
+      },
+      setAppSecret: function(value){
+        appSecret = value;
+      },
+      setAppId: function(value){
+        appId = value;
+      },
+      $get: function(){
 
-				return {
+        return {
 
-				}
-			}
-		}
-	}
+        }
+      }
+    }
+  }
 
-	var chatWindow = function(){
-		var controller = function(){
+  var chatWindow = function(){
+    var controller = function(){
 
-		};
+    };
 
-		return {
-			templateUrl: '/html/pi/chat-window.html',
-			controller: controller,
-			controllerAs: 'chatWindowCtrl'
-		}
-	}
+    return {
+      templateUrl: '/html/pi/chat-window.html',
+      controller: controller,
+      controllerAs: 'chatWindowCtrl'
+    }
+  }
 
-	var chatMessage = function(){
-		return {
-			templateUrl: '/html/pi/chat-message.html',
-		}
-	}
+  var chatMessage = function(){
+    return {
+      templateUrl: '/html/pi/chat-message.html',
+    }
+  }
 
-	var chatMessagePreview = function(){
-		return {
-			templateUrl: '/html/pi/chat-message-preview.html'
-		}
-	}
+  var chatMessagePreview = function(){
+    return {
+      templateUrl: '/html/pi/chat-message-preview.html'
+    }
+  }
 
-	angular
-		.module('pi.chat')
-		.directive
+  angular
+    .module('pi.chat')
+    .directive
 })();
 (function(){
-	angular
-		.module('pi.gallery')
-		.directive('piGallery', [function(){
-	    	return {
-	    		templateUrl: 'core/pi-gallery.tpl.html',
-	    		scope: {
-	    			images: '='
-	    		},
-	    		replace: true,
-	    		controller: ['$scope', '$rootScope', function($scope, $rootScope){
-	    			$scope.path = "src";
-					$scope.tileWidth = 150;
-					$scope.tileHeight = 150;
+  angular
+    .module('pi.gallery')
+    .directive('piGallery', [function(){
+        return {
+          templateUrl: 'core/pi-gallery.tpl.html',
+          scope: {
+            images: '='
+          },
+          replace: true,
+          controller: ['$scope', '$rootScope', function($scope, $rootScope){
+            $scope.path = "src";
+          $scope.tileWidth = 150;
+          $scope.tileHeight = 150;
 
-					$scope.displayImage = function (img) {
-						$scope.selected = $scope.images.indexOf(img);
-						$scope.selectedImg = img;
-						$scope.showModal = true;
-					};
+          $scope.displayImage = function (img) {
+            $scope.selected = $scope.images.indexOf(img);
+            $scope.selectedImg = img;
+            $scope.showModal = true;
+          };
 
-					$scope.close = function(){
-						$scope.showModal = false;
-					}
-	    		}]
-	    	}
-	    }]);
+          $scope.close = function(){
+            $scope.showModal = false;
+          }
+          }]
+        }
+      }]);
 
-	    
+      
 })();
 (function() {
     angular
@@ -890,95 +890,95 @@ angular
 
 (function(){
 
-	var AccountRecover = function(AccountRecoverService)
-	{
-		var linkFn = function(scope, elem, attrs)
-		{
-			scope.submit = function()
-			{
-				var successFn = function(res)
-					{
-						scope.onSuccessFn(res);
-					},
-					errorFn = function(res)
-					{
-						scope.onError(res);
-					};
+  var AccountRecover = function(AccountRecoverService)
+  {
+    var linkFn = function(scope, elem, attrs)
+    {
+      scope.submit = function()
+      {
+        var successFn = function(res)
+          {
+            scope.onSuccessFn(res);
+          },
+          errorFn = function(res)
+          {
+            scope.onError(res);
+          };
 
-				AccountRecoverService.requestRecover(scope.email)
-					.then(successFn, errorFn);
-			};
+        AccountRecoverService.requestRecover(scope.email)
+          .then(successFn, errorFn);
+      };
 
-			scope.cancel = function()
-			{
+      scope.cancel = function()
+      {
 
-			};
-		};
+      };
+    };
 
-		return {
-			scope: {
-				'piConfig': '=piConfig',
-				'onSuccess': '=onSuccess',
-				'onError': '=onError'
-			},
-			link: linkFn
-		};
-	};
+    return {
+      scope: {
+        'piConfig': '=piConfig',
+        'onSuccess': '=onSuccess',
+        'onError': '=onError'
+      },
+      link: linkFn
+    };
+  };
 
-	AccountRecover.$inject = ['AccountRecoverService'];
+  AccountRecover.$inject = ['AccountRecoverService'];
 
-	var AccountRecoverService = function($http, $q, modalSvc)
-	{
-		this.requestRecover = function(email)
-		{
-			var deferred = $q.defer(),
-				successFn = function(res)
-				{
-					deferred.resolve(res.data);
-				},
-				errorFn = function(res)
-				{
-					deferred.reject(res);
-				};
-			$http.post('/account/recover')
-				.then(successFn, errorFn, {email: email});
+  var AccountRecoverService = function($http, $q, modalSvc)
+  {
+    this.requestRecover = function(email)
+    {
+      var deferred = $q.defer(),
+        successFn = function(res)
+        {
+          deferred.resolve(res.data);
+        },
+        errorFn = function(res)
+        {
+          deferred.reject(res);
+        };
+      $http.post('/account/recover')
+        .then(successFn, errorFn, {email: email});
 
-			return deferred.promise;
-		};
+      return deferred.promise;
+    };
 
-		this.sendRecover = function(email, token, password, passwordConfirm)
-		{
-			var deferred = $q.defer(),
-				model = {
-					password: password,
-					passwordConfirm: passwordConfirm,
-					token: token,
-					email: email
-				},
-				successFn = function(res)
-				{
-					deferred.resolve(res.data);
-				},
-				errorFn = function(res)
-				{
-					deferred.reject(res);
-				};
+    this.sendRecover = function(email, token, password, passwordConfirm)
+    {
+      var deferred = $q.defer(),
+        model = {
+          password: password,
+          passwordConfirm: passwordConfirm,
+          token: token,
+          email: email
+        },
+        successFn = function(res)
+        {
+          deferred.resolve(res.data);
+        },
+        errorFn = function(res)
+        {
+          deferred.reject(res);
+        };
 
-			$http.post('/accouunt/recover/send', model)
-				.then(successFn, errorFn);
+      $http.post('/accouunt/recover/send', model)
+        .then(successFn, errorFn);
 
-			return deferred.promise;
-		};
+      return deferred.promise;
+    };
 
-		return this;
-	};
+    return this;
+  };
 
-	AccountRecoverService.$inject = ['$http', '$q', 'modalSvc'];
+  AccountRecoverService.$inject = ['$http', '$q', 'modalSvc'];
 
-	angular
-		.module('pi')
-		.directive('piAccountRecover', AccountRecover)
-		.factory('AccountRecoverService', AccountRecoverService);
+  angular
+    .module('pi')
+    .directive('piAccountRecover', AccountRecover)
+    .factory('AccountRecoverService', AccountRecoverService);
 })();
 (function(){
   angular
@@ -1007,169 +1007,169 @@ angular
 })();
 
 (function(){
-	var PiBreadcrumb = function(PiBreadcrumbService)
-	{
-		var link = function(scope, elem, attrs)
-		{
-			scope.current = PiBreadcrumbService.current;
-		}
-		return {
-			templateUrl: '/html/pi/breadcrumb.html',
-			link: link
-		}
-	};
+  var PiBreadcrumb = function(PiBreadcrumbService)
+  {
+    var link = function(scope, elem, attrs)
+    {
+      scope.current = PiBreadcrumbService.current;
+    }
+    return {
+      templateUrl: '/html/pi/breadcrumb.html',
+      link: link
+    }
+  };
 
-	PiBreadcrumb.$inject = ['piBreadcrumbService'];
+  PiBreadcrumb.$inject = ['piBreadcrumbService'];
 
-	var PiBreadcrumbService = function($rootScope)
-	{
-		var _current = {name: 'First', image: null};
-		var uiStateGenerated = true;
+  var PiBreadcrumbService = function($rootScope)
+  {
+    var _current = {name: 'First', image: null};
+    var uiStateGenerated = true;
 
-		var set = function(name, image){
-			_current.name = name;
+    var set = function(name, image){
+      _current.name = name;
 
-			if(!_.isNull(image)){
-				_current.image = image;
-			}
-		};
-		if(uiStateGenerated) {
-			$rootScope.$on('$stateChangeStart',
-			function(event, toState, toParams, fromState, fromParams){
-				_current.name = toState.name;
-			});
-		}
-		var current = function()
-		{
+      if(!_.isNull(image)){
+        _current.image = image;
+      }
+    };
+    if(uiStateGenerated) {
+      $rootScope.$on('$stateChangeStart',
+      function(event, toState, toParams, fromState, fromParams){
+        _current.name = toState.name;
+      });
+    }
+    var current = function()
+    {
 
-			return ;
-		};
-		return {
-			set: set,
-			current: _current
-		};
-	};
+      return ;
+    };
+    return {
+      set: set,
+      current: _current
+    };
+  };
 
-	PiBreadcrumbService.$inject = ['$rootScope'];
+  PiBreadcrumbService.$inject = ['$rootScope'];
 
-	angular
-		.module('pi')
-		.factory('piBreadcrumbService', PiBreadcrumbService)
-		.directive('piBreadcrumb', PiBreadcrumb);
+  angular
+    .module('pi')
+    .factory('piBreadcrumbService', PiBreadcrumbService)
+    .directive('piBreadcrumb', PiBreadcrumb);
 })();
 (function(){
-	'use strict';
-	var piCommentResource = function($resource) {
-		return {
-			create: function(namespace, id) {
-				return $resource('/comment/' + namespace + '/' + id,
-		            {},
-		            {
-		            'query': {
-		                method: 'GET',
-		                transformResponse: function(res) {
-		                    return angular.fromJson(res).comments || [];
-		                },
-		                isArray: true
-		            }
-		        });
-			}
-		}
-	};
-	piCommentResource.$inject = ['$resource'];
+  'use strict';
+  var piCommentResource = function($resource) {
+    return {
+      create: function(namespace, id) {
+        return $resource('/comment/' + namespace + '/' + id,
+                {},
+                {
+                'query': {
+                    method: 'GET',
+                    transformResponse: function(res) {
+                        return angular.fromJson(res).comments || [];
+                    },
+                    isArray: true
+                }
+            });
+      }
+    }
+  };
+  piCommentResource.$inject = ['$resource'];
 
-	var piCommentWindow = function(piCommentResource) {
-		
+  var piCommentWindow = function(piCommentResource) {
+    
 
-		var link = function(scope, elem, attrs) {
-			
-			
-			
-		}
+    var link = function(scope, elem, attrs) {
+      
+      
+      
+    }
 
-		var ctrl = function($scope, $q) {
-			var resource = piCommentResource.create($scope.namespace, $scope.id);
+    var ctrl = function($scope, $q) {
+      var resource = piCommentResource.create($scope.namespace, $scope.id);
 
-			$scope.comments = resource.query({});
-			
-			this.send = function(message) {
+      $scope.comments = resource.query({});
+      
+      this.send = function(message) {
                 var deferred = $q.defer();
-				resource.save({message: message, id: $scope.id}, function(res){
+        resource.save({message: message, id: $scope.id}, function(res){
                     $scope.comments.push(res.comment);
                     deferred.resolve(res);
                 });
                 return deferred.promise;
-			}
-		};
-		return {
-			controller: ctrl,
-			link: link,
-			scope: {
-				namespace: '@',
-				id: '@'
-			},
-			templateUrl: 'html/pi/comment-window.html'
-		}
-	};
-	piCommentWindow.$inject = ['piCommentResource', '$q'];
+      }
+    };
+    return {
+      controller: ctrl,
+      link: link,
+      scope: {
+        namespace: '@',
+        id: '@'
+      },
+      templateUrl: 'html/pi/comment-window.html'
+    }
+  };
+  piCommentWindow.$inject = ['piCommentResource', '$q'];
 
-	var piCommentMessage = function() {
-		
-		return {
-			templateUrl: 'html/pi/comment-message.html',
-			replace: true,
-			scope: {
-				'comment': '='
-			}
-		}
-	};
+  var piCommentMessage = function() {
+    
+    return {
+      templateUrl: 'html/pi/comment-message.html',
+      replace: true,
+      scope: {
+        'comment': '='
+      }
+    }
+  };
 
-	var piCommentForm = function() {
-		var link = function(scope, elem, attrs, piCommentWindow) {
-			scope.send = function() {
-				piCommentWindow.send(scope.message)
+  var piCommentForm = function() {
+    var link = function(scope, elem, attrs, piCommentWindow) {
+      scope.send = function() {
+        piCommentWindow.send(scope.message)
                     .then(function(res){
                         scope.message = '';
                     });
-			}
-		};
+      }
+    };
 
-		return {
-			templateUrl: 'html/pi/comment-form.html',
-			require: '^piCommentWindow',
-			link: link
-		}
-	};
+    return {
+      templateUrl: 'html/pi/comment-form.html',
+      require: '^piCommentWindow',
+      link: link
+    }
+  };
 
-	var piCommentReplyForm = function() {
-		return {
-			templateUrl: 'html/pi/comment-reply-form.html'
-		}
-	};
+  var piCommentReplyForm = function() {
+    return {
+      templateUrl: 'html/pi/comment-reply-form.html'
+    }
+  };
 
-	angular
-		.module('pi')
-		.factory('piCommentResource', piCommentResource)
-		.directive('piCommentWindow', piCommentWindow)
-		.directive('piCommentMessage', piCommentMessage)
-		.directive('piCommentForm', piCommentForm)
-		.directive('piCommentReplyForm', piCommentReplyForm);
+  angular
+    .module('pi')
+    .factory('piCommentResource', piCommentResource)
+    .directive('piCommentWindow', piCommentWindow)
+    .directive('piCommentMessage', piCommentMessage)
+    .directive('piCommentForm', piCommentForm)
+    .directive('piCommentReplyForm', piCommentReplyForm);
 })();
 (function(){
 
-	var piFormMaker = function(){
-		var link = function(scope, elem, attrs, ctrl){
+  var piFormMaker = function(){
+    var link = function(scope, elem, attrs, ctrl){
 
-		}
-		return {
-			templateUrl: '/html/pi/form-maker.html',
-			link: linkFn
-		}
-	};
+    }
+    return {
+      templateUrl: '/html/pi/form-maker.html',
+      link: linkFn
+    }
+  };
 
-	angular
-		.module('pi')
-		.directive('piFormMaker', piFormMaker);
+  angular
+    .module('pi')
+    .directive('piFormMaker', piFormMaker);
 })();
 /**
  * @ng-doc directive
@@ -1180,31 +1180,31 @@ angular
  * Original directive: https://gist.github.com/tleunen/5277011
  */
 (function(){
-	var directiveFn = function() { 
-	    return function(scope, elm, attrs) {
-	        var gistId = attrs.gistId;
+  var directiveFn = function() { 
+      return function(scope, elm, attrs) {
+          var gistId = attrs.gistId;
 
-	        var iframe = document.createElement('iframe');
-	        iframe.setAttribute('width', '100%');
-	        iframe.setAttribute('frameborder', '0');
-	        iframe.id = "gist-" + gistId;
-	        elm[0].appendChild(iframe);
+          var iframe = document.createElement('iframe');
+          iframe.setAttribute('width', '100%');
+          iframe.setAttribute('frameborder', '0');
+          iframe.id = "gist-" + gistId;
+          elm[0].appendChild(iframe);
 
-	        var iframeHtml = '<html><head><base target="_parent"><style>table{font-size:12px;}</style></head><body onload="parent.document.getElementById(\'' + iframe.id + '\').style.height=document.body.scrollHeight + \'px\'"><scr' + 'ipt type="text/javascript" src="https://gist.github.com/' + gistId + '.js"></sc'+'ript></body></html>';
+          var iframeHtml = '<html><head><base target="_parent"><style>table{font-size:12px;}</style></head><body onload="parent.document.getElementById(\'' + iframe.id + '\').style.height=document.body.scrollHeight + \'px\'"><scr' + 'ipt type="text/javascript" src="https://gist.github.com/' + gistId + '.js"></sc'+'ript></body></html>';
 
-	        var doc = iframe.document;
-	        if (iframe.contentDocument) doc = iframe.contentDocument;
-	        else if (iframe.contentWindow) doc = iframe.contentWindow.document;
+          var doc = iframe.document;
+          if (iframe.contentDocument) doc = iframe.contentDocument;
+          else if (iframe.contentWindow) doc = iframe.contentWindow.document;
 
-	        doc.open();
-	        doc.writeln(iframeHtml);
-	        doc.close();
-	    };
-	 };
+          doc.open();
+          doc.writeln(iframeHtml);
+          doc.close();
+      };
+   };
 
-	 angular
-	 	.module('pi')
-	 	.directive('gist', directiveFn);
+   angular
+    .module('pi')
+    .directive('gist', directiveFn);
 })();
 (function(){
   var PiMetaDirective = function(FieldsMetaService, $parse)
@@ -1631,19 +1631,19 @@ angular
  * <a scroll-to-id scroll-to="firstSection">Scroll to first section</a>
  */
 (function(){
-	var fn =  function() {                                                      
-	    return {                                                                                 
-	        restrict: 'A',                                                                       
-	        scope: {                                                                             
-	            scrollTo: "@"                                                                    
-	        },                                                                                   
-	        link: function(scope, $elm,attr) {
+  var fn =  function() {                                                      
+      return {                                                                                 
+          restrict: 'A',                                                                       
+          scope: {                                                                             
+              scrollTo: "@"                                                                    
+          },                                                                                   
+          link: function(scope, $elm,attr) {
 
-	        	$elm.on('click', function() {                                                    
-	                $('html,body').animate({scrollTop: $(scope.scrollTo).offset().top }, "slow");
-	            });
-	        }                
-	    };
+            $elm.on('click', function() {                                                    
+                  $('html,body').animate({scrollTop: $(scope.scrollTo).offset().top }, "slow");
+              });
+          }                
+      };
     };
 })();
 var INTEGER_REGEXP = /^\-?\d*$/;
@@ -1750,78 +1750,78 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 })();
 (function(){
 
-	var piFileManager = function(){
+  var piFileManager = function(){
 
 
 
-		return {
+    return {
 
-			$get: {
+      $get: {
 
-			}
-		}
-	}
+      }
+    }
+  }
 
-	var piUploadService = function(){
+  var piUploadService = function(){
 
-		var upload = function(file, uploadDto){
+    var upload = function(file, uploadDto){
 
-		}
-		return {
-			upload: upload
-		}
-	}
+    }
+    return {
+      upload: upload
+    }
+  }
 
-	var piFileDashboard = function(){
+  var piFileDashboard = function(){
 
-		return {
-			templateUrl: '/html/pi/file-dashboard.html'
-		}
-	}
-	var piFileUpload = function(){
+    return {
+      templateUrl: '/html/pi/file-dashboard.html'
+    }
+  }
+  var piFileUpload = function(){
 
-		var link = function(scope, elem, attr){
+    var link = function(scope, elem, attr){
 
-		}
+    }
 
-		var controller = function($scope){
-			this.upload = function(){
+    var controller = function($scope){
+      this.upload = function(){
 
-			}
-		}
-		return {
-			link: link,
-			controller: controller,
-			controllerAs: 'ctrl'
-		}
-	}
+      }
+    }
+    return {
+      link: link,
+      controller: controller,
+      controllerAs: 'ctrl'
+    }
+  }
 
-	var  piFileUploadArea = function(){
+  var  piFileUploadArea = function(){
 
-		return {
-			templateUrl: '/html/pi/file-upload-area.html'
-		}
-	}
+    return {
+      templateUrl: '/html/pi/file-upload-area.html'
+    }
+  }
 
-	var piFileUploadBrowse = function(){
-		return {
-			templateUrl: '/html/pi/file-upload-browser.html'
-		}
-	}
+  var piFileUploadBrowse = function(){
+    return {
+      templateUrl: '/html/pi/file-upload-browser.html'
+    }
+  }
 
-	var piFileEditCard = function(){
-		return {
-			templateUrl: '/html/pi/file-edit-card.html'
-		}
-	}
+  var piFileEditCard = function(){
+    return {
+      templateUrl: '/html/pi/file-edit-card.html'
+    }
+  }
 
-	var piFileCard = function(){
-		return {
-			templateUrl: '/html/pi/file-card.html'
-		}
-	}
+  var piFileCard = function(){
+    return {
+      templateUrl: '/html/pi/file-card.html'
+    }
+  }
 
-	
+  
 })();
 /**
  * Filter to reverse a list
@@ -1836,30 +1836,30 @@ var INTEGER_REGEXP = /^\-?\d*$/;
  *
  * @example
  * <div ng-repeat="verses in bibles.kingJames | reverse">
- * 	<em ng-bind="verse.number"></em> <span ng-bind="verse.message"></span>
+ *  <em ng-bind="verse.number"></em> <span ng-bind="verse.message"></span>
  * </div>
  */
 (function(){
-	
-	var reverseFilter = function(){
+  
+  var reverseFilter = function(){
 
-	  return function(items) {
-	    return items ? items.slice().reverse() : [];
-	  };
+    return function(items) {
+      return items ? items.slice().reverse() : [];
+    };
 
-	};
+  };
 
-	angular.module('pi')
-		.filter('reverse', reverseFilter);
+  angular.module('pi')
+    .filter('reverse', reverseFilter);
 })();
 (function(){
-		'use strict';
+    'use strict';
     /**
      * @ngdoc directive
      * @name Pi Form
      * @description Directory to create a form
      */
-	var piForm = function(){
+  var piForm = function(){
 
         var compileFn = function(cElement, cAttrs, transclude) {
 
@@ -1876,96 +1876,96 @@ var INTEGER_REGEXP = /^\-?\d*$/;
             }
         };
 
-				var controller = function($scope, $injector, $http, piStack)
-		    {
-		      if(_.isUndefined($scope.httpMethod)) {
-		        $scope.httpMethod = 'POST';
-		      }
+        var controller = function($scope, $injector, $http, piStack)
+        {
+          if(_.isUndefined($scope.httpMethod)) {
+            $scope.httpMethod = 'POST';
+          }
 
-		      var isService = !_.isUndefined($scope.serviceApp) && !_.isUndefined($scope.serviceUri);
-		      $scope.model = {};
+          var isService = !_.isUndefined($scope.serviceApp) && !_.isUndefined($scope.serviceUri);
+          $scope.model = {};
 
-		      this.submit = function()
-		      {
-		        if(isService) {
-		          serviceHandler();
-		        } else if(isHttp) {
-		          httpHandler();
-		        } else {
+          this.submit = function()
+          {
+            if(isService) {
+              serviceHandler();
+            } else if(isHttp) {
+              httpHandler();
+            } else {
 
-		        }
-		      };
+            }
+          };
 
-		      this.setPreventSave = function()
-		      {
-		        $scope.$on('tentar mudar pagina', function(){
-		          // mostrar modal que retorna uma promessa a ver se muda de página ou ão
-		        });
-		      };
+          this.setPreventSave = function()
+          {
+            $scope.$on('tentar mudar pagina', function(){
+              // mostrar modal que retorna uma promessa a ver se muda de página ou ão
+            });
+          };
 
-		      var serviceHandler = function(dto)
-		      {
-		        var service = piServiceResolver.get($scope.serviceUri);
-		        if(_.isNull(service)) {
-		          // error
-		        }
-		        ServiceBroker.executeRequest($scope.serviceRequest, $scope.httpMethod, request)
-		        .then(function(res) {
-		            scope.onSuccess();
-		          }, function(res) {
-		            scope.onFailure();
-		          });
+          var serviceHandler = function(dto)
+          {
+            var service = piServiceResolver.get($scope.serviceUri);
+            if(_.isNull(service)) {
+              // error
+            }
+            ServiceBroker.executeRequest($scope.serviceRequest, $scope.httpMethod, request)
+            .then(function(res) {
+                scope.onSuccess();
+              }, function(res) {
+                scope.onFailure();
+              });
 
-		      };
+          };
 
-		      var httpHandler = function(dto)
-		      {
-		        $http[$scope.httpMethod]($scope.httpUri, dto)
-		          .then(function(res) {
-		            scope.onSuccess();
-		          }, function(res) {
-		            scope.onFailure();
-		          });
-		      };
-		    };
-				controller.$inject = ['$scope', '$injector', '$http', 'piStack'];
+          var httpHandler = function(dto)
+          {
+            $http[$scope.httpMethod]($scope.httpUri, dto)
+              .then(function(res) {
+                scope.onSuccess();
+              }, function(res) {
+                scope.onFailure();
+              });
+          };
+        };
+        controller.$inject = ['$scope', '$injector', '$http', 'piStack'];
         return {
             compile: compileFn,
-						controller: controller,
-						controllerAs: 'piFormCtrl'
+            controller: controller,
+            controllerAs: 'piFormCtrl'
         };
     };
 
     var piFormGroup = function($compile){
         var controllerFn = function($scope, $element, $attrs){
 
-						var guide;
+            var guide;
 
             this.focus = function(){
-							if($attrs.piFormGuide){
-								guide = $compile('<div class="fit-form__guide">' + $attrs.piFormGuide + '</div>')($scope);
-								$element.append(guide);
-							}
-							// show help guide
+              if($attrs.piFormGuide){
+                guide = $compile('<div class="fit-form__guide">' + $attrs.piFormGuide + '</div>')($scope);
+                $element.append(guide);
+              }
+              // show help guide
 
                 // show all labels with hide attr on form group
             };
 
             this.blur = function(){
-								if(guide){
-									guide.remove();
-								}
+                if(guide){
+                  guide.remove();
+                }
                 // hide all la
                 // bels with hide attr  on form group
             }
         }
         return {
             controller: controllerFn,
-						controllerAs: 'piFormGroupCtrl',
-						require: '^piForm'
+            controllerAs: 'piFormGroupCtrl',
+            require: '^piForm'
         }
     };
-		piFormGroup.$inject = ['$compile'];
+    piFormGroup.$inject = ['$compile'];
 
     var piFormFooter = function(){
         return {};
@@ -1975,18 +1975,18 @@ var INTEGER_REGEXP = /^\-?\d*$/;
         var compileFn = function(cElement, cAttrs) {
 
             var preFn = function(scope, pElement, pAttrs, parentCtrl) {
-						//	if(piFormConfig.applyPiClasses && !pElement.hasClass('pi-form__control'))
-								pElement.addClass('pi-form__control');
+            //  if(piFormConfig.applyPiClasses && !pElement.hasClass('pi-form__control'))
+                pElement.addClass('pi-form__control');
 
               var focusFn = function(fElement) {
                   parentCtrl.focus();
               };
               pElement.on('focus', focusFn);
 
-							var blurFn = function(fElement){
-								parentCtrl.blur();
-							}
-							pElement.on('blur', blurFn)
+              var blurFn = function(fElement){
+                parentCtrl.blur();
+              }
+              pElement.on('blur', blurFn)
             },
             postFn = function(scope, pElement, pAttrs) {
 
@@ -1999,11 +1999,11 @@ var INTEGER_REGEXP = /^\-?\d*$/;
         };
         return {
             compile: compileFn,
-						restrict: 'EA',
-						require: '^piFormGroup',
+            restrict: 'EA',
+            require: '^piFormGroup',
         }
     };
-		piFormControl.$inject = ['piFormConfig'];
+    piFormControl.$inject = ['piFormConfig'];
 
     var piFormLabel = function(){
 
@@ -2030,74 +2030,74 @@ var INTEGER_REGEXP = /^\-?\d*$/;
         };
     }
 
-		var piFormClear = function()
-	  {
+    var piFormClear = function()
+    {
 
 
-	  };
+    };
 
-	  var piFormSubmit = function()
-	  {
-	    var link = function(scope, elem, attrs, piFormCtrl)
-	    {
-	      var canSubmit = true;
-	      var submit = function()
-	      {
-	        if(!canSubmit) return;
-	        canSubmit = !canSubmit;
-	        piFormCtrl.submit().success(function() {
-	          canSubmit = true;
-	        });
-	      };
-	      elem.bind('click', function(res) {
-	        submit();
-	      });
-	      elem.bind('touch', function(res) {
-	        submit();
-	      });
+    var piFormSubmit = function()
+    {
+      var link = function(scope, elem, attrs, piFormCtrl)
+      {
+        var canSubmit = true;
+        var submit = function()
+        {
+          if(!canSubmit) return;
+          canSubmit = !canSubmit;
+          piFormCtrl.submit().success(function() {
+            canSubmit = true;
+          });
+        };
+        elem.bind('click', function(res) {
+          submit();
+        });
+        elem.bind('touch', function(res) {
+          submit();
+        });
 
-	    }
-	  }
+      }
+    }
 
-	  /**
-	   * @ng-doc directive
-	   * Form Prevent Save
-	   *
-	   * Prevent a page from changing or some action that clear the form without user confirmation
-	   */
-	  var piFormPreventSave = function()
-	  {
-	    var link = function(scope, elem, attrs, piFormCtrl)
-	    {
-	        piFormCtrl.setPreventSave();
-	    };
+    /**
+     * @ng-doc directive
+     * Form Prevent Save
+     *
+     * Prevent a page from changing or some action that clear the form without user confirmation
+     */
+    var piFormPreventSave = function()
+    {
+      var link = function(scope, elem, attrs, piFormCtrl)
+      {
+          piFormCtrl.setPreventSave();
+      };
 
-	    return {
-	      restrict: 'A',
-	      require: '^piForm',
-	      link: link
-	    }
-	  };
+      return {
+        restrict: 'A',
+        require: '^piForm',
+        link: link
+      }
+    };
 
-		var piFormConfig = function(){
-			var _applyPiClasses = true;
+    var piFormConfig = function(){
+      var _applyPiClasses = true;
 
-			return {
-				setApplyPiClasses: function(value) {
-					_applyPiClasses = value;
-				},
-				$get: function(){
-					applyPiClasses: _applyPiClasses
-				}
-			}
-		};
+      return {
+        setApplyPiClasses: function(value) {
+          _applyPiClasses = value;
+        },
+        $get: function(){
+          applyPiClasses: _applyPiClasses
+        }
+      }
+    };
 
     angular
         .module('pi.form')
-				.provider('piFormConfig', piFormConfig)
+        .provider('piFormConfig', piFormConfig)
         .directive('piForm', piForm)
         .directive('piFormGroup', piFormGroup)
-				.directive('piFormControl', piFormControl)
+        .directive('piFormControl', piFormControl)
         .directive('piFormLabel', piFormLabel)
         .directive('piFormFooter', piFormFooter);
 
@@ -2191,10 +2191,10 @@ var INTEGER_REGEXP = /^\-?\d*$/;
                     isActive = true;
                     piMandril.send(fromEmail, fromName, toEmail, toName, subject, msg)
                       .then(function(res){
-                    	   scope.formSented = true;
+                         scope.formSented = true;
                          scope.isActive = false;
                          cleanElements(elems);
-                    	}, function(err){
+                      }, function(err){
                         scope.isActive = false;
                       });
                 }
@@ -2219,6 +2219,44 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
 })();
 
+(function(){
+  var fn = function(apiException){
+
+    var svc = function(response) {
+      this.response = response;
+
+      this.handle = function() {
+        if(_.isUndefined(this.response || _.isUndefined(this.response.data))) {
+          throw apiException.badRequest;
+        }
+
+        if(this.response.statusCode >= 400) {
+          
+        }
+
+        this.success = true;
+        return this.response.data;
+      };
+    };
+
+    return {
+      service: svc,
+      setProvider: function(dependency) {
+        svc.setHandler(dependency);
+      }
+    }
+  };
+
+  angular
+        .module('pi')
+    .constant('apiException', {
+      badRequest: 502,
+      notFound: 404,
+      notAuthorize: 501,
+      ok: 200
+    })
+    .factory('apiResponseProvider', ['apiException', fn]);
+})();
 (function(){
     angular
         .module('pi')
@@ -2379,84 +2417,46 @@ var INTEGER_REGEXP = /^\-?\d*$/;
         }]);
 })();
 (function(){
-	var fn = function(apiException){
-
-		var svc = function(response) {
-			this.response = response;
-
-			this.handle = function() {
-				if(_.isUndefined(this.response || _.isUndefined(this.response.data))) {
-					throw apiException.badRequest;
-				}
-
-				if(this.response.statusCode >= 400) {
-					
-				}
-
-				this.success = true;
-				return this.response.data;
-			};
-		};
-
-		return {
-			service: svc,
-			setProvider: function(dependency) {
-				svc.setHandler(dependency);
-			}
-		}
-	};
-
-	angular
-        .module('pi')
-		.constant('apiException', {
-			badRequest: 502,
-			notFound: 404,
-			notAuthorize: 501,
-			ok: 200
-		})
-		.factory('apiResponseProvider', ['apiException', fn]);
-})();
-(function(){
   (function(){
     angular
       .module('pi.mandril')
       .provider('piMandril', [function(){
-      	var _token = '';
-      	return {
-      		$get: ['$q', function($q){
+        var _token = '';
+        return {
+          $get: ['$q', function($q){
 
-  				this.send =  function(from, fromName, to, toName, subject, body) {
-  				      var mandrill_client = new mandrill.Mandrill(_token);
+          this.send =  function(from, fromName, to, toName, subject, body) {
+                var mandrill_client = new mandrill.Mandrill(_token);
 
-  					var promise = $q.defer(),
-  						message = {
-  		                  "html": body,
-  		                  "text": body,
-  		                  "subject": subject,
-  		                  "from_email": from,
-  		                  "from_name": 'Formulário',
-  		                  "to": [{
-  		                          "email": to,
-  		                          "name": "Website",
-  		                          "type": "to"
-  		                      }]
-  		              	};
-  		              mandrill_client.messages.send({"message": message, "async": false}, function(result) {
-  		                  promise.resolve(result);
-  		              }, function(e) {
-  		                  promise.reject(e);
-  		              });
+            var promise = $q.defer(),
+              message = {
+                        "html": body,
+                        "text": body,
+                        "subject": subject,
+                        "from_email": from,
+                        "from_name": 'Formulário',
+                        "to": [{
+                                "email": to,
+                                "name": "Website",
+                                "type": "to"
+                            }]
+                      };
+                    mandrill_client.messages.send({"message": message, "async": false}, function(result) {
+                        promise.resolve(result);
+                    }, function(e) {
+                        promise.reject(e);
+                    });
 
-  		             return promise.promise;
-      			}
+                   return promise.promise;
+            }
 
-      			return this;
-      		}],
-      		setToken: function(value){
-      			_token = value;
-      		}
+            return this;
+          }],
+          setToken: function(value){
+            _token = value;
+          }
 
-      	}
+        }
       }]);
   })();
 })();
@@ -2624,113 +2624,113 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 })();
 
 (function(){
-	var TestService = function(ServiceBase){
-		var service = new ServiceBase('TestService');
+  var TestService = function(ServiceBase){
+    var service = new ServiceBase('TestService');
 
-		return service;
-	};
+    return service;
+  };
 
-	TestService.$inject = ['ServiceBase'];
+  TestService.$inject = ['ServiceBase'];
 
-	angular
-		.module('pi')
-		.factory('TestService', TestService);
+  angular
+    .module('pi')
+    .factory('TestService', TestService);
 
-	var TestAppHost = function(AppHost) {
-		var config = {
-			'appName': 'test'
-		};
-		
-		return new AppHost(config);
-	};
+  var TestAppHost = function(AppHost) {
+    var config = {
+      'appName': 'test'
+    };
+    
+    return new AppHost(config);
+  };
 
-	TestAppHost.$inject = ['AppHost'];
+  TestAppHost.$inject = ['AppHost'];
 
-	var AppHost = function($log, ServiceBroker){
+  var AppHost = function($log, ServiceBroker){
 
-		var fn = function(configs) {
+    var fn = function(configs) {
 
-			var self = this;
-			this.appName = configs.appName || 'default';
-			this.mode = configs.mode || 'production';
-			this.plugins = [];
+      var self = this;
+      this.appName = configs.appName || 'default';
+      this.mode = configs.mode || 'production';
+      this.plugins = [];
 
-			this.init = function()
-			{
-				var services = discoveryServices();
-				self.registerService(services);
-			};
-			this.setConfigs = function(configs)
-			{
-				if(!_.isUndefined(configs['appName'])) {
-					self.appName = configs.appName;
-				}
-				if(!_.isUndefined(configs['mode'])) {
-					self.mode = configs.mode;
-				}
+      this.init = function()
+      {
+        var services = discoveryServices();
+        self.registerService(services);
+      };
+      this.setConfigs = function(configs)
+      {
+        if(!_.isUndefined(configs['appName'])) {
+          self.appName = configs.appName;
+        }
+        if(!_.isUndefined(configs['mode'])) {
+          self.mode = configs.mode;
+        }
 
-				self.configs = configs;
-			};
+        self.configs = configs;
+      };
 
-			this.getConfigs = function()
-			{
-				return self.configs;
-			}
+      this.getConfigs = function()
+      {
+        return self.configs;
+      }
 
-			this.registerService = function(service)
-			{
-				return ServiceBroker.register(service);
-			};
+      this.registerService = function(service)
+      {
+        return ServiceBroker.register(service);
+      };
 
-			this.execute = function(requestType, method, requestDto)
-			{
-				return ServiceBroker.executeRequest(requestType, method, requestDto);
-			};
+      this.execute = function(requestType, method, requestDto)
+      {
+        return ServiceBroker.executeRequest(requestType, method, requestDto);
+      };
 
-			var discoveryServices = function()
-			{
-				return [
-					{
-						id: "serverId",
-						endpoint: '/api/user',
-						requestsTypes: [
-							{
-								name: 'GetUser',
-								methods: ['GET'],
-								roles: []
-							},
-							'PutUser',
-							'DeleteUser'
-						]
-					},
-					{
-						id: "serverId2",
-						endpoint: '/api/group'
-					}
-				];
-			};
-		};
+      var discoveryServices = function()
+      {
+        return [
+          {
+            id: "serverId",
+            endpoint: '/api/user',
+            requestsTypes: [
+              {
+                name: 'GetUser',
+                methods: ['GET'],
+                roles: []
+              },
+              'PutUser',
+              'DeleteUser'
+            ]
+          },
+          {
+            id: "serverId2",
+            endpoint: '/api/group'
+          }
+        ];
+      };
+    };
 
-		return fn;
-	};
+    return fn;
+  };
 
-	AppHost.$inject = ['$log'];
+  AppHost.$inject = ['$log'];
 
-	angular
-		.module('pi')
-		.factory('AppHost', AppHost)
-		.factory('TestAppHost', TestAppHost);
+  angular
+    .module('pi')
+    .factory('AppHost', AppHost)
+    .factory('TestAppHost', TestAppHost);
 })();
 (function(){
-	var FieldsMetaService = function()
-	{
+  var FieldsMetaService = function()
+  {
       var fn = function(defaultMeta)
       {
-				metaDefault = _.isArray(defaultMeta) ? defaultMeta : [];
+        metaDefault = _.isArray(defaultMeta) ? defaultMeta : [];
 
-					var meta = [];
+          var meta = [];
 
-					var addMeta = function(value, key)
+          var addMeta = function(value, key)
           {
             meta.push({
               value: value,
@@ -2738,10 +2738,10 @@ var INTEGER_REGEXP = /^\-?\d*$/;
             });
           };
 
-					var addObj = function(obj)
-					{
-						meta.push(obj);
-					}
+          var addObj = function(obj)
+          {
+            meta.push(obj);
+          }
 
           var removeMeta = function(value)
           {
@@ -2750,10 +2750,10 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
           return {
               add: addMeta,
-							addObj: addObj,
+              addObj: addObj,
               remove: removeMeta,
               meta: meta,
-							available: metaDefault
+              available: metaDefault
           }
       };
 
@@ -2766,351 +2766,351 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 })();
 
 (function(){
-	var ServiceBase = function($resource, $q, MessageBroker) {
-		var fn = function(serviceName)
-		{
-			this.serviceName = serviceName;
-			this.requests	 = 0;
-			this.currentRequest = undefined;
-			this.httpBusy = false;
-			this.MessageBroker = MessageBroker;
-		};
+  var ServiceBase = function($resource, $q, MessageBroker) {
+    var fn = function(serviceName)
+    {
+      this.serviceName = serviceName;
+      this.requests  = 0;
+      this.currentRequest = undefined;
+      this.httpBusy = false;
+      this.MessageBroker = MessageBroker;
+    };
 
-		fn.prototype.update = function(first_argument) {
-			// body...
-		};
+    fn.prototype.update = function(first_argument) {
+      // body...
+    };
 
-		fn.prototype.get = function(id) {
-			
-		};
+    fn.prototype.get = function(id) {
+      
+    };
 
-		fn.prototype.remove = function(id) {
-			// body...
-		};
+    fn.prototype.remove = function(id) {
+      // body...
+    };
 
-		fn.prototype.query = function() {
-			// body...
-		};
+    fn.prototype.query = function() {
+      // body...
+    };
 
-		return fn;
-	};
+    return fn;
+  };
 
-	ServiceBase.$inject = ['$resource', '$q', 'MessageBroker'];
+  ServiceBase.$inject = ['$resource', '$q', 'MessageBroker'];
 
-	angular
-		.module('pi')
-		.factory('ServiceBase', ServiceBase)
+  angular
+    .module('pi')
+    .factory('ServiceBase', ServiceBase)
 })();
 (function(){
 
-	var ServiceBroker = function($log, ServiceRunner) 
-	{
-		var services = [];
-		/* Map the Service Request Type and the Service index
-		 */
-		var servicesMap = {};
-		var self = this;
+  var ServiceBroker = function($log, ServiceRunner) 
+  {
+    var services = [];
+    /* Map the Service Request Type and the Service index
+     */
+    var servicesMap = {};
+    var self = this;
 
-		this.register = function(serviceType)
-		{
-			var register = function(service)
-			{
-				var index = services.push(service);
-				angular.forEach(service.requestsTypes, function(requestType, typeIndex){
-					servicesMap[serviceType] = index;
-				});
-			}
-			
-			if(_.isArray(serviceType))
-			{
-				angular.forEach(serviceType, function(value, key) {
-					register(value);
-				});
-			} else {
-				register(serviceType);
-			}
-		};
+    this.register = function(serviceType)
+    {
+      var register = function(service)
+      {
+        var index = services.push(service);
+        angular.forEach(service.requestsTypes, function(requestType, typeIndex){
+          servicesMap[serviceType] = index;
+        });
+      }
+      
+      if(_.isArray(serviceType))
+      {
+        angular.forEach(serviceType, function(value, key) {
+          register(value);
+        });
+      } else {
+        register(serviceType);
+      }
+    };
 
-		this.unregister = function(serviceType)
-		{
+    this.unregister = function(serviceType)
+    {
 
-		};
+    };
 
-		/**
-		 * Execute a request
-		 * @param  {[type]} requestType [description]
-		 * @param  {[type]} method      [description]
-		 * @param  {[type]} requestDto  [description]
-		 * @return {promise}             [description]
-		 */
-		this.executeRequest = function(requestType, method, requestDto)
-		{
-			var service = services[servicesMap[requestType]];
-			var runner = new ServiceRunner(service, requestType, requestDto);
-			
-			return runner.execute(method);
-		};
+    /**
+     * Execute a request
+     * @param  {[type]} requestType [description]
+     * @param  {[type]} method      [description]
+     * @param  {[type]} requestDto  [description]
+     * @return {promise}             [description]
+     */
+    this.executeRequest = function(requestType, method, requestDto)
+    {
+      var service = services[servicesMap[requestType]];
+      var runner = new ServiceRunner(service, requestType, requestDto);
+      
+      return runner.execute(method);
+    };
 
-	};
-	ServiceBroker.$inject = ['$log', 'ServiceRunner'];
+  };
+  ServiceBroker.$inject = ['$log', 'ServiceRunner'];
 
-	angular
-		.module('pi')
-		.factory('ServiceBroker', ServiceBroker);
+  angular
+    .module('pi')
+    .factory('ServiceBroker', ServiceBroker);
 })();
 (function(){
-	var ServiceConsumer = function($log) 
-	{
-		this.send = function()
-		{
+  var ServiceConsumer = function($log) 
+  {
+    this.send = function()
+    {
 
-		};
-	};
-	ServiceConsumer.$inject = ['$log'];
+    };
+  };
+  ServiceConsumer.$inject = ['$log'];
 
-	angular
-		.module('pi')
-		.factory('ServiceConsumer', ServiceConsumer)
-})();
-(function(){
-
-	/**
-	 * Service Request
-	 */
-
-	var PiServiceRequest = function()
-	{
-		var fn = function()
-		{
-			/**
-			 * Unique identifier for the Service
-			 * @type {[type]}
-			 */
-			this.id = undefined;
-			this.externalId = undefined;
-			this.attributes = []
-		};
-
-		fn.prototype.AddAttribute = function(objectOrArray) {
-			if(_.isArray(objectOrArray))
-			{
-				this.attributes = objectOrArray;
-			} 
-			else if(_.isObject(objectOrArray))
-			{
-				this.attributes.push(objectOrArray);
-			}
-		};
-
-		fn.prototype.Attributes = function() {
-			return this.attributes;
-		};
-
-		return fn;
-	};
-
-	angular
-		.module('pi')
-		.factory('piServiceRequest)', PiServiceRequest);
+  angular
+    .module('pi')
+    .factory('ServiceConsumer', ServiceConsumer)
 })();
 (function(){
 
-	var ServiceRunner = function($http, $q){
+  /**
+   * Service Request
+   */
 
-		var fn = function(service, requestType, requestDto)
-		{
-			if(!_.isObject(service) || !_.isObject(requestType))
-			{
-				return false;
-			}
-			var self = this;
+  var PiServiceRequest = function()
+  {
+    var fn = function()
+    {
+      /**
+       * Unique identifier for the Service
+       * @type {[type]}
+       */
+      this.id = undefined;
+      this.externalId = undefined;
+      this.attributes = []
+    };
 
-			this.execute = function(httpMethod)
-			{
-				var deferred = $q.defer(),
-					success = function(response) 
-					{
-						deferred.resolve(res.data);
-					},
-					error = function(resposne)
-					{
-						deferred.reject(response);
-					};
+    fn.prototype.AddAttribute = function(objectOrArray) {
+      if(_.isArray(objectOrArray))
+      {
+        this.attributes = objectOrArray;
+      } 
+      else if(_.isObject(objectOrArray))
+      {
+        this.attributes.push(objectOrArray);
+      }
+    };
 
-				$http({
-					method: httpMethod,
-					data: requestDto,
-					url: service.endpoint
-				})
-				.then(success, error);
+    fn.prototype.Attributes = function() {
+      return this.attributes;
+    };
 
-				return deferred.promise;
-			};
-			
-		};
+    return fn;
+  };
 
-		return fn;
-	};
-	ServiceRunner.$inject = ['$http', '$q'];
+  angular
+    .module('pi')
+    .factory('piServiceRequest)', PiServiceRequest);
+})();
+(function(){
 
-	angular
-		.module('pi')
-		.factory('ServiceRunner', ServiceRunner);
+  var ServiceRunner = function($http, $q){
+
+    var fn = function(service, requestType, requestDto)
+    {
+      if(!_.isObject(service) || !_.isObject(requestType))
+      {
+        return false;
+      }
+      var self = this;
+
+      this.execute = function(httpMethod)
+      {
+        var deferred = $q.defer(),
+          success = function(response) 
+          {
+            deferred.resolve(res.data);
+          },
+          error = function(resposne)
+          {
+            deferred.reject(response);
+          };
+
+        $http({
+          method: httpMethod,
+          data: requestDto,
+          url: service.endpoint
+        })
+        .then(success, error);
+
+        return deferred.promise;
+      };
+      
+    };
+
+    return fn;
+  };
+  ServiceRunner.$inject = ['$http', '$q'];
+
+  angular
+    .module('pi')
+    .factory('ServiceRunner', ServiceRunner);
 
 })();
 (function(){
 
-	 var fn = function(){
-	 	return {
-	      createNew: function () {
-	        var stack = [];
+   var fn = function(){
+    return {
+        createNew: function () {
+          var stack = [];
 
-	        return {
-	          add: function (key, value) {
-	            stack.push({
-	              key: key,
-	              value: value
-	            });
-	          },
-	          get: function (key) {
-	            for (var i = 0; i < stack.length; i++) {
-	              if (key == stack[i].key) {
-	                return stack[i];
-	              }
-	            }
-	          },
-	          keys: function() {
-	            var keys = [];
-	            for (var i = 0; i < stack.length; i++) {
-	              keys.push(stack[i].key);
-	            }
-	            return keys;
-	          },
-	          top: function () {
-	            return stack[stack.length - 1];
-	          },
-	          remove: function (key) {
-	            var idx = -1;
-	            for (var i = 0; i < stack.length; i++) {
-	              if (key == stack[i].key) {
-	                idx = i;
-	                break;
-	              }
-	            }
-	            return idx != -1 ? stack.splice(idx, 1)[0] : false;
-	          },
-	          removeTop: function () {
-	            return stack.splice(stack.length - 1, 1)[0];
-	          },
-	          length: function () {
-	            return stack.length;
-	          }
-	        };
-	      }
-	    };
-	 };
+          return {
+            add: function (key, value) {
+              stack.push({
+                key: key,
+                value: value
+              });
+            },
+            get: function (key) {
+              for (var i = 0; i < stack.length; i++) {
+                if (key == stack[i].key) {
+                  return stack[i];
+                }
+              }
+            },
+            keys: function() {
+              var keys = [];
+              for (var i = 0; i < stack.length; i++) {
+                keys.push(stack[i].key);
+              }
+              return keys;
+            },
+            top: function () {
+              return stack[stack.length - 1];
+            },
+            remove: function (key) {
+              var idx = -1;
+              for (var i = 0; i < stack.length; i++) {
+                if (key == stack[i].key) {
+                  idx = i;
+                  break;
+                }
+              }
+              return idx != -1 ? stack.splice(idx, 1)[0] : false;
+            },
+            removeTop: function () {
+              return stack.splice(stack.length - 1, 1)[0];
+            },
+            length: function () {
+              return stack.length;
+            }
+          };
+        }
+      };
+   };
 
-	 angular
-	 	.module('pi')
-	 	.factory('StackedMap', fn)
+   angular
+    .module('pi')
+    .factory('StackedMap', fn)
 })();
 
 (function(){
 
-	var UpdateBuilder = function($log){
-		var fn = function(){
-			this.current = undefined;
-			this.request = {};
-			var self = this;
+  var UpdateBuilder = function($log){
+    var fn = function(){
+      this.current = undefined;
+      this.request = {};
+      var self = this;
 
-			this.field = function(field) {
-				self.current = field;
-				return self;
-			};
+      this.field = function(field) {
+        self.current = field;
+        return self;
+      };
 
-			this.set = function(value) {
-				self.request[self.current] = value;
-				self.current = undefined;
-				$log.debug('field ' + self.current + ' set ' + value);
-				return self;
-			};
+      this.set = function(value) {
+        self.request[self.current] = value;
+        self.current = undefined;
+        $log.debug('field ' + self.current + ' set ' + value);
+        return self;
+      };
 
-			this.getRequest = function(){
-				return self.request;
-			};
-		};
+      this.getRequest = function(){
+        return self.request;
+      };
+    };
 
-		return fn;
-	};
+    return fn;
+  };
 
-	UpdateBuilder.$inject = ['$log'];
+  UpdateBuilder.$inject = ['$log'];
 
-	angular
-		.module('pi')
-		.factory('UpdateBuilder', UpdateBuilder);
+  angular
+    .module('pi')
+    .factory('UpdateBuilder', UpdateBuilder);
 })();
 
 (function(){
-	
-	var svcFn = function($rootScope){
+  
+  var svcFn = function($rootScope){
 
-		var svc = function(model){
-			var self = this;
-			this.model = model;
-			
-			this.get = function(){
-				return self.model;
-			};
+    var svc = function(model){
+      var self = this;
+      this.model = model;
+      
+      this.get = function(){
+        return self.model;
+      };
 
-		};
+    };
 
-		svc.prototype.build = function(skip, take) {
-			
-			if(_.isUndefined(this.model.skip)) {
-				this.model.skip = _.isUndefined(skip) ? 0 : skip;
-			}
+    svc.prototype.build = function(skip, take) {
+      
+      if(_.isUndefined(this.model.skip)) {
+        this.model.skip = _.isUndefined(skip) ? 0 : skip;
+      }
 
-			if(_.isUndefined(this.model.take)) {
-				this.model.take = _.isUndefined(take) ? 40 : take;
-			}
-		};
+      if(_.isUndefined(this.model.take)) {
+        this.model.take = _.isUndefined(take) ? 40 : take;
+      }
+    };
 
-		return svc;		
-	};
+    return svc;   
+  };
 
-	angular
-		.module('pi')
-		.factory('queryModelFactory', ['$rootScope', svcFn]);
+  angular
+    .module('pi')
+    .factory('queryModelFactory', ['$rootScope', svcFn]);
 })();
 (function(){
-	var commonUtils = function(){
+  var commonUtils = function(){
 
-		this.capitalizeFirstLetter = function(string) {
-			return string.charAt(0).toUpperCase() + string.slice(1);
-		};
+    this.capitalizeFirstLetter = function(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    };
 
-		this.randomText =  function(counter)
-		{
-	    var text = "";
-	    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    this.randomText =  function(counter)
+    {
+      var text = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-	    for( var i=0; i < counter; i++ )
-	        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      for( var i=0; i < counter; i++ )
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-	    return text;
-		};
+      return text;
+    };
 
-		return this;
-	};
+    return this;
+  };
 
 
-	angular
-		.module('pi')
-		.factory('commonUtils', commonUtils);
+  angular
+    .module('pi')
+    .factory('commonUtils', commonUtils);
 })();
 
 (function(){
-	var pagingFn = function(){
+  var pagingFn = function(){
 
         var svc = function(queryFnName){
             this.queryFnName = queryFnName;
@@ -3160,84 +3160,92 @@ var INTEGER_REGEXP = /^\-?\d*$/;
     };
 
     angular
-    	.module('pi')
-    	.factory('dataPagingBase', pagingFn)
+      .module('pi')
+      .factory('dataPagingBase', pagingFn)
 })();
 (function(){
-	angular
-		.module('pi')
-		.provider('facebookMetaService', [function(){
+  angular
+    .module('pi')
+    .provider('facebookMetaService', [function(){
 
-			var _meta = {},
-				_author = 'https://www.facebook.com/living.with.jesus',
-				_publisher = 'https://www.facebook.com/codigo.ovh',
-				_locale = 'pt_PT',
-				_type = 'article',
-				_siteName = 'Codigo',
-				_image = '';
+      var _meta = {},
+        _author = 'https://www.facebook.com/living.with.jesus',
+        _publisher = 'https://www.facebook.com/codigo.ovh',
+        _locale = 'pt_PT',
+        _type = 'article',
+        _siteName = 'Codigo',
+        _image = '',
+        _description = 'Os artigos que escrevo são daquilo que aprendo e faço, desde linguagens de programação e segurança informática a notícias e tutoriais.',
+        _image = '';
 
-			var setDefault = function() {
-				_meta = {
-					'og:site_name': _siteName,
-					'og:type': _type,
-					'og:locale': _locale,
-					'og:image': _image,
-					'article:author': _author,
-					'article:publisher': _publisher
-				};
-			}
+      var setDefault = function() {
+        _meta = {
+          'og:site_name': _siteName,
+          'og:type': _type,
+          'og:locale': _locale,
+          'og:image': _image,
+          'article:author': _author,
+          'article:publisher': _publisher,
+          'og:description': _description,
+          'description': _description
+        };
+      }
 
-			setDefault();
+      setDefault();
 
-			return {
-				$get: function() {
-					return {
-						clean: function(){
-							setDefault();
-						},
-						set: function(title, description, image) {
-							_meta['og:locale'] = 'pt_PT';
-							_meta['og:title'] = title;
-							_meta['og:description'] = description;
-							_meta['og:image'] = image;
-						},
-						meta: function(){
-							return _meta;
-						}
-					}
-				},
-				setImage: function(image) {
-					_image = image;
-				},
-				setAuthor: function(author){
-					_author = author;
-				},
-				setPublisher: function(publisher) {
-					_publisher = publisher;
-				},
-				setLocale: function(locale) {
-					_locale = locale;
-				},
-				setType: function(type) {
-					_type = type;
-				},
-				setSiteName: function(siteName) {
-					_siteName = siteName;
-				}
-			}
+      return {
+        $get: function() {
+          return {
+            clean: function(){
+              setDefault();
+            },
+            set: function(title, description, image) {
+              _meta['og:locale'] = 'pt_PT';
+              _meta['og:title'] = title;
+              _meta['og:description'] = description;
+              _meta['description'] = description;
+              _meta['og:image'] = image;
+            },
+            meta: function(){
+              return _meta;
+            }
+          }
+        },
+        setDescription: function(type) {
+          _description = type;
+        },
+        setImage: function(image) {
+          _image = image;
+        },
+        setAuthor: function(author){
+          _author = author;
+        },
+        setPublisher: function(publisher) {
+          _publisher = publisher;
+        },
+        setLocale: function(locale) {
+          _locale = locale;
+        },
+        setType: function(type) {
+          _type = type;
+        },
+        setSiteName: function(siteName) {
+          _siteName = siteName;
+        }
+      }
 
-			
-		}])
-		.directive('facebookMeta', [function(){
-			return {
-				replace: true,
-				template: '<meta ng-repeat="(key, value) in $root.metas" property="{{key}}" content="{{value}}">',
-				controller: ['$rootScope', '$scope', 'facebookMetaService', function($rootScope, $scope, facebookMetaService) {
-					facebookMetaService.set('Codigo', 'Site de Programação', 'http://codigo.ovh/logo.png');
-					$rootScope.metas = facebookMetaService.meta();
-				}]
-			}
-		}])
+      
+    }])
+    .directive('facebookMeta', [function(){
+      return {
+        replace: true,
+        template: '<meta ng-repeat="(key, value) in $root.metas" property="{{key}}" content="{{value}}">',
+        controller: ['$rootScope', '$scope', 'facebookMetaService', function($rootScope, $scope, facebookMetaService) {
+          facebookMetaService.set('Codigo', 'Site de Programação', 'http://codigo.ovh/logo.png');
+          $rootScope.metas = facebookMetaService.meta();
+        }]
+      }
+    }])
 })();
 (function(){
     var fn = function($resource, fittingModel, piHttp) {
@@ -3263,11 +3271,11 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
 (function(){
 
-	angular
-		.module('pi.adsense')
-		.run(['$rootScope', '$window', function($rootScope, $window){
+  angular
+    .module('pi.adsense')
+    .run(['$rootScope', '$window', function($rootScope, $window){
 
-			$rootScope.$on('$locationChangeStart', function () {
+      $rootScope.$on('$locationChangeStart', function () {
               Object.keys($window).filter(function(k) { return k.indexOf('google') >= 0 }).forEach(
                 function(key) {
                   delete($window[key]);
@@ -3275,167 +3283,167 @@ var INTEGER_REGEXP = /^\-?\d*$/;
               );
             });
 
-		}])
-		.provider('googleAdSenseService', [function(){
-	      
-	      var self = this;
-	      self.format = 'auto';
+    }])
+    .provider('googleAdSenseService', [function(){
+        
+        var self = this;
+        self.format = 'auto';
 
-	      return {
-	        $get: function() {
+        return {
+          $get: function() {
 
-	          this.getClient = function(){
-	            return self.client;
-	          };
+            this.getClient = function(){
+              return self.client;
+            };
 
-	          this.getSlot = function(){
-	            return self.slot;
-	          };
+            this.getSlot = function(){
+              return self.slot;
+            };
 
-	          this.getFormat = function(){
-	            return self.format;
-	          };
+            this.getFormat = function(){
+              return self.format;
+            };
 
-	          return this;
-	        },
-	        setClient: function(value){
-	          self.client = value;
-	        },
-	        setSlot: function(value){
-	          self.slot = value;
-	        },
-	        setFormat: function(value){
-	          self.format = value;
-	        }
-	      };
+            return this;
+          },
+          setClient: function(value){
+            self.client = value;
+          },
+          setSlot: function(value){
+            self.slot = value;
+          },
+          setFormat: function(value){
+            self.format = value;
+          }
+        };
 
-	    }])
-	    .directive('googleAdSense', ['googleAdSenseService', function (googleAdSenseService) {
-	        
-	        return {
-	            restrict: 'A',
-	            replace: true,       
-	            template: '<ins class="adsbygoogle" style="display:block" data-ad-client="{{client}}" data-ad-slot="{{slot}}" data-ad-format="{{format}}"></ins>',
-	            controller: ['$scope', 'googleAdSenseService', function($scope, googleAdSenseService){
-	              $scope.client = googleAdSenseService.getClient();
-	              $scope.slot = googleAdSenseService.getSlot();
-	              $scope.format = googleAdSenseService.getFormat();
-	              (adsbygoogle = window.adsbygoogle || []).push({});
-	            }]
-	        };
+      }])
+      .directive('googleAdSense', ['googleAdSenseService', function (googleAdSenseService) {
+          
+          return {
+              restrict: 'A',
+              replace: true,       
+              template: '<ins class="adsbygoogle" style="display:block" data-ad-client="{{client}}" data-ad-slot="{{slot}}" data-ad-format="{{format}}"></ins>',
+              controller: ['$scope', 'googleAdSenseService', function($scope, googleAdSenseService){
+                $scope.client = googleAdSenseService.getClient();
+                $scope.slot = googleAdSenseService.getSlot();
+                $scope.format = googleAdSenseService.getFormat();
+                (adsbygoogle = window.adsbygoogle || []).push({});
+              }]
+          };
 
-	    }]);
+      }]);
 })();
 /**
 (function(){
 
-	var fn = function($q){
-		var modals = [];
+  var fn = function($q){
+    var modals = [];
 
-		var add = function(modalObj) {
-			
-		};
+    var add = function(modalObj) {
+      
+    };
 
-		var templatePath, 
-			setTemplatePath = function(path) {
+    var templatePath, 
+      setTemplatePath = function(path) {
 
-		};
+    };
 
-		var getFn = function(){
-			return {
-				getTemplatePath: function(){
-					return templatePath;
-				}
-			}
-		};
-		getFn.$inject = [];
+    var getFn = function(){
+      return {
+        getTemplatePath: function(){
+          return templatePath;
+        }
+      }
+    };
+    getFn.$inject = [];
 
 
-		return {
-			setTemplatePath: setTemplatePath,
-			$get: getFn
-		}
+    return {
+      setTemplatePath: setTemplatePath,
+      $get: getFn
+    }
 
-		
-	};
+    
+  };
 
-	fn.$inject = ['$q'];
+  fn.$inject = ['$q'];
 
-	angular
-		.module('pi')
-		.provider('ModalService', fn);
+  angular
+    .module('pi')
+    .provider('ModalService', fn);
 })();
 */
 (function(){
-	'use strict';
+  'use strict';
 
-	/**
-	 * @ng-doc service
-	 * @name piHttp
-	 *
-	 * This service is a wrapper for angular $http service
-	 * http://stackoverflow.com/questions/23968129/limiting-http-interceptor-to-specific-domain
-	 */
-	 angular
-	 	.module('pi')
-		.provider('piHttp', [
-			function () {
-				var formatUrl = function(url) {
-					return self.baseUrl + url;
-				};
-				var self = this;
+  /**
+   * @ng-doc service
+   * @name piHttp
+   *
+   * This service is a wrapper for angular $http service
+   * http://stackoverflow.com/questions/23968129/limiting-http-interceptor-to-specific-domain
+   */
+   angular
+    .module('pi')
+    .provider('piHttp', [
+      function () {
+        var formatUrl = function(url) {
+          return self.baseUrl + url;
+        };
+        var self = this;
 
-				return  {
-					$get: function($http) {
+        return  {
+          $get: function($http) {
 
-						var s = this;
+            var s = this;
 
-						// Augments the request configuration object
-						// with OAuth specific stuff (e.g. some header)
-						function getAugmentedConfig(cfg) {
-							var config  = cfg || {};
-							config.headers = config.headers || {};
-							//config.headers.someHeaderName = 'some-header-value';
-							return config;
-						}
+            // Augments the request configuration object
+            // with OAuth specific stuff (e.g. some header)
+            function getAugmentedConfig(cfg) {
+              var config  = cfg || {};
+              config.headers = config.headers || {};
+              //config.headers.someHeaderName = 'some-header-value';
+              return config;
+            }
 
-						// The service object to be returned (`$http` wrapper)
+            // The service object to be returned (`$http` wrapper)
 
 
-						// Create wrappers for methods WITHOUT data
-						['delete', 'get', 'head', 'jsonp'].forEach(function (method) {
-							s[method] = function (url, config) {
-							    var config = getAugmentedConfig(config);
-							    return $http[method](formatUrl(url), config);
-							};
-						});
+            // Create wrappers for methods WITHOUT data
+            ['delete', 'get', 'head', 'jsonp'].forEach(function (method) {
+              s[method] = function (url, config) {
+                  var config = getAugmentedConfig(config);
+                  return $http[method](formatUrl(url), config);
+              };
+            });
 
-						// Create wrappers for methods WITH data
-						['post', 'put'].forEach(function (method) {
-							s[method] = function (url, data, config) {
-							    var config = getAugmentedConfig(config);
-							    return $http[method](formatUrl(url), data, config);
-							};
-						});
+            // Create wrappers for methods WITH data
+            ['post', 'put'].forEach(function (method) {
+              s[method] = function (url, data, config) {
+                  var config = getAugmentedConfig(config);
+                  return $http[method](formatUrl(url), data, config);
+              };
+            });
 
-						this.getBaseUrl = function() {
-							return self.baseUrl;
-						}
+            this.getBaseUrl = function() {
+              return self.baseUrl;
+            }
 
-						// Return the service object
-						return this;
-					},
-					baseUrl: '',
-					token: null,
-					setBaseUrl: function(url) {
-						self.baseUrl = url;
-					},
-					setAuth: function(token) {
-						self.token = token;
-					}
-				};
-			}
-		]);
+            // Return the service object
+            return this;
+          },
+          baseUrl: '',
+          token: null,
+          setBaseUrl: function(url) {
+            self.baseUrl = url;
+          },
+          setAuth: function(token) {
+            self.token = token;
+          }
+        };
+      }
+    ]);
 })();
 
 (function(){
@@ -3561,34 +3569,34 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 })();
 
 (function(){
-	
-	var registerFactory = function($http, $q){
+  
+  var registerFactory = function($http, $q){
 
-		this.register = function(registerModel) {
-			var model = registerModel;
-				deferred = $q.defer(),
-				successFn = function(res) {
-					deferred.resolve(res.data);
-				},
-				errorFn = function(res) {
-					deferred.reject(res);
-				},
-				httpObj = {
-					method: 'POST',
-					url: '/api/register',
-					data: model
-				};
+    this.register = function(registerModel) {
+      var model = registerModel;
+        deferred = $q.defer(),
+        successFn = function(res) {
+          deferred.resolve(res.data);
+        },
+        errorFn = function(res) {
+          deferred.reject(res);
+        },
+        httpObj = {
+          method: 'POST',
+          url: '/api/register',
+          data: model
+        };
 
-			$http(httpObj)
-				.then(successFn, errorFn);
+      $http(httpObj)
+        .then(successFn, errorFn);
 
-			return deferred.promise;
-		};
-	};
+      return deferred.promise;
+    };
+  };
 
-	angular	
-		.module('pi')
-		.service('piRegisterService', registerFactory);
+  angular 
+    .module('pi')
+    .service('piRegisterService', registerFactory);
 })();
 /**
  * @author Gui <guilhermecardoso@volupio.com>
@@ -3600,14 +3608,14 @@ var INTEGER_REGEXP = /^\-?\d*$/;
  * Functions started with "validate" will be used agains validateObject() with common properties array
  */
  var seoValidationResult = {
- 	message: '',
- 	error: false
+  message: '',
+  error: false
  };
 
 (function(){
-	var SeoValidator = function(commonUtils, $log){
-		var self = this,
-			commonProperties = ['title', 'content', 'url', 'excerpt'];
+  var SeoValidator = function(commonUtils, $log){
+    var self = this,
+      commonProperties = ['title', 'content', 'url', 'excerpt'];
 
     var createError = function(property, message)
     {
@@ -3620,45 +3628,45 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
     var validators = {
         validateTitle: function(title) {
-    			if(title.length < 10 || title.length > 70) {
+          if(title.length < 10 || title.length > 70) {
             return createError('title', 'Title length should be between 30 and 70');
-    			}
+          }
           return true;
-    		},
+        },
         validateContent: function(content) {
 
           if(content.length < 30 || content.length > 70) {
             return createError('content', 'Title length should be between 30 and 70');
           }
           return true;
-    		},
+        },
         validateExcerpt: function(excerpt){
           if(excerpt.length < 10 || excerpt.length > 50) {
             return createError('excerpt', 'Title length should be between 30 and 70');
           }
           return true;
-    		},
+        },
         validateUrl: function(url){
           if(url.length < 10 || url.length > 70) {
             return createError('url', 'Title length should be between 30 and 70');
           }
           return true;
-    		}
+        }
     };
     this.validateTitle = validators.validateTitle;
     this.validateContext = validators.validateContent;
     this.validateExcerpt = validators.validateExcerpts;
     this.validateUrl = validators.validateUrl;
-		/*
-		 * Runs all the validation functions of the service agains the object
-		 * The existence of the properties is checked, and the object must have the regular properties: title, content, url, etc
-		 */
-		this.validateObject = function(obj) {
-			var results = [];
+    /*
+     * Runs all the validation functions of the service agains the object
+     * The existence of the properties is checked, and the object must have the regular properties: title, content, url, etc
+     */
+    this.validateObject = function(obj) {
+      var results = [];
 
       angular.forEach(commonProperties, function(prop, key) {
-				if(prop in obj) {
-					/*var fnName = String('validate' + commonUtils.capitalizeFirstLetter(prop)),
+        if(prop in obj) {
+          /*var fnName = String('validate' + commonUtils.capitalizeFirstLetter(prop)),
             obj[prop],
             validators[fnName](val);
 
@@ -3666,8 +3674,8 @@ var INTEGER_REGEXP = /^\-?\d*$/;
           {
             results.push(res);
           }*/
-				}
-			});
+        }
+      });
 
       if(results.length >= 0)
       {
@@ -3678,357 +3686,357 @@ var INTEGER_REGEXP = /^\-?\d*$/;
       }
 
       return true;
-		};
+    };
 
     return this;
-	};
+  };
 
   SeoValidator.$inject = ['commonUtils', '$log'];
 
-	angular
-		.module('pi')
-		.factory('SeoValidator', SeoValidator);
+  angular
+    .module('pi')
+    .factory('SeoValidator', SeoValidator);
 })();
 
 (function(){
-	/**
-	 * @ng-doc overview
-	 * @name pi template editor
-	 * 
-	 * @description
-	 * template editor for pi based apps
-	 * the editor store dom with angular directives in jsonml
-	 */
+  /**
+   * @ng-doc overview
+   * @name pi template editor
+   * 
+   * @description
+   * template editor for pi based apps
+   * the editor store dom with angular directives in jsonml
+   */
 
-	 var svcFn = function(){
+   var svcFn = function(){
 
-	 	/**
-	 	 * @param bodyJson the jsonml retrieved from database
-	 	 */
-	 	var main = function(bodyJson) {
-	 		this.toolBar = {
-	 			items: [],
-	 			version: '0.0.1'
-	 		};
-	 	}
+    /**
+     * @param bodyJson the jsonml retrieved from database
+     */
+    var main = function(bodyJson) {
+      this.toolBar = {
+        items: [],
+        version: '0.0.1'
+      };
+    }
 
-	 };
+   };
 
 
-	 var directive = function($compile){
-	 	var compileFn = function(element, attributes) {
-	 		var preFn = function(scope, element, attributes, controller) {
+   var directive = function($compile){
+    var compileFn = function(element, attributes) {
+      var preFn = function(scope, element, attributes, controller) {
 
-	 				},
-	 				postFn = function(scope, iElement, attributes, controller) {
-	 					$compile(iElement)(scope);
-	 				};
+          },
+          postFn = function(scope, iElement, attributes, controller) {
+            $compile(iElement)(scope);
+          };
 
-	 		return {
-	 			pre: preFn,
-	 			post: postFn
-	 		}
-	 	}
- 		return {
- 			compile: compileFn
- 		}
-	 };
+      return {
+        pre: preFn,
+        post: postFn
+      }
+    }
+    return {
+      compile: compileFn
+    }
+   };
 })();
 (function(){
-	
-	var configFn = function($provide) {
+  
+  var configFn = function($provide) {
 
-		// use $state.forceReload() to reload the current state
-		// delegate cames from SO http://stackoverflow.com/questions/21714655/angular-js-angular-ui-router-reloading-current-state-refresh-data
-		$provide.decorator('$state', function($delegate, $stateParams) {
-	        $delegate.forceReload = function() {
-	            return $delegate.go($delegate.current, $stateParams, {
-	                reload: true,
-	                inherit: false,
-	                notify: true
-	            });
-	        };
-	        return $delegate;
-	    });
-	};
-	angular
-		.module('pi.ui-extensions')
-		.config(['$provide', configFn]);
-})();
-(function(){
-
-	var svc = function($state, $rootScope, $window) {
-
-	  var history = [];
-
-	  angular.extend(this, {
-	    push: function(state, params) {
-	      history.push({ state: state, params: params });
-	    },
-	    all: function() {
-	      return history;
-	    },
-	    go: function(step) {
-	      // TODO:
-	      // (1) Determine # of states in stack with URLs, attempt to
-	      //    shell out to $window.history when possible
-	      // (2) Attempt to figure out some algorthim for reversing that,
-	      //     so you can also go forward
-
-	      var prev = this.previous(step || -1);
-	      return $state.go(prev.state, prev.params);
-	    },
-	    previous: function(step) {
-	      return history[history.length - Math.abs(step || 1)];
-	    },
-	    back: function() {
-	      return this.go(-1);
-	    }
-	  });
-
-	};
-
-	svc.$inject = ['$state', '$rootScope', '$window'];
-
-	var directiveFn = function($history){
-		
-		var linkFn = function(scope, elem, attrs) {
-			elem.on('click', function(){
-				$history.back();
-			});
-		};
-
-		return {
-			link: linkFn,
-			restrict: 'A'
-		}
-	};
-
-	directiveFn.$inject = ['$history'];
-
-	angular
-		.module('pi.ui-extensions')
-		.directive('piUiBack', directiveFn)
-		.service('$history', svc);
+    // use $state.forceReload() to reload the current state
+    // delegate cames from SO http://stackoverflow.com/questions/21714655/angular-js-angular-ui-router-reloading-current-state-refresh-data
+    $provide.decorator('$state', function($delegate, $stateParams) {
+          $delegate.forceReload = function() {
+              return $delegate.go($delegate.current, $stateParams, {
+                  reload: true,
+                  inherit: false,
+                  notify: true
+              });
+          };
+          return $delegate;
+      });
+  };
+  angular
+    .module('pi.ui-extensions')
+    .config(['$provide', configFn]);
 })();
 (function(){
 
-	var runFn = function($rootScope, $history, $state) {
-	
-		$rootScope.$on("$stateChangeSuccess", function(event, to, toParams, from, fromParams) {
-			if (!from.abstract) {
-				$history.push(from, fromParams);
-			}
-	  	});
+  var svc = function($state, $rootScope, $window) {
 
-	  	$history.push($state.current, $state.params);
-	};
+    var history = [];
 
-	runFn.$inject = ['$rootScope', '$history', '$state'];
+    angular.extend(this, {
+      push: function(state, params) {
+        history.push({ state: state, params: params });
+      },
+      all: function() {
+        return history;
+      },
+      go: function(step) {
+        // TODO:
+        // (1) Determine # of states in stack with URLs, attempt to
+        //    shell out to $window.history when possible
+        // (2) Attempt to figure out some algorthim for reversing that,
+        //     so you can also go forward
 
-	angular
-		.module('pi.ui-extensions')
-		.run(runFn)
+        var prev = this.previous(step || -1);
+        return $state.go(prev.state, prev.params);
+      },
+      previous: function(step) {
+        return history[history.length - Math.abs(step || 1)];
+      },
+      back: function() {
+        return this.go(-1);
+      }
+    });
+
+  };
+
+  svc.$inject = ['$state', '$rootScope', '$window'];
+
+  var directiveFn = function($history){
+    
+    var linkFn = function(scope, elem, attrs) {
+      elem.on('click', function(){
+        $history.back();
+      });
+    };
+
+    return {
+      link: linkFn,
+      restrict: 'A'
+    }
+  };
+
+  directiveFn.$inject = ['$history'];
+
+  angular
+    .module('pi.ui-extensions')
+    .directive('piUiBack', directiveFn)
+    .service('$history', svc);
 })();
 (function(){
-	'use strict';
 
-	angular
-		.module('pi.core.app')
-		.factory('pi.core.app.appSvc', ['piHttp', function(piHttp){
+  var runFn = function($rootScope, $history, $state) {
+  
+    $rootScope.$on("$stateChangeSuccess", function(event, to, toParams, from, fromParams) {
+      if (!from.abstract) {
+        $history.push(from, fromParams);
+      }
+      });
 
-			this.post = function(model){
-				return piHttp.post('/application', model);
-			}
+      $history.push($state.current, $state.params);
+  };
 
-			this.get = function(id, model) {
-				return piHttp.get('/application/' + id, model);
-			}
+  runFn.$inject = ['$rootScope', '$history', '$state'];
 
-			this.find = function(model) {
-				return piHttp.get('/application', model);
-			}
+  angular
+    .module('pi.ui-extensions')
+    .run(runFn)
+})();
+(function(){
+  'use strict';
 
-			this.put = function(id, model){
-				return piHttp.post('/application/' + id, model);
-			}
+  angular
+    .module('pi.core.app')
+    .factory('pi.core.app.appSvc', ['piHttp', function(piHttp){
 
-			return this;
-		}]);
+      this.post = function(model){
+        return piHttp.post('/application', model);
+      }
+
+      this.get = function(id, model) {
+        return piHttp.get('/application/' + id, model);
+      }
+
+      this.find = function(model) {
+        return piHttp.get('/application', model);
+      }
+
+      this.put = function(id, model){
+        return piHttp.post('/application/' + id, model);
+      }
+
+      return this;
+    }]);
 
 })();
 (function(){
-	angular
-		.module('pi.core.article')
-		.factory('pi.core.article.articleCategorySvc', ['piHttp', function(piHttp){
+  angular
+    .module('pi.core.article')
+    .factory('pi.core.article.articleCategorySvc', ['piHttp', function(piHttp){
 
-			this.post = function(model){
-				return piHttp.post('/article-category', model);
-			}
+      this.post = function(model){
+        return piHttp.post('/article-category', model);
+      }
 
-			this.remove = function(id){
-				return piHttp.post('/article-category-remove/' + id);
-			}
+      this.remove = function(id){
+        return piHttp.post('/article-category-remove/' + id);
+      }
 
-			this.get = function(id, model) {
-				return piHttp.get('/article-category/' + id, model);
-			}
+      this.get = function(id, model) {
+        return piHttp.get('/article-category/' + id, model);
+      }
 
-			this.find = function(model) {
-				return piHttp.get('/article-category', {params: model});
-			};
+      this.find = function(model) {
+        return piHttp.get('/article-category', {params: model});
+      };
 
-			this.put = function(id, model) {
-				return piHttp.post('/article-serie/' + id, model);
-			};
+      this.put = function(id, model) {
+        return piHttp.post('/article-serie/' + id, model);
+      };
 
-			return this;
-		}]);
+      return this;
+    }]);
 })();
 
 (function(){
-	angular
-		.module('pi.core.article')
-		.factory('pi.core.article.articleSerieSvc', ['piHttp', function(piHttp){
+  angular
+    .module('pi.core.article')
+    .factory('pi.core.article.articleSerieSvc', ['piHttp', function(piHttp){
 
-			this.post = function(model){
-				return piHttp.post('/article-serie', model);
-			}
+      this.post = function(model){
+        return piHttp.post('/article-serie', model);
+      }
 
-			this.remove = function(id) {
-				return piHttp.post('/article-serie-remove/' + id);
-			}
+      this.remove = function(id) {
+        return piHttp.post('/article-serie-remove/' + id);
+      }
 
-			this.put = function(id, model) {
-				return piHttp.post('/article-serie/' + id, model);
-			}
+      this.put = function(id, model) {
+        return piHttp.post('/article-serie/' + id, model);
+      }
 
-			this.get = function(id, model) {
-				return piHttp.get('/article-serie/' + id, model);
-			}
+      this.get = function(id, model) {
+        return piHttp.get('/article-serie/' + id, model);
+      }
 
-			this.find = function(model) {
-				return piHttp.get('/article-serie', {params: model});
-			};
-			return this;
-		}]);
+      this.find = function(model) {
+        return piHttp.get('/article-serie', {params: model});
+      };
+      return this;
+    }]);
 })();
 
 (function(){
-	angular
-		.module('pi.core.article')
-		.factory('pi.core.article.articleSvc', ['piHttp', function(piHttp){
+  angular
+    .module('pi.core.article')
+    .factory('pi.core.article.articleSvc', ['piHttp', function(piHttp){
 
-			this.post = function(model){
-				return piHttp.post('/article', model);
-			}
+      this.post = function(model){
+        return piHttp.post('/article', model);
+      }
 
-			this.remove = function(id) {
-				return piHttp.post('/article-remove/' + id);
-			}
+      this.remove = function(id) {
+        return piHttp.post('/article-remove/' + id);
+      }
 
-			this.put = function(id, model) {
-				return piHttp.post('/article/' + id, model);
-			}
+      this.put = function(id, model) {
+        return piHttp.post('/article/' + id, model);
+      }
 
-			this.get = function(id, model) {
-				return piHttp.get('/article/' + id, model);
-			}
+      this.get = function(id, model) {
+        return piHttp.get('/article/' + id, model);
+      }
 
-			this.find = function(model) {
-				return piHttp.get('/article', {params: model});
-			};
-			return this;
-		}]);
+      this.find = function(model) {
+        return piHttp.get('/article', {params: model});
+      };
+      return this;
+    }]);
 })();
 
 (function(){
 
-	angular
-		.module('pi.core.chat')
-		.factory('pi.core.chat.inboxSvc', ['piHttp', '$rootScope', function(piHttp, $rootScope){
+  angular
+    .module('pi.core.chat')
+    .factory('pi.core.chat.inboxSvc', ['piHttp', '$rootScope', function(piHttp, $rootScope){
 
-			this.post = function(model){
-				return piHttp.post('/inbox', model);
-			}
+      this.post = function(model){
+        return piHttp.post('/inbox', model);
+      }
 
-			this.get = function(id) {
-				var model = {};
-				model.fromId = id;
-				model.toId = $rootScope.userId;
-				return piHttp.post('/inbox-view', model);
-			}
+      this.get = function(id) {
+        var model = {};
+        model.fromId = id;
+        model.toId = $rootScope.userId;
+        return piHttp.post('/inbox-view', model);
+      }
 
-			return this;
-		}]);
+      return this;
+    }]);
 })();
 (function(){
-	'use strict';
+  'use strict';
 
-	angular
-		.module('pi.core.app')
-		.factory('pi.core.app.eventSvc', ['piHttp', function(piHttp){
+  angular
+    .module('pi.core.app')
+    .factory('pi.core.app.eventSvc', ['piHttp', function(piHttp){
 
-			this.post = function(model){
-				return piHttp.post('/event', model);
-			}
+      this.post = function(model){
+        return piHttp.post('/event', model);
+      }
 
-			this.get = function(id, model) {
-				return piHttp.get('/event/' + id, model);
-			}
+      this.get = function(id, model) {
+        return piHttp.get('/event/' + id, model);
+      }
 
-			this.find = function(model) {
-				return piHttp.get('/event', model);
-			};
+      this.find = function(model) {
+        return piHttp.get('/event', model);
+      };
 
-			this.remove = function(id) {
-				return piHttp.post('/event-remove/' + id);
-			};
+      this.remove = function(id) {
+        return piHttp.post('/event-remove/' + id);
+      };
 
-			return this;
-		}]);
+      return this;
+    }]);
 
-		angular
-			.module('pi.core.app')
-			.factory('pi.core.app.eventSubSvc', ['piHttp', function(piHttp){
-				
-				this.post = function(model) {
-					return piHttp.post('/event-subscription', model);
-				}
+    angular
+      .module('pi.core.app')
+      .factory('pi.core.app.eventSubSvc', ['piHttp', function(piHttp){
+        
+        this.post = function(model) {
+          return piHttp.post('/event-subscription', model);
+        }
 
-				this.get = function(id, model) {
-					return piHttp.get('/event-subscription/' + id);
-				}
+        this.get = function(id, model) {
+          return piHttp.get('/event-subscription/' + id);
+        }
 
-				this.find = function(model) {
-					return piHttp.get('/event-subscription', model);
-				}
+        this.find = function(model) {
+          return piHttp.get('/event-subscription', model);
+        }
 
-				this.remove = function(id) {
-					return piHttp.post('/event-subscription-remove/' + id);
-				};
+        this.remove = function(id) {
+          return piHttp.post('/event-subscription-remove/' + id);
+        };
 
-				return this;
-			}]);
+        return this;
+      }]);
 
-		angular
-			.module('pi.core.app')
-			.factory('pi.core.app.eventAttendSvc', ['piHttp', function(piHttp){
-				
-				this.post = function(model) {
-					return piHttp.post('/event-attend', model);
-				}
+    angular
+      .module('pi.core.app')
+      .factory('pi.core.app.eventAttendSvc', ['piHttp', function(piHttp){
+        
+        this.post = function(model) {
+          return piHttp.post('/event-attend', model);
+        }
 
-				this.get = function(id, model) {
-					return piHttp.get('/event-attend/' + id);
-				}
+        this.get = function(id, model) {
+          return piHttp.get('/event-attend/' + id);
+        }
 
-				this.find = function(model) {
-					return piHttp.get('/event-attend', model);
-				}
+        this.find = function(model) {
+          return piHttp.get('/event-attend', model);
+        }
 
-				return this;
-			}]);
+        return this;
+      }]);
 })();
 (function(){
     angular
@@ -4079,9 +4087,9 @@ var INTEGER_REGEXP = /^\-?\d*$/;
         }]);
 })();
 (function(){
-	angular
-		.module('pi.core.likes')
-		.factory('pi.core.likes.likesSvc', ['piHttp', function(piHttp){
+  angular
+    .module('pi.core.likes')
+    .factory('pi.core.likes.likesSvc', ['piHttp', function(piHttp){
 
             this.get = function(namespace, id) {
                 return piHttp.get('/like/' + namespace + '/' + id);
@@ -4100,348 +4108,348 @@ var INTEGER_REGEXP = /^\-?\d*$/;
         }]);
 })();
 (function(){
-	'use strict';
+  'use strict';
 
-	angular
-		.module('pi.core.app')
-		.factory('pi.core.payment.paymentSvc', ['piHttp', function(piHttp){
+  angular
+    .module('pi.core.app')
+    .factory('pi.core.payment.paymentSvc', ['piHttp', function(piHttp){
 
-			this.post = function(model){
-				return piHttp.post('/payment/report', model);
-			}
+      this.post = function(model){
+        return piHttp.post('/payment/report', model);
+      }
 
-			this.get = function(id, model) {
-				return piHttp.get('/payment/report/' + id, model);
-			}
+      this.get = function(id, model) {
+        return piHttp.get('/payment/report/' + id, model);
+      }
 
-			this.find = function(model) {
-				return piHttp.get('/payment/report', model);
-			};
+      this.find = function(model) {
+        return piHttp.get('/payment/report', model);
+      };
 
-			return this;
-		}]);
+      return this;
+    }]);
 })();
 (function(){
-	angular
-		.module('pi.core.payment')
-		.factory('pi.core.payment.paymentMethod', [function(){
-			var svc = [
-				{ byBankTransferInAdvance: 1 },
-				{ byInvoice: 2 },
-				{ cash: 3 },
-				{ checkInAdvance: 4 },
-				{ cod: 5 },
-				{ directDebit: 6 },
-				{ googleCheckout: 7 },
-				{ payPal: 8 },
-				{ paySwarm: 9 }
-			];
-			return svc;
-		}]);
+  angular
+    .module('pi.core.payment')
+    .factory('pi.core.payment.paymentMethod', [function(){
+      var svc = [
+        { byBankTransferInAdvance: 1 },
+        { byInvoice: 2 },
+        { cash: 3 },
+        { checkInAdvance: 4 },
+        { cod: 5 },
+        { directDebit: 6 },
+        { googleCheckout: 7 },
+        { payPal: 8 },
+        { paySwarm: 9 }
+      ];
+      return svc;
+    }]);
 })();
 (function(){
-	
-	angular
-		.module('pi.core.product')
-		.directive('piPriceSpecifications', ['$log', function($log){
-			return {
+  
+  angular
+    .module('pi.core.product')
+    .directive('piPriceSpecifications', ['$log', function($log){
+      return {
 
-				link: function(scope, elem, attrs, ngModel) {
-					scope.view = 'home';
-					var modelDefault = {
-							eligibleQuantity: null,
-							eligibleTransactionVolume: null,
-							minPrice: null,
-							maxPrice: null,
-							price: null,
-							priceCurreny: 'EURO',
-							validFrom: null,
-							validThrough: null,
-							valueAddedTaxIncluded: null
-						};
+        link: function(scope, elem, attrs, ngModel) {
+          scope.view = 'home';
+          var modelDefault = {
+              eligibleQuantity: null,
+              eligibleTransactionVolume: null,
+              minPrice: null,
+              maxPrice: null,
+              price: null,
+              priceCurreny: 'EURO',
+              validFrom: null,
+              validThrough: null,
+              valueAddedTaxIncluded: null
+            };
 
-					scope.model = {};
-					scope.items = [];
-			
-					scope.setPrice = function() {
-						var value = ngModel.$viewValue;
-						value.push(scope.model);
-						ngModel.$setViewValue(value);	
-						scope.items.push(scope.model);
+          scope.model = {};
+          scope.items = [];
+      
+          scope.setPrice = function() {
+            var value = ngModel.$viewValue;
+            value.push(scope.model);
+            ngModel.$setViewValue(value); 
+            scope.items.push(scope.model);
 
-						scope.model = angular.copy(modelDefault);
-						scope.view = 'home';
-					}
+            scope.model = angular.copy(modelDefault);
+            scope.view = 'home';
+          }
 
-					scope.edit = function(index) {
-						scope.editIndex = index;
-						scope.editModel = scope.items[index];
-						scope.view = 'edit';
-					}
+          scope.edit = function(index) {
+            scope.editIndex = index;
+            scope.editModel = scope.items[index];
+            scope.view = 'edit';
+          }
 
-					scope.save = function() {
-						ngModel.$viewValue[scope.editIndex] = scope.editModel;
-						scope.items[scope.editIndex] = scope.editModel;
+          scope.save = function() {
+            ngModel.$viewValue[scope.editIndex] = scope.editModel;
+            scope.items[scope.editIndex] = scope.editModel;
 
-						scope.view = 'home';
-					}
+            scope.view = 'home';
+          }
 
-					attrs.$observe('ngModel', function(value){
-			        	scope.$watch(value, function(newValue){ 
-			        			try {
-			        				ngModel.$setViewValue(_.isObject(ngModel.$viewValue) ? ngModel.$viewValue : [modelDefault]);	
-			        			} catch(err) {
-			        				$log.info('piPriceSpecification couldnt set the ngModel, the default is used. Error: ' + err);
-			        				ngModel.$setViewValue([modelDefault]);
-			        			}
-			                    
-			            });
-			        });
+          attrs.$observe('ngModel', function(value){
+                scope.$watch(value, function(newValue){ 
+                    try {
+                      ngModel.$setViewValue(_.isObject(ngModel.$viewValue) ? ngModel.$viewValue : [modelDefault]);  
+                    } catch(err) {
+                      $log.info('piPriceSpecification couldnt set the ngModel, the default is used. Error: ' + err);
+                      ngModel.$setViewValue([modelDefault]);
+                    }
+                          
+                  });
+              });
 
-			        scope.model = angular.copy(modelDefault);
-				},
-				scope: {
-					'piPriceSpecifications': '@'
-				},
-				require: '^ngModel',
-				templateUrl: 'html/pi/price-specification.tpl.html'
-			}
-		}]);
+              scope.model = angular.copy(modelDefault);
+        },
+        scope: {
+          'piPriceSpecifications': '@'
+        },
+        require: '^ngModel',
+        templateUrl: 'html/pi/price-specification.tpl.html'
+      }
+    }]);
 })();
 (function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.businessEntity', [function(){
-			var svc = [
-				{ key: 'Business', value: 1 },
-				{ key: 'Enduser', value: 2 },
-				{ key: 'PublicInstitution', value: 3 },
-				{ key: 'Reseller', value: 4 }
-			];
-			return svc;
-		}]);
+  angular
+    .module('pi.core.product')
+    .factory('pi.core.product.businessEntity', [function(){
+      var svc = [
+        { key: 'Business', value: 1 },
+        { key: 'Enduser', value: 2 },
+        { key: 'PublicInstitution', value: 3 },
+        { key: 'Reseller', value: 4 }
+      ];
+      return svc;
+    }]);
 })();
 (function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.businessFunction', [function(){
-			var svc = [
-				{ key: 'ConstructionInstallation', value: 1 },
-				{ key: 'Dispose', value: 2 },
-				{ key: 'LeaseOut', value: 3 },
-				{ key: 'Maintain', value: 4 },
-				{ key: 'ProvideService', value: 5 },
-				{ key: 'Repair', value: 6 },
-				{ key: 'Sell', value: 7 },
-				{ key: 'Buy', value: 8 }
-			];
-			return svc;
-		}]);
+  angular
+    .module('pi.core.product')
+    .factory('pi.core.product.businessFunction', [function(){
+      var svc = [
+        { key: 'ConstructionInstallation', value: 1 },
+        { key: 'Dispose', value: 2 },
+        { key: 'LeaseOut', value: 3 },
+        { key: 'Maintain', value: 4 },
+        { key: 'ProvideService', value: 5 },
+        { key: 'Repair', value: 6 },
+        { key: 'Sell', value: 7 },
+        { key: 'Buy', value: 8 }
+      ];
+      return svc;
+    }]);
 })();
 (function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.deliveryMethod', [function(){
-			var svc = [
-				{ key: 'Direct Download', value: 1 },
-				{ key: 'Freight', value: 2 },
-				{ key: 'Mail', value: 3 },
-				{ key: 'Own Fleet', value: 4 },
-				{ key: 'PickUp Mode', value: 5 },
-				{ key: 'DHL', value: 6 },
-				{ key: 'Federal Express', value: 7 },
-				{ key: 'UPS', value: 8 }
-			];
-			return svc;
-		}]);
+  angular
+    .module('pi.core.product')
+    .factory('pi.core.product.deliveryMethod', [function(){
+      var svc = [
+        { key: 'Direct Download', value: 1 },
+        { key: 'Freight', value: 2 },
+        { key: 'Mail', value: 3 },
+        { key: 'Own Fleet', value: 4 },
+        { key: 'PickUp Mode', value: 5 },
+        { key: 'DHL', value: 6 },
+        { key: 'Federal Express', value: 7 },
+        { key: 'UPS', value: 8 }
+      ];
+      return svc;
+    }]);
 })();
 (function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.itemCondition', [function(){
-			var svc = [
-				{ key: 'Discontinued', value: 1 },
-				{ key: 'InStock', value: 2 },
-				{ key: 'InStoreOnly', value: 3 },
-				{ key: 'LimitedAvailability', value: 4 },
-				{ key: 'OnlineOnly', value: 5 },
-				{ key: 'PutOfStock', value: 6 },
-				{ key: 'PreOrder', value: 7 },
-				{ key: 'SoldOut', value: 8 }
-			];
-			return svc;
-		}]);
+  angular
+    .module('pi.core.product')
+    .factory('pi.core.product.itemCondition', [function(){
+      var svc = [
+        { key: 'Discontinued', value: 1 },
+        { key: 'InStock', value: 2 },
+        { key: 'InStoreOnly', value: 3 },
+        { key: 'LimitedAvailability', value: 4 },
+        { key: 'OnlineOnly', value: 5 },
+        { key: 'PutOfStock', value: 6 },
+        { key: 'PreOrder', value: 7 },
+        { key: 'SoldOut', value: 8 }
+      ];
+      return svc;
+    }]);
 })();
 (function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.offerStatus', [function(){
-			var svc = [
-				{ damagedCondition: 1 },
-				{ newCondition: 2 },
-				{ refurbishedCondition: 3 },
-				{ usedCondition: 4 }
-			];
-			return svc;
-		}]);
+  angular
+    .module('pi.core.product')
+    .factory('pi.core.product.offerStatus', [function(){
+      var svc = [
+        { damagedCondition: 1 },
+        { newCondition: 2 },
+        { refurbishedCondition: 3 },
+        { usedCondition: 4 }
+      ];
+      return svc;
+    }]);
 })();
 (function(){
-	angular
-		.module('pi.core.product')
-		.factory('pi.core.product.productSvc', ['piHttp', function(piHttp){
+  angular
+    .module('pi.core.product')
+    .factory('pi.core.product.productSvc', ['piHttp', function(piHttp){
 
-			this.post = function(model){
-				return piHttp.post('/product', model);
-			}
+      this.post = function(model){
+        return piHttp.post('/product', model);
+      }
 
-			this.get = function(id, model) {
-				return piHttp.get('/product/' + id, model);
-			}
+      this.get = function(id, model) {
+        return piHttp.get('/product/' + id, model);
+      }
 
-			this.find = function(model) {
-				return piHttp.get('/product', model);
-			};
+      this.find = function(model) {
+        return piHttp.get('/product', model);
+      };
 
-			this.postOffer = function(productId, model) {
-				return piHttp.post('/product-offer/' + productId, model);
-			}
+      this.postOffer = function(productId, model) {
+        return piHttp.post('/product-offer/' + productId, model);
+      }
 
-			return this;
-		}]);
+      return this;
+    }]);
 })();
 (function(){
-	angular
-		.module('pi.core.question')
-		.factory('pi.core.question.questionCategorySvc', ['piHttp', function(piHttp){
+  angular
+    .module('pi.core.question')
+    .factory('pi.core.question.questionCategorySvc', ['piHttp', function(piHttp){
 
-			this.post = function(model){
-				return piHttp.post('/question-category', model);
-			}
+      this.post = function(model){
+        return piHttp.post('/question-category', model);
+      }
 
-			this.remove = function(id){
-				return piHttp.post('/question-category-remove/' + id);
-			}
+      this.remove = function(id){
+        return piHttp.post('/question-category-remove/' + id);
+      }
 
-			this.get = function(id, model) {
-				return piHttp.get('/question-category/' + id, model);
-			}
+      this.get = function(id, model) {
+        return piHttp.get('/question-category/' + id, model);
+      }
 
-			this.find = function(model) {
-				return piHttp.get('/question-category', {params: model});
-			};
-			return this;
-		}]);
-})();
-
-(function(){
-	angular
-		.module('pi.core.question')
-		.factory('pi.core.question.questionSvc', ['piHttp', function(piHttp){
-
-			this.post = function(model){
-				return piHttp.post('/question', model);
-			}
-
-			this.remove = function(id) {
-				return piHttp.post('/question-remove/' + id);
-			}
-
-			this.put = function(id, model) {
-				return piHttp.post('/question/' + id, model);
-			}
-
-			this.get = function(id, model) {
-				return piHttp.get('/question/' + id, model);
-			}
-
-			this.find = function(model) {
-				return piHttp.get('/question', {params: model});
-			};
-			return this;
-		}]);
+      this.find = function(model) {
+        return piHttp.get('/question-category', {params: model});
+      };
+      return this;
+    }]);
 })();
 
 (function(){
-	angular
-		.module('pi.core.user')
-		.factory('pi.core.user.userSvc', ['piHttp', function(piHttp){
+  angular
+    .module('pi.core.question')
+    .factory('pi.core.question.questionSvc', ['piHttp', function(piHttp){
 
-			this.post = function(model){
-				return piHttp.post('/user', model);
-			}
+      this.post = function(model){
+        return piHttp.post('/question', model);
+      }
 
-			this.remove = function(id) {
-				return piHttp.post('/user-remove/' + id);
-			}
+      this.remove = function(id) {
+        return piHttp.post('/question-remove/' + id);
+      }
 
-			this.put = function(id, model) {
-				return piHttp.post('/user/' + id, model);
-			}
+      this.put = function(id, model) {
+        return piHttp.post('/question/' + id, model);
+      }
 
-			this.get = function(id, model) {
-				return piHttp.get('/user/' + id, model);
-			}
+      this.get = function(id, model) {
+        return piHttp.get('/question/' + id, model);
+      }
 
-			this.find = function(model) {
-				return piHttp.get('/user', {params: model});
-			};
-			return this;
-		}]);
+      this.find = function(model) {
+        return piHttp.get('/question', {params: model});
+      };
+      return this;
+    }]);
 })();
 
 (function(){
-	
-	var apiFn = function(){
-		this.get = function(articleId) {
-			var httpObj = {
-				method: 'GET',
-				url: '/api/blog/article/' + articleId
-			};
+  angular
+    .module('pi.core.user')
+    .factory('pi.core.user.userSvc', ['piHttp', function(piHttp){
 
-			return $http(httpObj);
-		};
+      this.post = function(model){
+        return piHttp.post('/user', model);
+      }
 
-		this.post = function(blogId, model) {
-			model.blogId = blogId;
+      this.remove = function(id) {
+        return piHttp.post('/user-remove/' + id);
+      }
 
-			var httpObj = {
-				method: 'POST',
-				url: '/api/blog/article',
-				data: model
-			};
+      this.put = function(id, model) {
+        return piHttp.post('/user/' + id, model);
+      }
 
-			return $http(httpObj);
-		};
+      this.get = function(id, model) {
+        return piHttp.get('/user/' + id, model);
+      }
 
-		this.put = function(articleId, model) {
-			var httpObj = {
-				method: 'POST',
-				url: '/api/blog/article/:id',
-				data: model
-			};
+      this.find = function(model) {
+        return piHttp.get('/user', {params: model});
+      };
+      return this;
+    }]);
+})();
 
-			return $http(httpObj);
-		};
+(function(){
+  
+  var apiFn = function(){
+    this.get = function(articleId) {
+      var httpObj = {
+        method: 'GET',
+        url: '/api/blog/article/' + articleId
+      };
 
-		this.remove = function(articleId) {
-			var httpObj = {
-				method: 'DELETE',
-				url: '/api/blog/article/' + articleId
-			};
+      return $http(httpObj);
+    };
 
-			return $http(httpObj);
-		};
-	};
+    this.post = function(blogId, model) {
+      model.blogId = blogId;
 
-	var blogArticleResource = function($resource) {
-		return $resource('/api/blog/article/:id');
-	};
-	blogArticleResource.$inject = ['$resource'];
+      var httpObj = {
+        method: 'POST',
+        url: '/api/blog/article',
+        data: model
+      };
 
-	angular
-		.module('pi')
-		.factory('blogArticleResource', blogArticleResource)
-		.service('blogArticleApi', ['$rootScope', '$q', '$http', apiFn]);
+      return $http(httpObj);
+    };
+
+    this.put = function(articleId, model) {
+      var httpObj = {
+        method: 'POST',
+        url: '/api/blog/article/:id',
+        data: model
+      };
+
+      return $http(httpObj);
+    };
+
+    this.remove = function(articleId) {
+      var httpObj = {
+        method: 'DELETE',
+        url: '/api/blog/article/' + articleId
+      };
+
+      return $http(httpObj);
+    };
+  };
+
+  var blogArticleResource = function($resource) {
+    return $resource('/api/blog/article/:id');
+  };
+  blogArticleResource.$inject = ['$resource'];
+
+  angular
+    .module('pi')
+    .factory('blogArticleResource', blogArticleResource)
+    .service('blogArticleApi', ['$rootScope', '$q', '$http', apiFn]);
 
 })();
 /**
@@ -4454,110 +4462,110 @@ var INTEGER_REGEXP = /^\-?\d*$/;
  * @dependencies blogApi
  */
 (function(){
-	
-	var createService = function(blogApi){
+  
+  var createService = function(blogApi){
 
-		var fn = function(blogId) {
-			this.blogId = blogId;
-			this.model = {};
-		};
+    var fn = function(blogId) {
+      this.blogId = blogId;
+      this.model = {};
+    };
 
-		/*
-		 * Title is validated agains the API to check titles already in use
-		 */
-		fn.prototype.slugIsValid = function(){
-			if(blogApi.validateSlugTitle(this.model.title) == false) {
+    /*
+     * Title is validated agains the API to check titles already in use
+     */
+    fn.prototype.slugIsValid = function(){
+      if(blogApi.validateSlugTitle(this.model.title) == false) {
 
-			};
-		};
+      };
+    };
 
-		fn.prototype.validateSeo = function(){
+    fn.prototype.validateSeo = function(){
 
-		};
+    };
 
-		fn.prototype.create = function(){
-			return blogApi.createArticle(this.model);
-		};
+    fn.prototype.create = function(){
+      return blogApi.createArticle(this.model);
+    };
 
-		return fn;
-	};
+    return fn;
+  };
 
-	createService.$inject = ['blogApi'];
+  createService.$inject = ['blogApi'];
 
-	angular
-		.module('pi')
-		.factory('articleCreateService', createService);
+  angular
+    .module('pi')
+    .factory('articleCreateService', createService);
 
 })();
 (function(){
-	var apiFn = function($rootScope, $http, $q){
-		this.get = function(id){
-			var httpObj = {
-				method: 'GET',
-				url: '/api/blog/' + id
-			};
+  var apiFn = function($rootScope, $http, $q){
+    this.get = function(id){
+      var httpObj = {
+        method: 'GET',
+        url: '/api/blog/' + id
+      };
 
-			return $http(httpObj);
-		};
+      return $http(httpObj);
+    };
 
-		this.post = function(model) {
-			var httpObj = {
-				method: 'POST',
-				url: '/api/blog',
-				data: model
-			};
+    this.post = function(model) {
+      var httpObj = {
+        method: 'POST',
+        url: '/api/blog',
+        data: model
+      };
 
-			return $http(httpObj);
-		};
+      return $http(httpObj);
+    };
 
-		this.put = function(blogId, model) {
-			var httpObj = {
-				method: 'POST',
-				url: '/api/blog/' + blogId,
-				datA: datA
-			};
+    this.put = function(blogId, model) {
+      var httpObj = {
+        method: 'POST',
+        url: '/api/blog/' + blogId,
+        datA: datA
+      };
 
-			return $http(httpObj);
-		};
+      return $http(httpObj);
+    };
 
-		this.remove = function(blogId) {
-			var httpObj = {
-				method: 'DELETE',
-				url: '/api/blog/' + blogId
-			};
+    this.remove = function(blogId) {
+      var httpObj = {
+        method: 'DELETE',
+        url: '/api/blog/' + blogId
+      };
 
-			return $http(httpObj);
-		};
-	};
+      return $http(httpObj);
+    };
+  };
 
-	angular
-		.module('pi')
-		.service('blogApi', ['$rootScope', '$http', '$q', apiFn]);
+  angular
+    .module('pi')
+    .service('blogApi', ['$rootScope', '$http', '$q', apiFn]);
 })();
 (function(){
-	var directiveFn = function() {
-		var linkFn = function(scope, element, attrs, blogApi) {
-			scope.model = {};
+  var directiveFn = function() {
+    var linkFn = function(scope, element, attrs, blogApi) {
+      scope.model = {};
 
-			scope.submit = function(){
-				
-				blogApi
-					.post(scope.model)
-					.then(successFn, errorFn);
-			};
-		};
+      scope.submit = function(){
+        
+        blogApi
+          .post(scope.model)
+          .then(successFn, errorFn);
+      };
+    };
 
-		return {
-			link: linkFn,
-			replace: false
-		}
-	};
+    return {
+      link: linkFn,
+      replace: false
+    }
+  };
 
-	angular
-		.module('piBlogCreate', [''])
+  angular
+    .module('piBlogCreate', [''])
 })();
 (function(){
-	var svcFn = function($http, $q, $rootScope, piHttp) {
+  var svcFn = function($http, $q, $rootScope, piHttp) {
 
         /**
          * Login
@@ -4578,9 +4586,9 @@ var INTEGER_REGEXP = /^\-?\d*$/;
          * @param model
          * @returns {*}
          */
-		this.register = function(model){
-			return piHttp.post('/api/account', model)
-		};
+    this.register = function(model){
+      return piHttp.post('/api/account', model)
+    };
 
         /**
          * Request a recover link to email
@@ -4611,12 +4619,12 @@ var INTEGER_REGEXP = /^\-?\d*$/;
                 });
         };
 
-	};
+  };
 
-	angular
-		.module('pi')
-		.service('accountApi', ['$http', '$q', '$rootScope', 'piHttp', svcFn]);
-	})();
+  angular
+    .module('pi')
+    .service('accountApi', ['$http', '$q', '$rootScope', 'piHttp', svcFn]);
+  })();
 (function(){
   var service = function($http, $q) {
 
@@ -4736,150 +4744,150 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 })();
 
 (function(){
-	var svcFn = function(accountApi, $q) {
+  var svcFn = function(accountApi, $q) {
 
-		this.basic = function(email, password, passwordConfirm, requestModel) {
+    this.basic = function(email, password, passwordConfirm, requestModel) {
 
-			if(_.isUndefined(requestModel) && !_.isObject(requestModel)) {
-				requestModel = {};
-			}
-			requestModel.email = email;
-			requestModel.password = password;
+      if(_.isUndefined(requestModel) && !_.isObject(requestModel)) {
+        requestModel = {};
+      }
+      requestModel.email = email;
+      requestModel.password = password;
 
-			var deferred = $q.defer(),
-				successFn = function(res) {
-					deferred.resolve(res.data);
-				},
-				errorFn = function(res) {
-					deferred.reject(res.data);
-				};
+      var deferred = $q.defer(),
+        successFn = function(res) {
+          deferred.resolve(res.data);
+        },
+        errorFn = function(res) {
+          deferred.reject(res.data);
+        };
 
             accountApi.register(requestModel)
-				.then(successFn, errorFn);
+        .then(successFn, errorFn);
 
-			return deferred.promise;
-		};
+      return deferred.promise;
+    };
 
-	};
+  };
 
-	var directiveFn = function(registerSvc){
-		
-		var linkFn = function(scope, element, attrs) {
-			
-			var disposeFn = function(){
+  var directiveFn = function(registerSvc){
+    
+    var linkFn = function(scope, element, attrs) {
+      
+      var disposeFn = function(){
 
-			};
+      };
 
-			element.on('$destroy', disposeFn);
+      element.on('$destroy', disposeFn);
 
-			scope.account = {};
+      scope.account = {};
 
-			scope.submit = function(){
-				var model = {};
-				registerSvc.basic(scope.account.email, scope.account.password, model);
-			};
+      scope.submit = function(){
+        var model = {};
+        registerSvc.basic(scope.account.email, scope.account.password, model);
+      };
 
-		};
-		return {
-			link: linkFn,
-			scope: {
-				'account': ''
-			},
-			replace: false
-		}
-	};
+    };
+    return {
+      link: linkFn,
+      scope: {
+        'account': ''
+      },
+      replace: false
+    }
+  };
 
-	angular
-		.module('pi')
-		.service('registerSvc', ['accountApi', '$q', svcFn])
-		.directive('piRegister', ['registerSvc', directiveFn]);
+  angular
+    .module('pi')
+    .service('registerSvc', ['accountApi', '$q', svcFn])
+    .directive('piRegister', ['registerSvc', directiveFn]);
 
 })();
 
 
 (function(){
 
-	var svcFn = function($http, $q){
-		/**
-		 * Create a new forum
-		 *
-		 * @param model Request model
-		 * @param parentId The forum parent id. If null or undefined, the forum is created as a Parent
-		 */
-		this.create = function(model, parentId) {
+  var svcFn = function($http, $q){
+    /**
+     * Create a new forum
+     *
+     * @param model Request model
+     * @param parentId The forum parent id. If null or undefined, the forum is created as a Parent
+     */
+    this.create = function(model, parentId) {
 
-			var data = angular.copy(model);
-			if(!_.isUndefined(parentId)) {
-				data.parentId = parentId;
-			}
+      var data = angular.copy(model);
+      if(!_.isUndefined(parentId)) {
+        data.parentId = parentId;
+      }
 
-			var deferred = $q.defer(),
-				successFn = function(res) {
-					deferred.resolve(res.data);
-				},
-				errorFn = function(res) {
-					deferred.reject(res.data);
-				},
-				httpObj = {
-					method: 'POST',
-					url: '/api/community/forum',
-					data: data
-				};
+      var deferred = $q.defer(),
+        successFn = function(res) {
+          deferred.resolve(res.data);
+        },
+        errorFn = function(res) {
+          deferred.reject(res.data);
+        },
+        httpObj = {
+          method: 'POST',
+          url: '/api/community/forum',
+          data: data
+        };
 
-			$http(httpObj)
-				.then(successFn, errorFn);
+      $http(httpObj)
+        .then(successFn, errorFn);
 
-			return deferred.promise;
-		};
+      return deferred.promise;
+    };
 
-		this.updateInformation = function(forumId, model) {
-			var data = angular.copy(model);
-			data.id = forumId;
+    this.updateInformation = function(forumId, model) {
+      var data = angular.copy(model);
+      data.id = forumId;
 
-			var deferred = $q.defer(),
-				successFn = function(res) {
-					deferred.resolve(res.data);
-				},
-				errorFn = function(res) {
-					deferred.reject(res);
-				},
-				httpObj = {
-					method: 'POST',
-					url: '/api/community/forum/info',
-					data: data
-				};
+      var deferred = $q.defer(),
+        successFn = function(res) {
+          deferred.resolve(res.data);
+        },
+        errorFn = function(res) {
+          deferred.reject(res);
+        },
+        httpObj = {
+          method: 'POST',
+          url: '/api/community/forum/info',
+          data: data
+        };
 
-			$http(httpObj)
-				.then(successFn, errorFn);
+      $http(httpObj)
+        .then(successFn, errorFn);
 
-			return deferred.promise;
-		};
+      return deferred.promise;
+    };
 
-		this.remove = function(forumId, reason) {
-			var data = {
-					id: forumId
-				},
-				deferred = $q.defer(),
-				succesFn = function(res) {
-					deferred.resolve(res.data);
-				},
-				errorFn = function(res) {
-					deferred.reject(res);
-				},
-				httpObj = {
-					method: 'DELETE',
-					url: '/api/community/forum',
-					data: data
-				};
+    this.remove = function(forumId, reason) {
+      var data = {
+          id: forumId
+        },
+        deferred = $q.defer(),
+        succesFn = function(res) {
+          deferred.resolve(res.data);
+        },
+        errorFn = function(res) {
+          deferred.reject(res);
+        },
+        httpObj = {
+          method: 'DELETE',
+          url: '/api/community/forum',
+          data: data
+        };
 
-			$http(httpObj)
-				.then(successFn, errorFn);
+      $http(httpObj)
+        .then(successFn, errorFn);
 
-			return deferred.promise;
-		};
+      return deferred.promise;
+    };
 
-		angular
-			.module('pi')
-			.service('forumApi', ['$http', '$q', svcFn]);
-	};
+    angular
+      .module('pi')
+      .service('forumApi', ['$http', '$q', svcFn]);
+  };
 });

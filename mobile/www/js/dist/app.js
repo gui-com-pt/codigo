@@ -55,8 +55,8 @@ var boot = function(){
         .module('codigo.core.question', ['codigo.core']);
 
   angular
-    .module('codigo', ['templates', 'pi.core', 'pi.adsense', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
-      'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select', 'angularMoment', 'pi',
+    .module('codigo', ['templates', 'pi', 'pi.core', 'pi.adsense', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
+      'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select', 'angularMoment',
       'piClassHover', 'ngTagsInput', '720kb.socialshare', 'wu.masonry', 'config', 'angular-bind-html-compile']);
 
   angular
@@ -68,12 +68,12 @@ var boot = function(){
         googleAdSenseServiceProvider.setFormat('auto');
 
         piHttpProvider.setBaseUrl('https://codigo.ovh/api');
-
         facebookMetaServiceProvider.setAuthor('https://www.facebook.com/living.with.jesus');
         facebookMetaServiceProvider.setPublisher('https://www.facebook.com/codigo.ovh');
         facebookMetaServiceProvider.setSiteName('Codigo');
         facebookMetaServiceProvider.setType('article');
         facebookMetaServiceProvider.setLocale('pt_PT');
+        facebookMetaServiceProvider.setImage('https://image.freepik.com/free-vector/web-programmer_23-2147502079.jpg');
 
         $urlRouterProvider.otherwise('/');
         $locationProvider.hashPrefix('!');
@@ -493,7 +493,8 @@ var boot = function(){
         .controller('codigo.core.article.articleCreateCtrl', SportsNewsCreateCtrl);
 })();
 (function(){
-    var SportsNewsListCtrl = function(articleSvc, $scope, $stateParams){
+    var SportsNewsListCtrl = function(articleSvc, $scope, $stateParams, facebookMetaService){
+        facebookMetaService.set('Artigos de Informática, Segurança, Programação', 'Os artigos que escrevo são daquilo que aprendo e faço, desde linguagens de programação e segurança informática a notícias e tutoriais.');
         var self = this;
 
         this.news = [];
@@ -542,7 +543,7 @@ var boot = function(){
 
     };
 
-    SportsNewsListCtrl.$inject = ['pi.core.article.articleSvc', '$scope', '$stateParams'];
+    SportsNewsListCtrl.$inject = ['pi.core.article.articleSvc', '$scope', '$stateParams', 'facebookMetaService'];
 
     angular
         .module('codigo')
@@ -591,6 +592,10 @@ var boot = function(){
     var SportsNewsViewCtrl = function(articleSvc, $scope, $stateParams, facebookMetaService) {
         this.id = $stateParams.id;
         var self = this;
+
+        $scope.$on('$destroy', function(){
+            facebookMetaService.clean();
+        })
         articleSvc.get($stateParams.id)
             .then(function(res){
                 facebookMetaService.set(res.data.article.name, res.data.article.headline, res.data.article.image);
@@ -622,7 +627,7 @@ var boot = function(){
 (function(){
     angular
         .module('codigo')
-        .controller('codigo.core.article.categoryListCtrl', ['pi.core.article.articleCategorySvc', function(articleCategorySvc){
+        .controller('codigo.core.article.categoryListCtrl', ['pi.core.article.articleCategorySvc', 'facebookMetaService', function(articleCategorySvc, facebookMetaService){
             var self = this;
 
             articleCategorySvc.find({})

@@ -76,8 +76,7 @@
 .row {
   *zoom: 1; }
   .wrapper:before,
-  .row:before,
-  .wrapper:after,
+  .row:before, .wrapper:after,
   .row:after {
     content: " ";
     display: table; }
@@ -1263,8 +1262,7 @@ a.pi-card__title {
   .pi-nav ul.pi-nav__list-mobile, .pi-nav .pi-nav__brand {
     display: initial;
     -webkit-flex: 50% 1; }
-  .pi-nav
-ul {
+  .pi-nav ul {
     list-style: none;
     position: relative;
     float: left;
@@ -1312,27 +1310,22 @@ ul {
       .pi-nav li {
         display: initial;
         width: initial; } }
-  .pi-nav
-ul li:hover > ul {
+  .pi-nav ul li:hover > ul {
     display: block; }
-  .pi-nav
-ul a {
+  .pi-nav ul a {
     display: block;
     text-decoration: none;
     color: #0e57c8;
     padding: 0 15px; }
-    .pi-nav
-ul a:hover {
+    .pi-nav ul a:hover {
       color: #0e57c8; }
-  .pi-nav
-ul li {
+  .pi-nav ul li {
     color: #0e57c8;
     position: relative;
     float: left;
     margin: 0;
     padding: 0; }
-  .pi-nav
-ul ul {
+  .pi-nav ul ul {
     display: none;
     position: absolute;
     top: 100%;
@@ -1340,21 +1333,17 @@ ul ul {
     padding: 0;
     z-index: 5000;
     background-color: #f6f6f6; }
-  .pi-nav
-ul ul li {
+  .pi-nav ul ul li {
     float: none;
     width: 200px; }
-  .pi-nav ul ul > li > a, .pi-nav
-ul ul > li > span {
+  .pi-nav ul ul > li > a, .pi-nav ul ul > li > span {
     line-height: 120%;
     padding: 10px 12px;
     display: block; }
-    .pi-nav ul ul > li > a:hover, .pi-nav
-ul ul > li > span:hover {
+    .pi-nav ul ul > li > a:hover, .pi-nav ul ul > li > span:hover {
       background-color: white;
       color: #000; }
-  .pi-nav
-ul ul ul {
+  .pi-nav ul ul ul {
     top: 0;
     left: 100%; }
 
@@ -1887,7 +1876,7 @@ See README.md or https://github.com/fraywing/textAngular/wiki for requirements a
   position: absolute;
   top: 50%;
   right: 15px;
-  margin-top: -2px;
+  margin-top: -3px;
   width: 0;
   height: 0;
   border-style: solid;
