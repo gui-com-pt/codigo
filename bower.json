@@ -59,7 +59,6 @@
     "ui-bootstrap": "~0.12.1",
     "ui-router": "~0.2.13",
     "underscore": "~1.8.2",
-    "volupio-angular": "git@gitlab.com:volupio/volupio-angular.git#master",
     "angular-bind-html-compile": "~1.1.0"
   },
   "devDependencies": {

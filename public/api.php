@@ -264,12 +264,12 @@ class InitResponse extends Response {
         $this->notify = $notify;
     }
 }
-class DemoHost extends AppHost {
+class ViseuHost extends AppHost {
 
   public function configure(IContainer $container)
   {
     header('P3P: policyref="/w3c/p3p.xml", CP="ALL IND DSP COR ADM CONo CUR CUSo IVAo IVDo PSA PSD TAI TELo OUR SAMo CNT COM INT NAV ONL PHY PRE PUR UNI"');
-  	$this->config()->domain('codigo.ovh');
+  	$this->config()->domain('viseu.ovh');
     $this->config()->protocol('https');
     
   	$conf = new FileSystemConfiguration();
@@ -282,7 +282,7 @@ class DemoHost extends AppHost {
   	$this->registerService(new InitService());
 
     $db = $container->get('OdmConfiguration');
-    $db->setDefaultDb('codigo');
+    $db->setDefaultDb('viseu');
   }
 }
 
