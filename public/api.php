@@ -264,7 +264,7 @@ class InitResponse extends Response {
         $this->notify = $notify;
     }
 }
-class DemoHost extends AppHost {
+class CodigoHost extends AppHost {
 
   public function configure(IContainer $container)
   {
@@ -276,13 +276,13 @@ class DemoHost extends AppHost {
   	$conf->storeDir(__DIR__ . '/cdn');
   	$this->config()->staticFolder(__DIR__ . '/cdn');
 
-  	$this->addPlugin(new FileSystemPlugin($conf));
-  	$this->addPlugin(new PiUmlPlugin());
-  	$this->addPlugin(new SpotEventsPlugin());
+  	$this->registerPlugin(new FileSystemPlugin($conf));
+  	$this->registerPlugin(new PiUmlPlugin());
+  	$this->registerPlugin(new SpotEventsPlugin());
   	$this->registerService(new InitService());
 
     $db = $container->get('OdmConfiguration');
-    $db->setDefaultDb('codigo');
+    $db->setDefaultDb('viseu');
   }
 }
 

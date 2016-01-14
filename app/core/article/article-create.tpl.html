@@ -25,6 +25,14 @@
                 <div class="pi-form__group">
                     <div placeholder="O conteúdo principal da Notícia" text-angular  ng-model="ctrl.model.articleBody"></div>
                 </div>
+                <div class="pi-form__group">
+                    <ui-select required ng-model="ctrl.refferSelect" theme="selectize">
+                        <ui-select-match placeholder="Referencia">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="cat in ctrl.reffers | filter: $select.search">
+                            <span ng-bind="cat.name | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
                 <div class="pi-form__footer">
                     <button ng-disabled="createForm.$invalid || createForm.$pristine" ng-click="ctrl.create()">Criar</button>
                 </div>
