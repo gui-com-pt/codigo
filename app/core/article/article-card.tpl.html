@@ -1,33 +1,26 @@
 <div class="pi-card" pi-class-hover="pi-card--hover">
+    <span class="pi-card__date" am-time-ago="article.datePublished | amFromUnix"></span> <span class="pi-card__tag" ng-repeat="keyword in article.keywords" ng-bind="keyword"></span>
     <div class="pi-card__thumb">
-        <a ng-style="{'background-image': 'url({{article.image}})'}" class="pi-card__thumb-anchor" ui-sref="article-view({id: article.id})"></a>
+        <a ng-style="{'background-image': 'url({{article.image}})'}" class="pi-card__thumb-anchor" ui-sref="article-view({name: article.name, id: article.id})"></a>
         <div class="pi-card__content">
-        <p ng-bind="article.headline"></p>
-        <ul class="pi-card__social-list">
-            <li>
-                <span href="" socialshare socialshare-hashtags="codigo,programacao" socialshare-provider="facebook" socialshare-text="{{article.headline}}" socialshare-url="http://codigo.ovh/#!/artigo/{{article.id}}"><i class="icon ion-social-facebook-outline"></i></span>
-            </li>
-            <li>
-                <span socialshare socialshare-hashtags="codigo,programacao" socialshare-provider="linkedin" socialshare-text="{{article.headline}}" socialshare-url="http://codigo.ovh/#!/artigo/{{article.id}}"><i class="icon ion-social-linkedin-outline"></i></span>
-            </li>
-            <li>
-                <span href="" socialshare socialshare-via="@codigoovh" socialshare-hashtags="codigo,programacao" socialshare-provider="twitter" socialshare-text="{{article.headline}}" socialshare-url="http://codigo.ovh/#!/artigo/{{article.id}}"><i class="icon ion-social-twitter-outline"></i></span>
-            </li>
-            <li>
-                <span href="" socialshare socialshare-hashtags="codigo,programacao" socialshare-provider="pinterest" socialshare-text="{{article.headline}}" socialshare-url="http://codigo.ovh/#!/artigo/{{article.id}}"><i class="icon ion-social-pinterest-outline"></i></span>
-            </li>
-            <li>
-                <span href="" socialshare socialshare-hashtags="codigo,programacao" socialshare-provider="google+" socialshare-text="{{article.headline}}" socialshare-url="http://codigo.ovh/#!/artigo/{{article.id}}"><i class="icon ion-social-google-outline"></i></span>
-            </li>
-            <li>
-                <span href="" socialshare socialshare-hashtags="codigo,programacao" socialshare-provider="tumblr" socialshare-text="{{article.headline}}" socialshare-url="http://codigo.ovh/#!/artigo/{{article.id}}"><i class="icon ion-social-tumblr-outline"></i></span>
-            </li>
-            <li>
-                <span href="" socialshare socialshare-hashtags="codigo,programacao" socialshare-provider="reddit" socialshare-text="{{article.headline}}" socialshare-url="http://codigo.ovh/#!/artigo/{{article.id}}"><i class="icon ion-social-reddit-outline"></i></span>
-            </li>
-        </ul>
+            <p ng-bind="article.headline"></p>
         </div>
     </div>
-    <a class="pi-card__title" ui-sref="article-view({id: article.id})" ng-bind="article.name"></a>
-    <div class="pi-card__date" am-time-ago="article.datePublished | amFromUnix"></div>
+    <ul class="pi-card__social" ng-if="showSocial">
+        <li>
+            <a href="javascript:void(0)"><i class="icon ion-social-facebook"></i></a>
+            <span class="pi-card__social-count">0</span>
+        </li>
+        <li>
+            <a href="javascript:void(0)"><i class="icon ion-social-twitter"></i></a>
+            <span class="pi-card__social-count">0</span>
+        </li>
+        <li>
+            <a href="javascript:void(0)"><i class="icon ion-social-googleplus"></i></a>
+            <span class="pi-card__social-count">0</span>
+        </li>
+    </ul>
+    <div class="pi-card__info">
+        <a class="pi-card__title" ui-sref="article-view({name: article.urlName, id: article.id})" ng-bind="article.name"></a>
+    </div>
 </div>

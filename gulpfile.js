@@ -63,6 +63,16 @@ var paths = {
         './app/core/*.js',
         './app/core/**/*.js',
         './app/core/**/**/*.js'
+    ],
+    sass: [
+        './app/*.scss',
+        './app/**/*.scss'
+    ],
+    templates: [
+        './app/*.html',
+        './app/**/*.html',
+        './app/**/**/*.html',
+        './app/**/**/**/*.html'
     ]
 };
 

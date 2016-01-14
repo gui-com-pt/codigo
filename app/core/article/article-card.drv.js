@@ -1,10 +1,14 @@
 (function(){
     var nutritionCard = function(ApiIsAuthorService, $rootScope)  {
         var link = function(scope, elem, attrs){
+          if(!_.isDefined(scope.showSocial)) {
+            showSocial = true;
+          }
         }
         return {
           scope: {
-              'article': '='
+              'article': '=',
+              'showSocial': '='
           },
           replace: true,
           templateUrl: 'core/article/article-card.tpl.html',

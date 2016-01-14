@@ -18,6 +18,7 @@ function getCookie(cname) {
         return "";
     }
 
+
     function setCookie(variable, value, expires_seconds) {
         var d = new Date();
         d = new Date(d.getTime() + 1000 * expires_seconds);
@@ -141,6 +142,10 @@ var boot = function(){
                   controller: 'codigo.core.homeCtrl',
                   controllerAs: 'ctrl'
               })
+              .state('services', {
+                  url: '/services',
+                  templateUrl: 'core/services.tpl.html',
+              })
               .state('learn', {
                 url: '/aprende-comigo',
                 templateUrl: 'core/learn.tpl.html',
@@ -202,12 +207,13 @@ var boot = function(){
                   controllerAs: 'ctrl'
               })
               .state('article-view', {
-                  url: '/artigo/:id',
+                  url: '/artigo/:name/art-:id',
                   templateUrl: 'core/article/article-view.tpl.html',
                   controller: 'codigo.core.article.articleViewCtrl',
                   controllerAs: 'ctrl'
               });
 
+              
       }])
     .run(['$rootScope', 'pi.core.article.articleCategorySvc', '$state', 'codigoModel', '$window', '$location',
           function($rootScope, categorySvc, $state, codigoModel, $window, $location){
@@ -447,10 +453,14 @@ var boot = function(){
 (function(){
     var nutritionCard = function(ApiIsAuthorService, $rootScope)  {
         var link = function(scope, elem, attrs){
+          if(!_.isDefined(scope.showSocial)) {
+            showSocial = true;
+          }
         }
         return {
           scope: {
-              'article': '='
+              'article': '=',
+              'showSocial': '='
           },
           replace: true,
           templateUrl: 'core/article/article-card.tpl.html',

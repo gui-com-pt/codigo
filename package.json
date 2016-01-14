@@ -16,6 +16,7 @@
     "require-dir": "^0.3.0"
   },
   "devDependencies": {
+    "gulp-livereload": "^3.8.1",
     "gulp-watch": "^4.3.5",
     "karma": "^0.12.31",
     "karma-chrome-launcher": "~0.1.5",

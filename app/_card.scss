@@ -1,0 +1,163 @@
+%pi-card__player {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  padding-top: 25px;
+  height: 0;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: solid 6px #e1e1e1;
+  }
+}
+
+.pi-card {
+  padding: $component-padding;
+  position: relative;
+
+  .pi-card__content {
+    display: none;
+  }
+}
+
+.pi-card--hover {
+  .pi-card__content {
+    display: block;
+  }
+}
+
+.pi-card__player {
+  @extend %pi-card__player;
+}
+
+.pi-card__photo-img {
+	width: 100%;
+	img {
+		max-width: 100%;
+	}
+	margin-bottom: 8px;
+}
+
+
+.pi-card__date {
+	color: lighten($font-color, 10%);
+  padding: $pi-card-content-padding;
+  font-size: 0.6em;
+  display: inline-block;
+}
+.pi-card__content {
+  font-size: 0.8em;
+  position: absolute;
+  padding: $pi-card-content-padding;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: $pi-card-content-hover-bg;
+}
+
+p.pi-card__content {
+  margin: 0;
+}
+
+.pi-card__gallery {
+	@include container(100%);
+}
+
+.pi-card__gallery-item {
+	@include span(1 of 4);
+
+	&:nth-child(4n) {
+		@include span(1 of 4 last);
+	}
+}
+
+.pi-card__gallery-item-avatar {
+	max-width: 100%;
+}
+
+.pi-card__thumb {
+  position: relative;
+  min-height: 40px;
+  min-width: 110px;
+}
+
+.pi-card__thumb-anchor {
+  display: block;
+}
+$pi-card-content-padding: 5px 5px;
+
+.pi-card__title {
+  padding: $pi-card-content-padding;
+  font-weight: bold;
+}
+
+a.pi-card__title {
+  display: block;
+  color: $text-color;
+
+  &:hover {
+    color: lighten($text-color, 20%);
+  }
+}
+
+
+.pi-card__info {
+  display: block;
+  float: left;
+  min-height: 62px;
+}
+
+.pi-card__social + .pi-card__info {
+  padding-right: 50px;
+}
+
+.pi-card__social {
+  float: right;
+  text-align: right;
+  position: absolute;
+  right: 0;
+  top: auto;
+  margin-top: 0;
+  width: 20px;
+
+
+  > li {
+    height: $font-size-small;
+    display: block;
+    position: relative;
+    list-style: none;
+    margin: 0 0 10px 0;
+    padding: 0;
+
+    > a {
+      float: right;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+    }
+
+    > i.icon, > a > i.icon {
+      font-size: 20px;
+    }
+    
+    > .pi-card__social-count {
+      font-size: $font-size-small;
+      float: left;
+      position: absolute;
+      right: 23px;
+      color: $color-gray-dark;
+      display: block;
+    }
+
+    > i.icon, > a > i.icon, > .pi-card__social-count {
+      line-height: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

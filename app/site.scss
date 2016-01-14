@@ -5,6 +5,7 @@
 $susy: (
         container: 95%
 );
+
 @import "../bower_components/susy/sass/susy";
 @import "../bower_components/compass-breakpoint/stylesheets/breakpoint";
 @import "../bower_components/compass-mixins/lib/compass";
@@ -19,6 +20,7 @@ $susy: (
 @import "prism";
 @import "core/comment";
 $breakpoint-site: 900px;
+@import "card";
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
@@ -81,9 +83,9 @@ body {
 
 
 .pi-card__content > p {
-  max-height: $font-size-small * 4;
-  line-height: $font-size-small;
-  font-size: 10px;
+  max-height: $font-size * 4;
+  /*line-height: $font-size-small;
+  font-size: 10px;*/
   text-overflow: ellipsis;
   word-wrap: break-word;
   overflow: hidden;
@@ -124,9 +126,14 @@ button, input[type="button"] {
   margin-right: auto;
   padding-top: $pi-nav-height + 5px;
 }
+
+.masonry-brick {
+  float: left;
+}
 .masonry-brick__wrapper  > .masonry-brick {
   width: 100%;
 }
+
 @include breakpoint($breakpoint-medium) {
   .masonry-brick__wrapper  > .masonry-brick {
     width: 50%;
@@ -142,8 +149,9 @@ button, input[type="button"] {
 }
 @include breakpoint($breakpoint-site) {
   .masonry-brick__wrapper  > .masonry-brick {
-    width: 25%;
+    width: 33%;
   }
+
 
 	.sidebar-right {
 		@include span(2 of 10 last);
@@ -168,6 +176,7 @@ button, input[type="button"] {
   
   > .pi-card {
     width: 100%;
+    padding: 0px;
   }
 }
 
@@ -191,4 +200,16 @@ button, input[type="button"] {
 
 pre {
   overflow-y: visible;
+}
+
+
+.pi-card {
+  @include clearfix();
+}
+
+.pi-card__tag {
+  @extend color-secondary();
+  padding: $pi-card-content-padding;
+  font-size: 0.6em;
+  display: inline-block;
 }
