@@ -10,7 +10,7 @@
 	configFn.$inject = ['FacebookProvider', '$httpProvider'];
 
 	angular
-		.module('pi', ['ngResource', 'facebook', 'pi.core', 'pi.core.app', 'pi.core.question', 'pi.core.article', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product'])
+		.module('pi', ['ngResource', 'facebook', 'pi.core', 'pi.core.app', 'pi.core.place', 'pi.core.question', 'pi.core.article', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product'])
 		.config(configFn)
 		.provider('pi', [function(){
 			var appId,
@@ -58,6 +58,13 @@
 
 	angular
 		.module('pi.core.question', ['pi.core']);
+
+	angular
+		.module('pi.core.place', ['pi.core']);
+
+	angular
+		.module('pi.ionic', ['pi.core']);
+
 })();
 function getCookie(cname) {
    var name = cname + "=",
@@ -313,6 +320,25 @@ angular
   }]);
 })();
 
+(function(){
+	
+	angular
+		.module('pi.ionic')
+		.config(['$httpProvider', function($httpProvider){
+			$httpProvider.interceptors.push(function($rootScope) {
+		    return {
+		      request: function(config) {
+		        $rootScope.$broadcast('http:start')
+		        return config
+		      },
+		      response: function(response) {
+		        $rootScope.$broadcast('http:end')
+		        return response
+		      }
+		    }
+		  });
+		}]);
+})();
 (function(){
 	'use strict';
 
@@ -870,6 +896,59 @@ angular
         }]);
 })();
 (function(){
+	angular
+		.module('pi.core')
+		.provider('pi.core.responseUtilsSvc', [function(){
+
+			var getModelFromStateParams = function(names, model){
+                angular.forEach(names, function(value){
+                    if(!_.isUndefined($stateParams[value])) {
+                        model[value] = $stateParams[value];
+                    }
+                });
+
+                return model;
+            };
+			return {
+				$get: ['$stateParams', function($stateParams){
+					return {
+						orderByNewest: function(items, keyDate) {
+							if(!_.isArray(items) || !_.isString(keyDate)) {
+								return null;
+							}
+
+							var events = _.groupBy(items, function (event) {
+		                      return moment.utc(event[keyDate], 'X').startOf('day').format('DD-MM-YYYY');
+		                    });
+
+		                    events = _.map(events, function(group, day){
+		                        return {
+		                            day: day,
+		                            results: group
+		                        }
+		                    });
+
+							return events;
+						},
+						getModelFromStateParams: function(names, model){
+		                    return getModelFromStateParams(names, model);
+		                },
+		                getQueryModel: function(data, queryKeys, take){
+		                	var take = _.isNumber(take) ? take : 12,
+		                		model = {
+		                			skip: _.isObject(data) && _.isNumber(data.length) ? data.length : 0, 
+		                			take: take
+		                		};
+
+		                    getModelFromStateParams(queryKeys, model);
+		                    return model;
+		                },
+					}
+				}]
+			}
+		}]);
+})();
+(function(){
   angular
     .module('pi.ui-router')
     .factory('pi.ui-router.stateUtils', ['$stateParams', function($stateParams){
@@ -1059,10 +1138,11 @@ angular
 })();
 (function(){
 	'use strict';
-	var piCommentResource = function($resource) {
+	var piCommentResource = function($resource, piHttp) {
 		return {
 			create: function(namespace, id) {
-				return $resource('/comment/' + namespace + '/' + id,
+
+				return $resource(piHttp.getBaseUrl() + '/comment/' + namespace + '/' + id,
 		            {},
 		            {
 		            'query': {
@@ -1076,7 +1156,7 @@ angular
 			}
 		}
 	};
-	piCommentResource.$inject = ['$resource'];
+	piCommentResource.$inject = ['$resource', 'piHttp'];
 
 	var piCommentWindow = function(piCommentResource) {
 		
@@ -3334,46 +3414,173 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 
 	    }]);
 })();
-/**
-(function(){
+(function() {
+    var svcFn = function($modal, $q) {
 
-	var fn = function($q){
-		var modals = [];
+        var modalSvc = {};
 
-		var add = function(modalObj) {
-			
-		};
+        modalSvc.configuration = {
+            internalErrorTitle: 'Erro Interno',
+            internalErrorContent: 'Ocorreu um erro interno na nossa Plataforma que foi registado. Pedimos desculpa pelo incómodo.'
+        };
 
-		var templatePath, 
-			setTemplatePath = function(path) {
+        this.$get = function(){
 
-		};
+            return modalSvc;
+        };
 
-		var getFn = function(){
-			return {
-				getTemplatePath: function(){
-					return templatePath;
-				}
-			}
-		};
-		getFn.$inject = [];
+        modalSvc.success = function(title, message) {
+            addModal(title, message);
+        };
 
+        modalSvc.internalError = function(response) {
+            addModal(modalSvc.configuration.internalErrorTitle, modalSvc.configuration.internalErrorContent);
+        };
 
-		return {
-			setTemplatePath: setTemplatePath,
-			$get: getFn
-		}
+        var addModal = function(title, message, errors, statusCode) {
+            var deferred = $q.defer();
+            var instance = $modal.open({
+                templateUrl: 'modalDisplay.html',
+                controller: 'modalDisplayCtrl',
+                resolve: {
+                    modalObj: function() {
+                        var res =  {
+                            title: title,
+                            body: message,
+                            errors: _.isArray(errors) && errors.length > 0 ? errors : []
+                        };
+                        if(!_.isUndefined(statusCode)) {
+                            res.sucess = statusCode < 300;
+                            res.warning = statusCode >= 300 && statusCode < 400;
+                            res.error = statusCode >= 400 && statusCode < 600;
+                        } else if(res.errors.length > 0) {
+                            res.sucess = false;
+                            res.warning = false;
+                            res.error = true;
+                        } else {
+                            res.sucess = true;
+                            res.warning = false;
+                            res.error = false;
+                        }
+                        return res;
+                    }
+                }
+            });
 
-		
-	};
+            instance.result.then(function(res) {
+                deferred.resolve(res);
+            }, function(res) {
+                deferred.reject(res);
+            });
 
-	fn.$inject = ['$q'];
+            return deferred.promise;
+        };
 
-	angular
-		.module('pi')
-		.provider('ModalService', fn);
+        var confirmModal = function(title, content, btnConfirm, btnDismiss) {
+            var deferred = $q.defer();
+
+            var instance = $modal.open({
+                templateUrl: 'modalConfirm.html',
+                controller: 'modalConfirmCtrl',
+                resolve: {
+                    model: function(){
+                        return {
+                            title: title,
+                            content: content,
+                            btnDismiss: _.isUndefined(btnDismiss) ? 'Cancelar' : btnDismiss,
+                            btnConfirm: _.isUndefined(btnConfirm) ? 'Ok' : btnConfirm
+                        }
+                    }
+                }
+            });
+
+            instance.result.then(function(res) {
+                deferred.resolve(res);
+            }, function(res) {
+                deferred.reject(res);
+            });
+
+            return deferred.promise;
+        };
+        /**
+         * Modal Confirmation
+         *
+         * @return $q promise to handle the user behaviour: ok or cancel
+         */
+        modalSvc.confirm = confirmModal;
+
+        modalSvc.display = function(res) {
+            var response = _.isUndefined(res.data) ? res : res.data;
+            var title = '';
+            switch (response.statusCode) {
+                case 400:
+                    title = 'Erro de validação';
+                    break;
+                case 500:
+                    title = 'Erro interno';
+                    break;
+            }
+            var errors = _.isArray(response.validationErrors) ?
+                    response.validationErrors :
+                        !_.isUndefined(response.errors)  && _.isArray(response.errors) ? response.errors : [];
+            var message = !_.isEmpty(response.errorDescription) ?
+                    response.errorDescription :
+                !_.isEmpty(response.errorMessage) ? response.errorMessage :
+                !_.isEmpty(response.message) ? response.message :
+                '';
+
+            return addModal(title, message, errors, response.statusCode);
+        };
+
+        return modalSvc;
+    };
+
+    var confirmCtrl = function($scope, $modalInstance, model, $sce) {
+        $scope.title = model.title;
+        $scope.content = model.content;
+        $scope.btnConfirm = model.btnConfirm;
+        $scope.btnDismiss = model.btnDismiss;
+
+        $scope.submit = function(){
+             $modalInstance.close();
+
+        };
+
+        $scope.cancel = function(){
+           $modalInstance.dismiss();
+        };
+    };
+
+    var displayCtrl = function($scope, $modalInstance, modalObj, $sce) {
+        $scope.title = modalObj.title;
+        $scope.instance = $modalInstance;
+        var body = !_.isEmpty(modalObj.body) ? modalObj.body :
+            modalObj.errors.length > 0 ? null : 'Pedimos desculpa, ocorreu um erro interno.';
+
+        $scope.status = {
+            warning: modalObj.warning,
+            error: modalObj.error,
+            success: modalObj.success
+        };
+
+        $scope.body = $sce.trustAsHtml(body);
+        $scope.errors = modalObj.errors;
+
+        $scope.ok = function() {
+            $modalInstance.close();
+        };
+        $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+
+        };
+    };
+
+    angular
+        .module('pi')
+        .service('piModal', ['$modal', '$q', svcFn])
+        .controller('modalConfirmCtrl', ['$scope', '$modalInstance', 'model', '$sce', confirmCtrl])
+        .controller('modalDisplayCtrl', ['$scope', '$modalInstance', 'modalObj', '$sce', displayCtrl]);
 })();
-*/
 (function(){
 	'use strict';
 
@@ -3392,6 +3599,7 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 					return self.baseUrl + url;
 				};
 				var self = this;
+				this.persist = false;
 
 				return  {
 					$get: function($http) {
@@ -3430,6 +3638,45 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 							return self.baseUrl;
 						}
 
+						this.isPersist = function() {
+							return self.persist;
+						}
+
+
+						function insertQuery(tblName, columns, data) {
+							if(!_.isArray(columns) || columns.length === 0) 
+								return null;
+
+							var query = 'INSERT INTO ' + tblName + ' (';
+
+							for (var i = 0; i < columns.length; i++) {
+								query = query + (i === 0)
+									? columns[i] // first column, no comma
+									: ',' + columns[i];
+							};
+							query = query + ') VALUES(';
+
+							for (var i = 0; i < columns.length; i++) {
+								for(var j = 0; j < data.length; j++) {
+									if(!_.isUndefined(data[columns[i]]) &&
+										!_.isUndefined(data[columns[i]['name']]) &&
+										!_.isString(data[columns[i]['name']])) {
+										
+									}
+								}
+								query = query + (i === 0)
+									? '?'
+									: ',?';
+							};
+							query = query + ');';
+
+							return query;
+						};
+
+						this.persist = function(schema, data) {
+							var query = insertQuery(sch)
+						}
+
 						// Return the service object
 						return this;
 					},
@@ -3440,6 +3687,9 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 					},
 					setAuth: function(token) {
 						self.token = token;
+					},
+					setPersist: function(persist) {
+						self.persist = persist;
 					}
 				};
 			}
@@ -3502,12 +3752,19 @@ var INTEGER_REGEXP = /^\-?\d*$/;
           };
 
       piPromptConfirmationStack.open(instance, config);
+      
     };
 
     return this;
   };
 
   promtConfirmation.$inject = ['piPromptConfirmationStack'];
+
+  angular
+    .module('pi')
+    .factory('piPromptConfirmation', promtConfirmation)
+    .factory('piPromptConfirmationStack', piPromptConfirmationStack);
+    
 })();
 
 (function(){
@@ -3854,7 +4111,7 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 			}
 
 			this.find = function(model) {
-				return piHttp.get('/application', model);
+				return piHttp.get('/application', {params: model});
 			}
 
 			this.put = function(id, model){
@@ -3925,10 +4182,114 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 (function(){
 	angular
 		.module('pi.core.article')
-		.factory('pi.core.article.articleSvc', ['piHttp', function(piHttp){
+		.factory('pi.core.article.articleSvc', ['piHttp', '$log', function(piHttp, $log){
+
+			var self = this;
+
+			this.schema = [
+			{
+				name: 'id',
+				type: 'objectId',
+				required: true
+			},
+			{
+				name: 'name',
+				type: 'shortString',
+				required: true
+			},
+			{
+				name: 'headline',
+				type: 'shortString',
+				required: false
+			},
+			{
+				name: 'articleBody',
+				type: 'string',
+				required: true
+			},
+			{
+				name: 'keywords',
+				type: 'string',
+				required: false
+			},
+			{
+				name: 'datePublished',
+				type: 'string',
+				required: false
+			},
+			{
+				name: 'dateCreated',
+				type: 'string',
+				required: false
+			},
+			{
+				name: 'image',
+				type: 'string',
+				required: false
+			},
+			{
+				name: 'categoryPath',
+				type: 'string',
+				required: false
+			},
+			{
+				name: 'category',
+				type: 'string',
+				required: false
+			},
+			{
+				name: 'viewsCounter',
+				type: 'int',
+				required: false
+			},
+			{
+				name: 'state',
+				type: 'int',
+				required: true
+			},
+			{
+				name: 'author',
+				type: 'string',
+				required: false
+			},
+			{
+				name: 'refferName',
+				type: 'string',
+				required: false
+			},
+			{
+				name: 'refferUrl',
+				type: 'string',
+				required: false
+			},
+			{
+				name: 'refferImage',
+				type: 'string',
+				required: false
+			}];
+
 
 			this.post = function(model){
 				return piHttp.post('/article', model);
+			}
+
+			this.postPublisheDate = function(id, date){
+				return piHttp.post('/article-publish/' + id, {
+					id: id,
+					date: date
+				});
+			}
+
+			this.postReffer = function(id, name, url, image){
+				return piHttp.post('/article-reffer/' + id, {
+					refferName: name,
+					refferImage: image,
+					refferUrl: url
+				});
+			}
+
+			this.removeReffer = function(id, name, url, image){
+				return piHttp.delete('/article-reffer/' + id);
 			}
 
 			this.remove = function(id) {
@@ -3942,9 +4303,43 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 			this.get = function(id, model) {
 				return piHttp.get('/article/' + id, model);
 			}
+			
+			this.config = {};
+
+			this.reset = function() {
+				self.config = {
+					lc: 'pt_PT',
+					sortOrder: null,
+					sortBy: null,
+					size: 10
+				};
+			}
+
+			this.withLanguage = function(lc) {
+				self.config.lc = lc;
+			}
+
+			this.sortOrder = function(sort){
+				self.config.sortOrder = sort;
+			}
+
+			this.sortBy = function(sort){
+				self.config.sortBy = sort;
+			}
+
+			this.size = function(size){
+				self.config.size = size;
+			}
 
 			this.find = function(model) {
-				return piHttp.get('/article', {params: model});
+				var promise = piHttp.get('/article', {params: model});
+				self.reset();
+				promise.then(function(res) {
+					if(piHttp.isPersist()) {
+						piHttp.persist(self.schema, res.data.articles);
+					}
+				});
+				return promise;
 			};
 			return this;
 		}]);
@@ -3971,6 +4366,80 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		}]);
 })();
 (function(){
+	
+	angular
+		.module('pi.core.app')
+		.factory('pi.core.app.eventAttendSvc', ['piHttp', function(piHttp){
+			
+			this.post = function(model) {
+				return piHttp.post('/event-attend', model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/event-attend/' + id);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/event-attend', model);
+			}
+
+			return this;
+		}]);
+})();
+(function(){
+	angular
+		.module('pi.core.app')
+		.factory('pi.core.app.eventCategorySvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/event-category', model);
+			}
+
+			this.remove = function(id){
+				return piHttp.post('/event-category-remove/' + id);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/event-category/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/event-category', {params: model});
+			};
+
+			this.put = function(id, model) {
+				return piHttp.post('/event-serie/' + id, model);
+			};
+
+			return this;
+		}]);
+})();
+
+(function(){
+	angular
+		.module('pi.core.app')
+		.factory('pi.core.app.eventSubSvc', ['piHttp', function(piHttp){
+			
+			this.post = function(model) {
+				return piHttp.post('/event-subscription', model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/event-subscription/' + id);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/event-subscription', model);
+			}
+
+			this.remove = function(id) {
+				return piHttp.post('/event-subscription-remove/' + id);
+			};
+
+			return this;
+		}]);
+	})();
+(function(){
 	'use strict';
 
 	angular
@@ -3986,57 +4455,19 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 			}
 
 			this.find = function(model) {
-				return piHttp.get('/event', model);
+				return piHttp.get('/event', {params: model});
 			};
 
 			this.remove = function(id) {
 				return piHttp.post('/event-remove/' + id);
 			};
 
+			this.put = function(id, model) {
+				return piHttp.post('/event/' + id, model);
+			};
+
 			return this;
 		}]);
-
-		angular
-			.module('pi.core.app')
-			.factory('pi.core.app.eventSubSvc', ['piHttp', function(piHttp){
-				
-				this.post = function(model) {
-					return piHttp.post('/event-subscription', model);
-				}
-
-				this.get = function(id, model) {
-					return piHttp.get('/event-subscription/' + id);
-				}
-
-				this.find = function(model) {
-					return piHttp.get('/event-subscription', model);
-				}
-
-				this.remove = function(id) {
-					return piHttp.post('/event-subscription-remove/' + id);
-				};
-
-				return this;
-			}]);
-
-		angular
-			.module('pi.core.app')
-			.factory('pi.core.app.eventAttendSvc', ['piHttp', function(piHttp){
-				
-				this.post = function(model) {
-					return piHttp.post('/event-attend', model);
-				}
-
-				this.get = function(id, model) {
-					return piHttp.get('/event-attend/' + id);
-				}
-
-				this.find = function(model) {
-					return piHttp.get('/event-attend', model);
-				}
-
-				return this;
-			}]);
 })();
 (function(){
     angular
@@ -4218,6 +4649,65 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 })();
 (function(){
 	angular
+		.module('pi.core.place')
+		.factory('pi.core.place.placeCategorySvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/place-category', model);
+			}
+
+			this.remove = function(id){
+				return piHttp.post('/place-category-remove/' + id);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/place-category/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/place-category', {params: model});
+			};
+
+			this.put = function(id, model) {
+				return piHttp.post('/place-serie/' + id, model);
+			};
+
+			return this;
+		}]);
+})();
+
+(function(){
+	'use strict';
+
+	angular
+		.module('pi.core.place')
+		.factory('pi.core.place.placeSvc', ['piHttp', function(piHttp){
+
+			this.post = function(model){
+				return piHttp.post('/place', model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/place/' + id, model);
+			}
+
+			this.find = function(model) {
+				return piHttp.get('/place', {params: model});
+			};
+
+			this.remove = function(id) {
+				return piHttp.post('/place-remove/' + id);
+			};
+
+			this.put = function(id, model) {
+				return piHttp.post('/place/' + id, model);
+			};
+
+			return this;
+		}]);
+})();
+(function(){
+	angular
 		.module('pi.core.product')
 		.factory('pi.core.product.businessEntity', [function(){
 			var svc = [
@@ -4307,7 +4797,7 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 			}
 
 			this.find = function(model) {
-				return piHttp.get('/product', model);
+				return piHttp.get('/product', {params: model});
 			};
 
 			this.postOffer = function(productId, model) {
@@ -4397,6 +4887,82 @@ var INTEGER_REGEXP = /^\-?\d*$/;
 		}]);
 })();
 
+/*
+window.sqlitePlugin = {};
+window.sqlitePlugin.openDatabase = function() {
+	return window.openDatabase('pi', '1.0', 'pidb', 10000000);
+}
+
+(function(){
+	
+	angular
+		.module('pi.ionic.article')
+		.factory('pi.ionic.db', ['$log', function($log) {
+
+			this.processQueries = function(db, queries, dbName) {
+				db.transaction(function(tx) {
+					for (var i = 0; i < queries.length; i++) {
+						tx.executeSql(queries[i], [], 
+							function() {
+								$log.debug(queries.length + ' queries processed.');
+							}, function(tx, err) {
+								$log.debug('failed to process queries');
+							});
+					};
+				})
+			}
+
+			return this;
+		}])
+		.factory('pi.ionic.article.articleSvc', ['piHttp', '$ionicPlatform', '$cordovaSQLite', function(piHttp, $ionicPlatform, $cordovaSQLite){
+
+			var db;
+
+			window.document.addEventListener('deviceready', function(){
+				db = $cordovaSQLite.openDB({
+					name: 'pi',
+					bgType: 1
+				});
+			}, false);
+
+
+			this.post = function(id, name, headline, articleBody, dateCreated, datePublished, state){
+				var query = 'INSERT INTO article (id, name, headline, articleBody, dateCreated, datePublished, state) VALUES (?, ?, ?, ?, ?, ?, ?)',
+					args = [id, name, headline, articleBody, dateCreated, datePublished, state],
+					promise = $cordovaSQLite.execute(db, query, args)
+						.then(function(res){
+							return res;
+						});
+				
+				return promise;
+			}
+
+			this.remove = function(id) {
+				return piHttp.post('/article-remove/' + id);
+			}
+
+			this.put = function(id, model) {
+				return piHttp.post('/article/' + id, model);
+			}
+
+			this.get = function(id, model) {
+				return piHttp.get('/article/' + id, model);
+			}
+
+			this.find = function(model) {
+				var query = 'SELECT * FROM article',
+					promise = $cordovaSQLite.execute(db, query, [])
+						.then(function(res){
+							return res.rows;
+						});
+
+				return promise;
+			};
+			return this;
+		}]);
+})();
+
+*/
 (function(){
 	
 	var apiFn = function(){

@@ -8372,12 +8372,12 @@ angular.module('ngResource', ['ng']).
 })(window, window.angular);
 
 //! moment.js
-//! version : 2.10.6
+//! version : 2.11.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
 
-(function (global, factory) {
+;(function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     global.moment = factory()
@@ -8494,39 +8494,45 @@ angular.module('ngResource', ['ng']).
         return m;
     }
 
+    function isUndefined(input) {
+        return input === void 0;
+    }
+
+    // Plugins that add properties should also add the key here (null value),
+    // so we can properly clone ourselves.
     var momentProperties = utils_hooks__hooks.momentProperties = [];
 
     function copyConfig(to, from) {
         var i, prop, val;
 
-        if (typeof from._isAMomentObject !== 'undefined') {
+        if (!isUndefined(from._isAMomentObject)) {
             to._isAMomentObject = from._isAMomentObject;
         }
-        if (typeof from._i !== 'undefined') {
+        if (!isUndefined(from._i)) {
             to._i = from._i;
         }
-        if (typeof from._f !== 'undefined') {
+        if (!isUndefined(from._f)) {
             to._f = from._f;
         }
-        if (typeof from._l !== 'undefined') {
+        if (!isUndefined(from._l)) {
             to._l = from._l;
         }
-        if (typeof from._strict !== 'undefined') {
+        if (!isUndefined(from._strict)) {
             to._strict = from._strict;
         }
-        if (typeof from._tzm !== 'undefined') {
+        if (!isUndefined(from._tzm)) {
             to._tzm = from._tzm;
         }
-        if (typeof from._isUTC !== 'undefined') {
+        if (!isUndefined(from._isUTC)) {
             to._isUTC = from._isUTC;
         }
-        if (typeof from._offset !== 'undefined') {
+        if (!isUndefined(from._offset)) {
             to._offset = from._offset;
         }
-        if (typeof from._pf !== 'undefined') {
+        if (!isUndefined(from._pf)) {
             to._pf = getParsingFlags(from);
         }
-        if (typeof from._locale !== 'undefined') {
+        if (!isUndefined(from._locale)) {
             to._locale = from._locale;
         }
 
@@ -8534,7 +8540,7 @@ angular.module('ngResource', ['ng']).
             for (i in momentProperties) {
                 prop = momentProperties[i];
                 val = from[prop];
-                if (typeof val !== 'undefined') {
+                if (!isUndefined(val)) {
                     to[prop] = val;
                 }
             }
@@ -8581,6 +8587,7 @@ angular.module('ngResource', ['ng']).
         return value;
     }
 
+    // compare two arrays, return the number of differences
     function compareArrays(array1, array2, dontConvert) {
         var len = Math.min(array1.length, array2.length),
             lengthDiff = Math.abs(array1.length - array2.length),
@@ -8598,6 +8605,7 @@ angular.module('ngResource', ['ng']).
     function Locale() {
     }
 
+    // internal storage for locale config files
     var locales = {};
     var globalLocale;
 
@@ -8635,7 +8643,7 @@ angular.module('ngResource', ['ng']).
     function loadLocale(name) {
         var oldLocale = null;
         // TODO: Find a better way to register and load all the locales in Node
-        if (!locales[name] && typeof module !== 'undefined' &&
+        if (!locales[name] && (typeof module !== 'undefined') &&
                 module && module.exports) {
             try {
                 oldLocale = globalLocale._abbr;
@@ -8654,7 +8662,7 @@ angular.module('ngResource', ['ng']).
     function locale_locales__getSetGlobalLocale (key, values) {
         var data;
         if (key) {
-            if (typeof values === 'undefined') {
+            if (isUndefined(values)) {
                 data = locale_locales__getLocale(key);
             }
             else {
@@ -8739,6 +8747,10 @@ angular.module('ngResource', ['ng']).
         return normalizedInput;
     }
 
+    function isFunction(input) {
+        return input instanceof Function || Object.prototype.toString.call(input) === '[object Function]';
+    }
+
     function makeGetSet (unit, keepTime) {
         return function (value) {
             if (value != null) {
@@ -8752,11 +8764,14 @@ angular.module('ngResource', ['ng']).
     }
 
     function get_set__get (mom, unit) {
-        return mom._d['get' + (mom._isUTC ? 'UTC' : '') + unit]();
+        return mom.isValid() ?
+            mom._d['get' + (mom._isUTC ? 'UTC' : '') + unit]() : NaN;
     }
 
     function get_set__set (mom, unit, value) {
-        return mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
+        if (mom.isValid()) {
+            mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
+        }
     }
 
     // MOMENTS
@@ -8769,7 +8784,7 @@ angular.module('ngResource', ['ng']).
             }
         } else {
             units = normalizeUnits(units);
-            if (typeof this[units] === 'function') {
+            if (isFunction(this[units])) {
                 return this[units](value);
             }
         }
@@ -8784,7 +8799,7 @@ angular.module('ngResource', ['ng']).
             Math.pow(10, Math.max(0, zerosToFill)).toString().substr(1) + absNumber;
     }
 
-    var formattingTokens = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Q|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g;
+    var formattingTokens = /(\[[^\[]*\])|(\\)?([Hh]mm(ss)?|Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Qo?|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g;
 
     var localFormattingTokens = /(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g;
 
@@ -8880,6 +8895,8 @@ angular.module('ngResource', ['ng']).
     var match4         = /\d{4}/;         //    0000 - 9999
     var match6         = /[+-]?\d{6}/;    // -999999 - 999999
     var match1to2      = /\d\d?/;         //       0 - 99
+    var match3to4      = /\d\d\d\d?/;     //     999 - 9999
+    var match5to6      = /\d\d\d\d\d\d?/; //   99999 - 999999
     var match1to3      = /\d{1,3}/;       //       0 - 999
     var match1to4      = /\d{1,4}/;       //       0 - 9999
     var match1to6      = /[+-]?\d{1,6}/;  // -999999 - 999999
@@ -8888,23 +8905,19 @@ angular.module('ngResource', ['ng']).
     var matchSigned    = /[+-]?\d+/;      //    -inf - inf
 
     var matchOffset    = /Z|[+-]\d\d:?\d\d/gi; // +00:00 -00:00 +0000 -0000 or Z
+    var matchShortOffset = /Z|[+-]\d\d(?::?\d\d)?/gi; // +00 -00 +00:00 -00:00 +0000 -0000 or Z
 
     var matchTimestamp = /[+-]?\d+(\.\d{1,3})?/; // 123456789 123456789.123
 
     // any word (or two) characters or numbers including two/three word month in arabic.
+    // includes scottish gaelic two word and hyphenated months
     var matchWord = /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i;
+
 
     var regexes = {};
 
-    function isFunction (sth) {
-        // https://github.com/moment/moment/issues/2325
-        return typeof sth === 'function' &&
-            Object.prototype.toString.call(sth) === '[object Function]';
-    }
-
-
     function addRegexToken (token, regex, strictRegex) {
-        regexes[token] = isFunction(regex) ? regex : function (isStrict) {
+        regexes[token] = isFunction(regex) ? regex : function (isStrict, localeData) {
             return (isStrict && strictRegex) ? strictRegex : regex;
         };
     }
@@ -8919,9 +8932,13 @@ angular.module('ngResource', ['ng']).
 
     // Code from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
     function unescapeFormat(s) {
-        return s.replace('\\', '').replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g, function (matched, p1, p2, p3, p4) {
+        return regexEscape(s.replace('\\', '').replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g, function (matched, p1, p2, p3, p4) {
             return p1 || p2 || p3 || p4;
-        }).replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        }));
+    }
+
+    function regexEscape(s) {
+        return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     }
 
     var tokens = {};
@@ -8961,6 +8978,8 @@ angular.module('ngResource', ['ng']).
     var MINUTE = 4;
     var SECOND = 5;
     var MILLISECOND = 6;
+    var WEEK = 7;
+    var WEEKDAY = 8;
 
     function daysInMonth(year, month) {
         return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
@@ -8988,8 +9007,12 @@ angular.module('ngResource', ['ng']).
 
     addRegexToken('M',    match1to2);
     addRegexToken('MM',   match1to2, match2);
-    addRegexToken('MMM',  matchWord);
-    addRegexToken('MMMM', matchWord);
+    addRegexToken('MMM',  function (isStrict, locale) {
+        return locale.monthsShortRegex(isStrict);
+    });
+    addRegexToken('MMMM', function (isStrict, locale) {
+        return locale.monthsRegex(isStrict);
+    });
 
     addParseToken(['M', 'MM'], function (input, array) {
         array[MONTH] = toInt(input) - 1;
@@ -9007,14 +9030,17 @@ angular.module('ngResource', ['ng']).
 
     // LOCALES
 
+    var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/;
     var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
-    function localeMonths (m) {
-        return this._months[m.month()];
+    function localeMonths (m, format) {
+        return isArray(this._months) ? this._months[m.month()] :
+            this._months[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
     }
 
     var defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_');
-    function localeMonthsShort (m) {
-        return this._monthsShort[m.month()];
+    function localeMonthsShort (m, format) {
+        return isArray(this._monthsShort) ? this._monthsShort[m.month()] :
+            this._monthsShort[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
     }
 
     function localeMonthsParse (monthName, format, strict) {
@@ -9053,6 +9079,11 @@ angular.module('ngResource', ['ng']).
     function setMonth (mom, value) {
         var dayOfMonth;
 
+        if (!mom.isValid()) {
+            // No op
+            return mom;
+        }
+
         // TODO: Move this out of here!
         if (typeof value === 'string') {
             value = mom.localeData().monthsParse(value);
@@ -9081,6 +9112,72 @@ angular.module('ngResource', ['ng']).
         return daysInMonth(this.year(), this.month());
     }
 
+    var defaultMonthsShortRegex = matchWord;
+    function monthsShortRegex (isStrict) {
+        if (this._monthsParseExact) {
+            if (!hasOwnProp(this, '_monthsRegex')) {
+                computeMonthsParse.call(this);
+            }
+            if (isStrict) {
+                return this._monthsShortStrictRegex;
+            } else {
+                return this._monthsShortRegex;
+            }
+        } else {
+            return this._monthsShortStrictRegex && isStrict ?
+                this._monthsShortStrictRegex : this._monthsShortRegex;
+        }
+    }
+
+    var defaultMonthsRegex = matchWord;
+    function monthsRegex (isStrict) {
+        if (this._monthsParseExact) {
+            if (!hasOwnProp(this, '_monthsRegex')) {
+                computeMonthsParse.call(this);
+            }
+            if (isStrict) {
+                return this._monthsStrictRegex;
+            } else {
+                return this._monthsRegex;
+            }
+        } else {
+            return this._monthsStrictRegex && isStrict ?
+                this._monthsStrictRegex : this._monthsRegex;
+        }
+    }
+
+    function computeMonthsParse () {
+        function cmpLenRev(a, b) {
+            return b.length - a.length;
+        }
+
+        var shortPieces = [], longPieces = [], mixedPieces = [],
+            i, mom;
+        for (i = 0; i < 12; i++) {
+            // make the regex if we don't have it already
+            mom = create_utc__createUTC([2000, i]);
+            shortPieces.push(this.monthsShort(mom, ''));
+            longPieces.push(this.months(mom, ''));
+            mixedPieces.push(this.months(mom, ''));
+            mixedPieces.push(this.monthsShort(mom, ''));
+        }
+        // Sorting makes sure if one month (or abbr) is a prefix of another it
+        // will match the longer piece.
+        shortPieces.sort(cmpLenRev);
+        longPieces.sort(cmpLenRev);
+        mixedPieces.sort(cmpLenRev);
+        for (i = 0; i < 12; i++) {
+            shortPieces[i] = regexEscape(shortPieces[i]);
+            longPieces[i] = regexEscape(longPieces[i]);
+            mixedPieces[i] = regexEscape(mixedPieces[i]);
+        }
+
+        this._monthsRegex = new RegExp('^(' + mixedPieces.join('|') + ')', 'i');
+        this._monthsShortRegex = this._monthsRegex;
+        this._monthsStrictRegex = new RegExp('^(' + longPieces.join('|') + ')$', 'i');
+        this._monthsShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')$', 'i');
+    }
+
     function checkOverflow (m) {
         var overflow;
         var a = m._a;
@@ -9098,6 +9195,12 @@ angular.module('ngResource', ['ng']).
             if (getParsingFlags(m)._overflowDayOfYear && (overflow < YEAR || overflow > DATE)) {
                 overflow = DATE;
             }
+            if (getParsingFlags(m)._overflowWeeks && overflow === -1) {
+                overflow = WEEK;
+            }
+            if (getParsingFlags(m)._overflowWeekday && overflow === -1) {
+                overflow = WEEKDAY;
+            }
 
             getParsingFlags(m).overflow = overflow;
         }
@@ -9106,7 +9209,8 @@ angular.module('ngResource', ['ng']).
     }
 
     function warn(msg) {
-        if (utils_hooks__hooks.suppressDeprecationWarnings === false && typeof console !== 'undefined' && console.warn) {
+        if (utils_hooks__hooks.suppressDeprecationWarnings === false &&
+                (typeof console !==  'undefined') && console.warn) {
             console.warn('Deprecation warning: ' + msg);
         }
     }
@@ -9116,7 +9220,7 @@ angular.module('ngResource', ['ng']).
 
         return extend(function () {
             if (firstTime) {
-                warn(msg + '\n' + (new Error()).stack);
+                warn(msg + '\nArguments: ' + Array.prototype.slice.call(arguments).join(', ') + '\n' + (new Error()).stack);
                 firstTime = false;
             }
             return fn.apply(this, arguments);
@@ -9134,22 +9238,39 @@ angular.module('ngResource', ['ng']).
 
     utils_hooks__hooks.suppressDeprecationWarnings = false;
 
-    var from_string__isoRegex = /^\s*(?:[+-]\d{6}|\d{4})-(?:(\d\d-\d\d)|(W\d\d$)|(W\d\d-\d)|(\d\d\d))((T| )(\d\d(:\d\d(:\d\d(\.\d+)?)?)?)?([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/;
+    // iso 8601 regex
+    // 0000-00-00 0000-W00 or 0000-W00-0 + T + 00 or 00:00 or 00:00:00 or 00:00:00.000 + +00:00 or +0000 or +00)
+    var extendedIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})-(?:\d\d-\d\d|W\d\d-\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?::\d\d(?::\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?/;
+    var basicIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})(?:\d\d\d\d|W\d\d\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?:\d\d(?:\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?/;
+
+    var tzRegex = /Z|[+-]\d\d(?::?\d\d)?/;
 
     var isoDates = [
-        ['YYYYYY-MM-DD', /[+-]\d{6}-\d{2}-\d{2}/],
-        ['YYYY-MM-DD', /\d{4}-\d{2}-\d{2}/],
-        ['GGGG-[W]WW-E', /\d{4}-W\d{2}-\d/],
-        ['GGGG-[W]WW', /\d{4}-W\d{2}/],
-        ['YYYY-DDD', /\d{4}-\d{3}/]
+        ['YYYYYY-MM-DD', /[+-]\d{6}-\d\d-\d\d/],
+        ['YYYY-MM-DD', /\d{4}-\d\d-\d\d/],
+        ['GGGG-[W]WW-E', /\d{4}-W\d\d-\d/],
+        ['GGGG-[W]WW', /\d{4}-W\d\d/, false],
+        ['YYYY-DDD', /\d{4}-\d{3}/],
+        ['YYYY-MM', /\d{4}-\d\d/, false],
+        ['YYYYYYMMDD', /[+-]\d{10}/],
+        ['YYYYMMDD', /\d{8}/],
+        // YYYYMM is NOT allowed by the standard
+        ['GGGG[W]WWE', /\d{4}W\d{3}/],
+        ['GGGG[W]WW', /\d{4}W\d{2}/, false],
+        ['YYYYDDD', /\d{7}/]
     ];
 
     // iso time formats and regexes
     var isoTimes = [
-        ['HH:mm:ss.SSSS', /(T| )\d\d:\d\d:\d\d\.\d+/],
-        ['HH:mm:ss', /(T| )\d\d:\d\d:\d\d/],
-        ['HH:mm', /(T| )\d\d:\d\d/],
-        ['HH', /(T| )\d\d/]
+        ['HH:mm:ss.SSSS', /\d\d:\d\d:\d\d\.\d+/],
+        ['HH:mm:ss,SSSS', /\d\d:\d\d:\d\d,\d+/],
+        ['HH:mm:ss', /\d\d:\d\d:\d\d/],
+        ['HH:mm', /\d\d:\d\d/],
+        ['HHmmss.SSSS', /\d\d\d\d\d\d\.\d+/],
+        ['HHmmss,SSSS', /\d\d\d\d\d\d,\d+/],
+        ['HHmmss', /\d\d\d\d\d\d/],
+        ['HHmm', /\d\d\d\d/],
+        ['HH', /\d\d/]
     ];
 
     var aspNetJsonRegex = /^\/?Date\((\-?\d+)/i;
@@ -9158,26 +9279,49 @@ angular.module('ngResource', ['ng']).
     function configFromISO(config) {
         var i, l,
             string = config._i,
-            match = from_string__isoRegex.exec(string);
+            match = extendedIsoRegex.exec(string) || basicIsoRegex.exec(string),
+            allowTime, dateFormat, timeFormat, tzFormat;
 
         if (match) {
             getParsingFlags(config).iso = true;
+
             for (i = 0, l = isoDates.length; i < l; i++) {
-                if (isoDates[i][1].exec(string)) {
-                    config._f = isoDates[i][0];
+                if (isoDates[i][1].exec(match[1])) {
+                    dateFormat = isoDates[i][0];
+                    allowTime = isoDates[i][2] !== false;
                     break;
                 }
             }
-            for (i = 0, l = isoTimes.length; i < l; i++) {
-                if (isoTimes[i][1].exec(string)) {
-                    // match[6] should be 'T' or space
-                    config._f += (match[6] || ' ') + isoTimes[i][0];
-                    break;
+            if (dateFormat == null) {
+                config._isValid = false;
+                return;
+            }
+            if (match[3]) {
+                for (i = 0, l = isoTimes.length; i < l; i++) {
+                    if (isoTimes[i][1].exec(match[3])) {
+                        // match[2] should be 'T' or space
+                        timeFormat = (match[2] || ' ') + isoTimes[i][0];
+                        break;
+                    }
+                }
+                if (timeFormat == null) {
+                    config._isValid = false;
+                    return;
                 }
             }
-            if (string.match(matchOffset)) {
-                config._f += 'Z';
+            if (!allowTime && timeFormat != null) {
+                config._isValid = false;
+                return;
             }
+            if (match[4]) {
+                if (tzRegex.exec(match[4])) {
+                    tzFormat = 'Z';
+                } else {
+                    config._isValid = false;
+                    return;
+                }
+            }
+            config._f = dateFormat + (timeFormat || '') + (tzFormat || '');
             configFromStringAndFormat(config);
         } else {
             config._isValid = false;
@@ -9215,8 +9359,8 @@ angular.module('ngResource', ['ng']).
         //http://stackoverflow.com/questions/181348/instantiating-a-javascript-object-by-calling-prototype-constructor-apply
         var date = new Date(y, m, d, h, M, s, ms);
 
-        //the date constructor doesn't accept years < 1970
-        if (y < 1970) {
+        //the date constructor remaps years 0-99 to 1900-1999
+        if (y < 100 && y >= 0 && isFinite(date.getFullYear())) {
             date.setFullYear(y);
         }
         return date;
@@ -9224,11 +9368,20 @@ angular.module('ngResource', ['ng']).
 
     function createUTCDate (y) {
         var date = new Date(Date.UTC.apply(null, arguments));
-        if (y < 1970) {
+
+        //the Date.UTC function remaps years 0-99 to 1900-1999
+        if (y < 100 && y >= 0 && isFinite(date.getUTCFullYear())) {
             date.setUTCFullYear(y);
         }
         return date;
     }
+
+    // FORMATTING
+
+    addFormatToken('Y', 0, 0, function () {
+        var y = this.year();
+        return y <= 9999 ? '' + y : '+' + y;
+    });
 
     addFormatToken(0, ['YY', 2], 0, function () {
         return this.year() % 100;
@@ -9257,6 +9410,9 @@ angular.module('ngResource', ['ng']).
     addParseToken('YY', function (input, array) {
         array[YEAR] = utils_hooks__hooks.parseTwoDigitYear(input);
     });
+    addParseToken('Y', function (input, array) {
+        array[YEAR] = parseInt(input, 10);
+    });
 
     // HELPERS
 
@@ -9282,124 +9438,66 @@ angular.module('ngResource', ['ng']).
         return isLeapYear(this.year());
     }
 
-    addFormatToken('w', ['ww', 2], 'wo', 'week');
-    addFormatToken('W', ['WW', 2], 'Wo', 'isoWeek');
+    // start-of-first-week - start-of-year
+    function firstWeekOffset(year, dow, doy) {
+        var // first-week day -- which january is always in the first week (4 for iso, 1 for other)
+            fwd = 7 + dow - doy,
+            // first-week day local weekday -- which local weekday is fwd
+            fwdlw = (7 + createUTCDate(year, 0, fwd).getUTCDay() - dow) % 7;
 
-    // ALIASES
-
-    addUnitAlias('week', 'w');
-    addUnitAlias('isoWeek', 'W');
-
-    // PARSING
-
-    addRegexToken('w',  match1to2);
-    addRegexToken('ww', match1to2, match2);
-    addRegexToken('W',  match1to2);
-    addRegexToken('WW', match1to2, match2);
-
-    addWeekParseToken(['w', 'ww', 'W', 'WW'], function (input, week, config, token) {
-        week[token.substr(0, 1)] = toInt(input);
-    });
-
-    // HELPERS
-
-    // firstDayOfWeek       0 = sun, 6 = sat
-    //                      the day of the week that starts the week
-    //                      (usually sunday or monday)
-    // firstDayOfWeekOfYear 0 = sun, 6 = sat
-    //                      the first week is the week that contains the first
-    //                      of this day of the week
-    //                      (eg. ISO weeks use thursday (4))
-    function weekOfYear(mom, firstDayOfWeek, firstDayOfWeekOfYear) {
-        var end = firstDayOfWeekOfYear - firstDayOfWeek,
-            daysToDayOfWeek = firstDayOfWeekOfYear - mom.day(),
-            adjustedMoment;
-
-
-        if (daysToDayOfWeek > end) {
-            daysToDayOfWeek -= 7;
-        }
-
-        if (daysToDayOfWeek < end - 7) {
-            daysToDayOfWeek += 7;
-        }
-
-        adjustedMoment = local__createLocal(mom).add(daysToDayOfWeek, 'd');
-        return {
-            week: Math.ceil(adjustedMoment.dayOfYear() / 7),
-            year: adjustedMoment.year()
-        };
+        return -fwdlw + fwd - 1;
     }
-
-    // LOCALES
-
-    function localeWeek (mom) {
-        return weekOfYear(mom, this._week.dow, this._week.doy).week;
-    }
-
-    var defaultLocaleWeek = {
-        dow : 0, // Sunday is the first day of the week.
-        doy : 6  // The week that contains Jan 1st is the first week of the year.
-    };
-
-    function localeFirstDayOfWeek () {
-        return this._week.dow;
-    }
-
-    function localeFirstDayOfYear () {
-        return this._week.doy;
-    }
-
-    // MOMENTS
-
-    function getSetWeek (input) {
-        var week = this.localeData().week(this);
-        return input == null ? week : this.add((input - week) * 7, 'd');
-    }
-
-    function getSetISOWeek (input) {
-        var week = weekOfYear(this, 1, 4).week;
-        return input == null ? week : this.add((input - week) * 7, 'd');
-    }
-
-    addFormatToken('DDD', ['DDDD', 3], 'DDDo', 'dayOfYear');
-
-    // ALIASES
-
-    addUnitAlias('dayOfYear', 'DDD');
-
-    // PARSING
-
-    addRegexToken('DDD',  match1to3);
-    addRegexToken('DDDD', match3);
-    addParseToken(['DDD', 'DDDD'], function (input, array, config) {
-        config._dayOfYear = toInt(input);
-    });
-
-    // HELPERS
 
     //http://en.wikipedia.org/wiki/ISO_week_date#Calculating_a_date_given_the_year.2C_week_number_and_weekday
-    function dayOfYearFromWeeks(year, week, weekday, firstDayOfWeekOfYear, firstDayOfWeek) {
-        var week1Jan = 6 + firstDayOfWeek - firstDayOfWeekOfYear, janX = createUTCDate(year, 0, 1 + week1Jan), d = janX.getUTCDay(), dayOfYear;
-        if (d < firstDayOfWeek) {
-            d += 7;
+    function dayOfYearFromWeeks(year, week, weekday, dow, doy) {
+        var localWeekday = (7 + weekday - dow) % 7,
+            weekOffset = firstWeekOffset(year, dow, doy),
+            dayOfYear = 1 + 7 * (week - 1) + localWeekday + weekOffset,
+            resYear, resDayOfYear;
+
+        if (dayOfYear <= 0) {
+            resYear = year - 1;
+            resDayOfYear = daysInYear(resYear) + dayOfYear;
+        } else if (dayOfYear > daysInYear(year)) {
+            resYear = year + 1;
+            resDayOfYear = dayOfYear - daysInYear(year);
+        } else {
+            resYear = year;
+            resDayOfYear = dayOfYear;
         }
 
-        weekday = weekday != null ? 1 * weekday : firstDayOfWeek;
-
-        dayOfYear = 1 + week1Jan + 7 * (week - 1) - d + weekday;
-
         return {
-            year: dayOfYear > 0 ? year : year - 1,
-            dayOfYear: dayOfYear > 0 ?  dayOfYear : daysInYear(year - 1) + dayOfYear
+            year: resYear,
+            dayOfYear: resDayOfYear
         };
     }
 
-    // MOMENTS
+    function weekOfYear(mom, dow, doy) {
+        var weekOffset = firstWeekOffset(mom.year(), dow, doy),
+            week = Math.floor((mom.dayOfYear() - weekOffset - 1) / 7) + 1,
+            resWeek, resYear;
 
-    function getSetDayOfYear (input) {
-        var dayOfYear = Math.round((this.clone().startOf('day') - this.clone().startOf('year')) / 864e5) + 1;
-        return input == null ? dayOfYear : this.add((input - dayOfYear), 'd');
+        if (week < 1) {
+            resYear = mom.year() - 1;
+            resWeek = week + weeksInYear(resYear, dow, doy);
+        } else if (week > weeksInYear(mom.year(), dow, doy)) {
+            resWeek = week - weeksInYear(mom.year(), dow, doy);
+            resYear = mom.year() + 1;
+        } else {
+            resYear = mom.year();
+            resWeek = week;
+        }
+
+        return {
+            week: resWeek,
+            year: resYear
+        };
+    }
+
+    function weeksInYear(year, dow, doy) {
+        var weekOffset = firstWeekOffset(year, dow, doy),
+            weekOffsetNext = firstWeekOffset(year + 1, dow, doy);
+        return (daysInYear(year) - weekOffset + weekOffsetNext) / 7;
     }
 
     // Pick the first defined of two or three arguments.
@@ -9414,11 +9512,12 @@ angular.module('ngResource', ['ng']).
     }
 
     function currentDateArray(config) {
-        var now = new Date();
+        // hooks is actually the exported moment object
+        var nowValue = new Date(utils_hooks__hooks.now());
         if (config._useUTC) {
-            return [now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()];
+            return [nowValue.getUTCFullYear(), nowValue.getUTCMonth(), nowValue.getUTCDate()];
         }
-        return [now.getFullYear(), now.getMonth(), now.getDate()];
+        return [nowValue.getFullYear(), nowValue.getMonth(), nowValue.getDate()];
     }
 
     // convert an array to a date.
@@ -9488,7 +9587,7 @@ angular.module('ngResource', ['ng']).
     }
 
     function dayOfYearFromWeekInfo(config) {
-        var w, weekYear, week, weekday, dow, doy, temp;
+        var w, weekYear, week, weekday, dow, doy, temp, weekdayOverflow;
 
         w = config._w;
         if (w.GG != null || w.W != null || w.E != null) {
@@ -9502,6 +9601,9 @@ angular.module('ngResource', ['ng']).
             weekYear = defaults(w.GG, config._a[YEAR], weekOfYear(local__createLocal(), 1, 4).year);
             week = defaults(w.W, 1);
             weekday = defaults(w.E, 1);
+            if (weekday < 1 || weekday > 7) {
+                weekdayOverflow = true;
+            }
         } else {
             dow = config._locale._week.dow;
             doy = config._locale._week.doy;
@@ -9512,23 +9614,32 @@ angular.module('ngResource', ['ng']).
             if (w.d != null) {
                 // weekday -- low day numbers are considered next week
                 weekday = w.d;
-                if (weekday < dow) {
-                    ++week;
+                if (weekday < 0 || weekday > 6) {
+                    weekdayOverflow = true;
                 }
             } else if (w.e != null) {
                 // local weekday -- counting starts from begining of week
                 weekday = w.e + dow;
+                if (w.e < 0 || w.e > 6) {
+                    weekdayOverflow = true;
+                }
             } else {
                 // default to begining of week
                 weekday = dow;
             }
         }
-        temp = dayOfYearFromWeeks(weekYear, week, weekday, doy, dow);
-
-        config._a[YEAR] = temp.year;
-        config._dayOfYear = temp.dayOfYear;
+        if (week < 1 || week > weeksInYear(weekYear, dow, doy)) {
+            getParsingFlags(config)._overflowWeeks = true;
+        } else if (weekdayOverflow != null) {
+            getParsingFlags(config)._overflowWeekday = true;
+        } else {
+            temp = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy);
+            config._a[YEAR] = temp.year;
+            config._dayOfYear = temp.dayOfYear;
+        }
     }
 
+    // constant that refers to the ISO standard
     utils_hooks__hooks.ISO_8601 = function () {};
 
     // date from string and format string
@@ -9553,6 +9664,8 @@ angular.module('ngResource', ['ng']).
         for (i = 0; i < tokens.length; i++) {
             token = tokens[i];
             parsedInput = (string.match(getParseRegexForToken(token, config)) || [])[0];
+            // console.log('token', token, 'parsedInput', parsedInput,
+            //         'regex', getParseRegexForToken(token, config));
             if (parsedInput) {
                 skipped = string.substr(0, string.indexOf(parsedInput));
                 if (skipped.length > 0) {
@@ -9621,6 +9734,7 @@ angular.module('ngResource', ['ng']).
         }
     }
 
+    // date from string and array of format strings
     function configFromStringAndArray(config) {
         var tempConfig,
             bestMoment,
@@ -9671,7 +9785,9 @@ angular.module('ngResource', ['ng']).
         }
 
         var i = normalizeObjectUnits(config._i);
-        config._a = [i.year, i.month, i.day || i.date, i.hour, i.minute, i.second, i.millisecond];
+        config._a = map([i.year, i.month, i.day || i.date, i.hour, i.minute, i.second, i.millisecond], function (obj) {
+            return obj && parseInt(obj, 10);
+        });
 
         configFromArray(config);
     }
@@ -9713,13 +9829,17 @@ angular.module('ngResource', ['ng']).
             configFromInput(config);
         }
 
+        if (!valid__isValid(config)) {
+            config._d = null;
+        }
+
         return config;
     }
 
     function configFromInput(config) {
         var input = config._i;
         if (input === undefined) {
-            config._d = new Date();
+            config._d = new Date(utils_hooks__hooks.now());
         } else if (isDate(input)) {
             config._d = new Date(+input);
         } else if (typeof input === 'string') {
@@ -9766,7 +9886,11 @@ angular.module('ngResource', ['ng']).
          'moment().min is deprecated, use moment.min instead. https://github.com/moment/moment/issues/1548',
          function () {
              var other = local__createLocal.apply(null, arguments);
-             return other < this ? this : other;
+             if (this.isValid() && other.isValid()) {
+                 return other < this ? this : other;
+             } else {
+                 return valid__createInvalid();
+             }
          }
      );
 
@@ -9774,7 +9898,11 @@ angular.module('ngResource', ['ng']).
         'moment().max is deprecated, use moment.max instead. https://github.com/moment/moment/issues/1548',
         function () {
             var other = local__createLocal.apply(null, arguments);
-            return other > this ? this : other;
+            if (this.isValid() && other.isValid()) {
+                return other > this ? this : other;
+            } else {
+                return valid__createInvalid();
+            }
         }
     );
 
@@ -9812,6 +9940,10 @@ angular.module('ngResource', ['ng']).
 
         return pickBy('isAfter', args);
     }
+
+    var now = function () {
+        return Date.now ? Date.now() : +(new Date());
+    };
 
     function Duration (duration) {
         var normalizedInput = normalizeObjectUnits(duration),
@@ -9852,6 +9984,8 @@ angular.module('ngResource', ['ng']).
         return obj instanceof Duration;
     }
 
+    // FORMATTING
+
     function offset (token, separator) {
         addFormatToken(token, 0, 0, function () {
             var offset = this.utcOffset();
@@ -9869,11 +10003,11 @@ angular.module('ngResource', ['ng']).
 
     // PARSING
 
-    addRegexToken('Z',  matchOffset);
-    addRegexToken('ZZ', matchOffset);
+    addRegexToken('Z',  matchShortOffset);
+    addRegexToken('ZZ', matchShortOffset);
     addParseToken(['Z', 'ZZ'], function (input, array, config) {
         config._useUTC = true;
-        config._tzm = offsetFromString(input);
+        config._tzm = offsetFromString(matchShortOffset, input);
     });
 
     // HELPERS
@@ -9883,8 +10017,8 @@ angular.module('ngResource', ['ng']).
     // '-1530'  > ['-15', '30']
     var chunkOffset = /([\+\-]|\d\d)/gi;
 
-    function offsetFromString(string) {
-        var matches = ((string || '').match(matchOffset) || []);
+    function offsetFromString(matcher, string) {
+        var matches = ((string || '').match(matcher) || []);
         var chunk   = matches[matches.length - 1] || [];
         var parts   = (chunk + '').match(chunkOffset) || ['-', 0, 0];
         var minutes = +(parts[1] * 60) + toInt(parts[2]);
@@ -9934,11 +10068,13 @@ angular.module('ngResource', ['ng']).
     function getSetOffset (input, keepLocalTime) {
         var offset = this._offset || 0,
             localAdjust;
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
         if (input != null) {
             if (typeof input === 'string') {
-                input = offsetFromString(input);
-            }
-            if (Math.abs(input) < 16) {
+                input = offsetFromString(matchShortOffset, input);
+            } else if (Math.abs(input) < 16) {
                 input = input * 60;
             }
             if (!this._isUTC && keepLocalTime) {
@@ -9998,12 +10134,15 @@ angular.module('ngResource', ['ng']).
         if (this._tzm) {
             this.utcOffset(this._tzm);
         } else if (typeof this._i === 'string') {
-            this.utcOffset(offsetFromString(this._i));
+            this.utcOffset(offsetFromString(matchOffset, this._i));
         }
         return this;
     }
 
     function hasAlignedHourOffset (input) {
+        if (!this.isValid()) {
+            return false;
+        }
         input = input ? local__createLocal(input).utcOffset() : 0;
 
         return (this.utcOffset() - input) % 60 === 0;
@@ -10017,7 +10156,7 @@ angular.module('ngResource', ['ng']).
     }
 
     function isDaylightSavingTimeShifted () {
-        if (typeof this._isDSTShifted !== 'undefined') {
+        if (!isUndefined(this._isDSTShifted)) {
             return this._isDSTShifted;
         }
 
@@ -10038,22 +10177,23 @@ angular.module('ngResource', ['ng']).
     }
 
     function isLocal () {
-        return !this._isUTC;
+        return this.isValid() ? !this._isUTC : false;
     }
 
     function isUtcOffset () {
-        return this._isUTC;
+        return this.isValid() ? this._isUTC : false;
     }
 
     function isUtc () {
-        return this._isUTC && this._offset === 0;
+        return this.isValid() ? this._isUTC && this._offset === 0 : false;
     }
 
-    var aspNetRegex = /(\-)?(?:(\d*)\.)?(\d+)\:(\d+)(?:\:(\d+)\.?(\d{3})?)?/;
+    // ASP.NET json date format regex
+    var aspNetRegex = /(\-)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)\.?(\d{3})?)?/;
 
     // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
     // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
-    var create__isoRegex = /^(-)?P(?:(?:([0-9,.]*)Y)?(?:([0-9,.]*)M)?(?:([0-9,.]*)D)?(?:T(?:([0-9,.]*)H)?(?:([0-9,.]*)M)?(?:([0-9,.]*)S)?)?|([0-9,.]*)W)$/;
+    var isoRegex = /^(-)?P(?:(?:([0-9,.]*)Y)?(?:([0-9,.]*)M)?(?:([0-9,.]*)D)?(?:T(?:([0-9,.]*)H)?(?:([0-9,.]*)M)?(?:([0-9,.]*)S)?)?|([0-9,.]*)W)$/;
 
     function create__createDuration (input, key) {
         var duration = input,
@@ -10086,7 +10226,7 @@ angular.module('ngResource', ['ng']).
                 s  : toInt(match[SECOND])      * sign,
                 ms : toInt(match[MILLISECOND]) * sign
             };
-        } else if (!!(match = create__isoRegex.exec(input))) {
+        } else if (!!(match = isoRegex.exec(input))) {
             sign = (match[1] === '-') ? -1 : 1;
             duration = {
                 y : parseIso(match[2], sign),
@@ -10143,6 +10283,10 @@ angular.module('ngResource', ['ng']).
 
     function momentsDifference(base, other) {
         var res;
+        if (!(base.isValid() && other.isValid())) {
+            return {milliseconds: 0, months: 0};
+        }
+
         other = cloneWithOffset(other, base);
         if (base.isBefore(other)) {
             res = positiveMomentsDifference(base, other);
@@ -10155,6 +10299,7 @@ angular.module('ngResource', ['ng']).
         return res;
     }
 
+    // TODO: remove 'name' arg after deprecation is removed
     function createAdder(direction, name) {
         return function (val, period) {
             var dur, tmp;
@@ -10175,6 +10320,12 @@ angular.module('ngResource', ['ng']).
         var milliseconds = duration._milliseconds,
             days = duration._days,
             months = duration._months;
+
+        if (!mom.isValid()) {
+            // No op
+            return;
+        }
+
         updateOffset = updateOffset == null ? true : updateOffset;
 
         if (milliseconds) {
@@ -10206,7 +10357,10 @@ angular.module('ngResource', ['ng']).
                 diff < 1 ? 'sameDay' :
                 diff < 2 ? 'nextDay' :
                 diff < 7 ? 'nextWeek' : 'sameElse';
-        return this.format(formats && formats[format] || this.localeData().calendar(format, this, local__createLocal(now)));
+
+        var output = formats && (isFunction(formats[format]) ? formats[format]() : formats[format]);
+
+        return this.format(output || this.localeData().calendar(format, this, local__createLocal(now)));
     }
 
     function clone () {
@@ -10214,26 +10368,28 @@ angular.module('ngResource', ['ng']).
     }
 
     function isAfter (input, units) {
-        var inputMs;
-        units = normalizeUnits(typeof units !== 'undefined' ? units : 'millisecond');
+        var localInput = isMoment(input) ? input : local__createLocal(input);
+        if (!(this.isValid() && localInput.isValid())) {
+            return false;
+        }
+        units = normalizeUnits(!isUndefined(units) ? units : 'millisecond');
         if (units === 'millisecond') {
-            input = isMoment(input) ? input : local__createLocal(input);
-            return +this > +input;
+            return +this > +localInput;
         } else {
-            inputMs = isMoment(input) ? +input : +local__createLocal(input);
-            return inputMs < +this.clone().startOf(units);
+            return +localInput < +this.clone().startOf(units);
         }
     }
 
     function isBefore (input, units) {
-        var inputMs;
-        units = normalizeUnits(typeof units !== 'undefined' ? units : 'millisecond');
+        var localInput = isMoment(input) ? input : local__createLocal(input);
+        if (!(this.isValid() && localInput.isValid())) {
+            return false;
+        }
+        units = normalizeUnits(!isUndefined(units) ? units : 'millisecond');
         if (units === 'millisecond') {
-            input = isMoment(input) ? input : local__createLocal(input);
-            return +this < +input;
+            return +this < +localInput;
         } else {
-            inputMs = isMoment(input) ? +input : +local__createLocal(input);
-            return +this.clone().endOf(units) < inputMs;
+            return +this.clone().endOf(units) < +localInput;
         }
     }
 
@@ -10242,21 +10398,44 @@ angular.module('ngResource', ['ng']).
     }
 
     function isSame (input, units) {
-        var inputMs;
+        var localInput = isMoment(input) ? input : local__createLocal(input),
+            inputMs;
+        if (!(this.isValid() && localInput.isValid())) {
+            return false;
+        }
         units = normalizeUnits(units || 'millisecond');
         if (units === 'millisecond') {
-            input = isMoment(input) ? input : local__createLocal(input);
-            return +this === +input;
+            return +this === +localInput;
         } else {
-            inputMs = +local__createLocal(input);
+            inputMs = +localInput;
             return +(this.clone().startOf(units)) <= inputMs && inputMs <= +(this.clone().endOf(units));
         }
     }
 
+    function isSameOrAfter (input, units) {
+        return this.isSame(input, units) || this.isAfter(input,units);
+    }
+
+    function isSameOrBefore (input, units) {
+        return this.isSame(input, units) || this.isBefore(input,units);
+    }
+
     function diff (input, units, asFloat) {
-        var that = cloneWithOffset(input, this),
-            zoneDelta = (that.utcOffset() - this.utcOffset()) * 6e4,
+        var that,
+            zoneDelta,
             delta, output;
+
+        if (!this.isValid()) {
+            return NaN;
+        }
+
+        that = cloneWithOffset(input, this);
+
+        if (!that.isValid()) {
+            return NaN;
+        }
+
+        zoneDelta = (that.utcOffset() - this.utcOffset()) * 6e4;
 
         units = normalizeUnits(units);
 
@@ -10308,7 +10487,7 @@ angular.module('ngResource', ['ng']).
     function moment_format__toISOString () {
         var m = this.clone().utc();
         if (0 < m.year() && m.year() <= 9999) {
-            if ('function' === typeof Date.prototype.toISOString) {
+            if (isFunction(Date.prototype.toISOString)) {
                 // native implementation is ~50x faster, use it when we can
                 return this.toDate().toISOString();
             } else {
@@ -10325,10 +10504,13 @@ angular.module('ngResource', ['ng']).
     }
 
     function from (time, withoutSuffix) {
-        if (!this.isValid()) {
+        if (this.isValid() &&
+                ((isMoment(time) && time.isValid()) ||
+                 local__createLocal(time).isValid())) {
+            return create__createDuration({to: this, from: time}).locale(this.locale()).humanize(!withoutSuffix);
+        } else {
             return this.localeData().invalidDate();
         }
-        return create__createDuration({to: this, from: time}).locale(this.locale()).humanize(!withoutSuffix);
     }
 
     function fromNow (withoutSuffix) {
@@ -10336,16 +10518,22 @@ angular.module('ngResource', ['ng']).
     }
 
     function to (time, withoutSuffix) {
-        if (!this.isValid()) {
+        if (this.isValid() &&
+                ((isMoment(time) && time.isValid()) ||
+                 local__createLocal(time).isValid())) {
+            return create__createDuration({from: this, to: time}).locale(this.locale()).humanize(!withoutSuffix);
+        } else {
             return this.localeData().invalidDate();
         }
-        return create__createDuration({from: this, to: time}).locale(this.locale()).humanize(!withoutSuffix);
     }
 
     function toNow (withoutSuffix) {
         return this.to(local__createLocal(), withoutSuffix);
     }
 
+    // If passed a locale key, it will set the locale for this
+    // instance.  Otherwise, it will return the locale configuration
+    // variables for this instance.
     function locale (key) {
         var newLocaleData;
 
@@ -10456,6 +10644,11 @@ angular.module('ngResource', ['ng']).
         };
     }
 
+    function toJSON () {
+        // JSON.stringify(new Date(NaN)) === 'null'
+        return this.isValid() ? this.toISOString() : 'null';
+    }
+
     function moment_valid__isValid () {
         return valid__isValid(this);
     }
@@ -10467,6 +10660,18 @@ angular.module('ngResource', ['ng']).
     function invalidAt () {
         return getParsingFlags(this).overflow;
     }
+
+    function creationData() {
+        return {
+            input: this._i,
+            format: this._f,
+            locale: this._locale,
+            isUTC: this._isUTC,
+            strict: this._strict
+        };
+    }
+
+    // FORMATTING
 
     addFormatToken(0, ['gg', 2], 0, function () {
         return this.weekYear() % 100;
@@ -10509,22 +10714,20 @@ angular.module('ngResource', ['ng']).
         week[token] = utils_hooks__hooks.parseTwoDigitYear(input);
     });
 
-    // HELPERS
-
-    function weeksInYear(year, dow, doy) {
-        return weekOfYear(local__createLocal([year, 11, 31 + dow - doy]), dow, doy).week;
-    }
-
     // MOMENTS
 
     function getSetWeekYear (input) {
-        var year = weekOfYear(this, this.localeData()._week.dow, this.localeData()._week.doy).year;
-        return input == null ? year : this.add((input - year), 'y');
+        return getSetWeekYearHelper.call(this,
+                input,
+                this.week(),
+                this.weekday(),
+                this.localeData()._week.dow,
+                this.localeData()._week.doy);
     }
 
     function getSetISOWeekYear (input) {
-        var year = weekOfYear(this, 1, 4).year;
-        return input == null ? year : this.add((input - year), 'y');
+        return getSetWeekYearHelper.call(this,
+                input, this.isoWeek(), this.isoWeekday(), 1, 4);
     }
 
     function getISOWeeksInYear () {
@@ -10536,7 +10739,33 @@ angular.module('ngResource', ['ng']).
         return weeksInYear(this.year(), weekInfo.dow, weekInfo.doy);
     }
 
-    addFormatToken('Q', 0, 0, 'quarter');
+    function getSetWeekYearHelper(input, week, weekday, dow, doy) {
+        var weeksTarget;
+        if (input == null) {
+            return weekOfYear(this, dow, doy).year;
+        } else {
+            weeksTarget = weeksInYear(input, dow, doy);
+            if (week > weeksTarget) {
+                week = weeksTarget;
+            }
+            return setWeekAll.call(this, input, week, weekday, dow, doy);
+        }
+    }
+
+    function setWeekAll(weekYear, week, weekday, dow, doy) {
+        var dayOfYearData = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy),
+            date = createUTCDate(dayOfYearData.year, 0, dayOfYearData.dayOfYear);
+
+        // console.log("got", weekYear, week, weekday, "set", date.toISOString());
+        this.year(date.getUTCFullYear());
+        this.month(date.getUTCMonth());
+        this.date(date.getUTCDate());
+        return this;
+    }
+
+    // FORMATTING
+
+    addFormatToken('Q', 0, 'Qo', 'quarter');
 
     // ALIASES
 
@@ -10554,6 +10783,62 @@ angular.module('ngResource', ['ng']).
     function getSetQuarter (input) {
         return input == null ? Math.ceil((this.month() + 1) / 3) : this.month((input - 1) * 3 + this.month() % 3);
     }
+
+    // FORMATTING
+
+    addFormatToken('w', ['ww', 2], 'wo', 'week');
+    addFormatToken('W', ['WW', 2], 'Wo', 'isoWeek');
+
+    // ALIASES
+
+    addUnitAlias('week', 'w');
+    addUnitAlias('isoWeek', 'W');
+
+    // PARSING
+
+    addRegexToken('w',  match1to2);
+    addRegexToken('ww', match1to2, match2);
+    addRegexToken('W',  match1to2);
+    addRegexToken('WW', match1to2, match2);
+
+    addWeekParseToken(['w', 'ww', 'W', 'WW'], function (input, week, config, token) {
+        week[token.substr(0, 1)] = toInt(input);
+    });
+
+    // HELPERS
+
+    // LOCALES
+
+    function localeWeek (mom) {
+        return weekOfYear(mom, this._week.dow, this._week.doy).week;
+    }
+
+    var defaultLocaleWeek = {
+        dow : 0, // Sunday is the first day of the week.
+        doy : 6  // The week that contains Jan 1st is the first week of the year.
+    };
+
+    function localeFirstDayOfWeek () {
+        return this._week.dow;
+    }
+
+    function localeFirstDayOfYear () {
+        return this._week.doy;
+    }
+
+    // MOMENTS
+
+    function getSetWeek (input) {
+        var week = this.localeData().week(this);
+        return input == null ? week : this.add((input - week) * 7, 'd');
+    }
+
+    function getSetISOWeek (input) {
+        var week = weekOfYear(this, 1, 4).week;
+        return input == null ? week : this.add((input - week) * 7, 'd');
+    }
+
+    // FORMATTING
 
     addFormatToken('D', ['DD', 2], 'Do', 'date');
 
@@ -10577,6 +10862,8 @@ angular.module('ngResource', ['ng']).
     // MOMENTS
 
     var getSetDayOfMonth = makeGetSet('Date', true);
+
+    // FORMATTING
 
     addFormatToken('d', 0, 'do', 'day');
 
@@ -10610,8 +10897,8 @@ angular.module('ngResource', ['ng']).
     addRegexToken('ddd',  matchWord);
     addRegexToken('dddd', matchWord);
 
-    addWeekParseToken(['dd', 'ddd', 'dddd'], function (input, week, config) {
-        var weekday = config._locale.weekdaysParse(input);
+    addWeekParseToken(['dd', 'ddd', 'dddd'], function (input, week, config, token) {
+        var weekday = config._locale.weekdaysParse(input, token, config._strict);
         // if we didn't get a weekday name, mark the date as invalid
         if (weekday != null) {
             week.d = weekday;
@@ -10646,8 +10933,9 @@ angular.module('ngResource', ['ng']).
     // LOCALES
 
     var defaultLocaleWeekdays = 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_');
-    function localeWeekdays (m) {
-        return this._weekdays[m.day()];
+    function localeWeekdays (m, format) {
+        return isArray(this._weekdays) ? this._weekdays[m.day()] :
+            this._weekdays[this._weekdays.isFormat.test(format) ? 'format' : 'standalone'][m.day()];
     }
 
     var defaultLocaleWeekdaysShort = 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_');
@@ -10660,20 +10948,37 @@ angular.module('ngResource', ['ng']).
         return this._weekdaysMin[m.day()];
     }
 
-    function localeWeekdaysParse (weekdayName) {
+    function localeWeekdaysParse (weekdayName, format, strict) {
         var i, mom, regex;
 
-        this._weekdaysParse = this._weekdaysParse || [];
+        if (!this._weekdaysParse) {
+            this._weekdaysParse = [];
+            this._minWeekdaysParse = [];
+            this._shortWeekdaysParse = [];
+            this._fullWeekdaysParse = [];
+        }
 
         for (i = 0; i < 7; i++) {
             // make the regex if we don't have it already
+
+            mom = local__createLocal([2000, 1]).day(i);
+            if (strict && !this._fullWeekdaysParse[i]) {
+                this._fullWeekdaysParse[i] = new RegExp('^' + this.weekdays(mom, '').replace('.', '\.?') + '$', 'i');
+                this._shortWeekdaysParse[i] = new RegExp('^' + this.weekdaysShort(mom, '').replace('.', '\.?') + '$', 'i');
+                this._minWeekdaysParse[i] = new RegExp('^' + this.weekdaysMin(mom, '').replace('.', '\.?') + '$', 'i');
+            }
             if (!this._weekdaysParse[i]) {
-                mom = local__createLocal([2000, 1]).day(i);
                 regex = '^' + this.weekdays(mom, '') + '|^' + this.weekdaysShort(mom, '') + '|^' + this.weekdaysMin(mom, '');
                 this._weekdaysParse[i] = new RegExp(regex.replace('.', ''), 'i');
             }
             // test the regex
-            if (this._weekdaysParse[i].test(weekdayName)) {
+            if (strict && format === 'dddd' && this._fullWeekdaysParse[i].test(weekdayName)) {
+                return i;
+            } else if (strict && format === 'ddd' && this._shortWeekdaysParse[i].test(weekdayName)) {
+                return i;
+            } else if (strict && format === 'dd' && this._minWeekdaysParse[i].test(weekdayName)) {
+                return i;
+            } else if (!strict && this._weekdaysParse[i].test(weekdayName)) {
                 return i;
             }
         }
@@ -10682,6 +10987,9 @@ angular.module('ngResource', ['ng']).
     // MOMENTS
 
     function getSetDayOfWeek (input) {
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
         var day = this._isUTC ? this._d.getUTCDay() : this._d.getDay();
         if (input != null) {
             input = parseWeekday(input, this.localeData());
@@ -10692,20 +11000,73 @@ angular.module('ngResource', ['ng']).
     }
 
     function getSetLocaleDayOfWeek (input) {
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
         var weekday = (this.day() + 7 - this.localeData()._week.dow) % 7;
         return input == null ? weekday : this.add(input - weekday, 'd');
     }
 
     function getSetISODayOfWeek (input) {
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
         // behaves the same as moment#day except
         // as a getter, returns 7 instead of 0 (1-7 range instead of 0-6)
         // as a setter, sunday should belong to the previous week.
         return input == null ? this.day() || 7 : this.day(this.day() % 7 ? input : input - 7);
     }
 
-    addFormatToken('H', ['HH', 2], 0, 'hour');
-    addFormatToken('h', ['hh', 2], 0, function () {
+    // FORMATTING
+
+    addFormatToken('DDD', ['DDDD', 3], 'DDDo', 'dayOfYear');
+
+    // ALIASES
+
+    addUnitAlias('dayOfYear', 'DDD');
+
+    // PARSING
+
+    addRegexToken('DDD',  match1to3);
+    addRegexToken('DDDD', match3);
+    addParseToken(['DDD', 'DDDD'], function (input, array, config) {
+        config._dayOfYear = toInt(input);
+    });
+
+    // HELPERS
+
+    // MOMENTS
+
+    function getSetDayOfYear (input) {
+        var dayOfYear = Math.round((this.clone().startOf('day') - this.clone().startOf('year')) / 864e5) + 1;
+        return input == null ? dayOfYear : this.add((input - dayOfYear), 'd');
+    }
+
+    // FORMATTING
+
+    function hFormat() {
         return this.hours() % 12 || 12;
+    }
+
+    addFormatToken('H', ['HH', 2], 0, 'hour');
+    addFormatToken('h', ['hh', 2], 0, hFormat);
+
+    addFormatToken('hmm', 0, 0, function () {
+        return '' + hFormat.apply(this) + zeroFill(this.minutes(), 2);
+    });
+
+    addFormatToken('hmmss', 0, 0, function () {
+        return '' + hFormat.apply(this) + zeroFill(this.minutes(), 2) +
+            zeroFill(this.seconds(), 2);
+    });
+
+    addFormatToken('Hmm', 0, 0, function () {
+        return '' + this.hours() + zeroFill(this.minutes(), 2);
+    });
+
+    addFormatToken('Hmmss', 0, 0, function () {
+        return '' + this.hours() + zeroFill(this.minutes(), 2) +
+            zeroFill(this.seconds(), 2);
     });
 
     function meridiem (token, lowercase) {
@@ -10734,6 +11095,11 @@ angular.module('ngResource', ['ng']).
     addRegexToken('HH', match1to2, match2);
     addRegexToken('hh', match1to2, match2);
 
+    addRegexToken('hmm', match3to4);
+    addRegexToken('hmmss', match5to6);
+    addRegexToken('Hmm', match3to4);
+    addRegexToken('Hmmss', match5to6);
+
     addParseToken(['H', 'HH'], HOUR);
     addParseToken(['a', 'A'], function (input, array, config) {
         config._isPm = config._locale.isPM(input);
@@ -10742,6 +11108,32 @@ angular.module('ngResource', ['ng']).
     addParseToken(['h', 'hh'], function (input, array, config) {
         array[HOUR] = toInt(input);
         getParsingFlags(config).bigHour = true;
+    });
+    addParseToken('hmm', function (input, array, config) {
+        var pos = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos));
+        array[MINUTE] = toInt(input.substr(pos));
+        getParsingFlags(config).bigHour = true;
+    });
+    addParseToken('hmmss', function (input, array, config) {
+        var pos1 = input.length - 4;
+        var pos2 = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos1));
+        array[MINUTE] = toInt(input.substr(pos1, 2));
+        array[SECOND] = toInt(input.substr(pos2));
+        getParsingFlags(config).bigHour = true;
+    });
+    addParseToken('Hmm', function (input, array, config) {
+        var pos = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos));
+        array[MINUTE] = toInt(input.substr(pos));
+    });
+    addParseToken('Hmmss', function (input, array, config) {
+        var pos1 = input.length - 4;
+        var pos2 = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos1));
+        array[MINUTE] = toInt(input.substr(pos1, 2));
+        array[SECOND] = toInt(input.substr(pos2));
     });
 
     // LOCALES
@@ -10770,6 +11162,8 @@ angular.module('ngResource', ['ng']).
     // this rule.
     var getSetHour = makeGetSet('Hours', true);
 
+    // FORMATTING
+
     addFormatToken('m', ['mm', 2], 0, 'minute');
 
     // ALIASES
@@ -10786,6 +11180,8 @@ angular.module('ngResource', ['ng']).
 
     var getSetMinute = makeGetSet('Minutes', false);
 
+    // FORMATTING
+
     addFormatToken('s', ['ss', 2], 0, 'second');
 
     // ALIASES
@@ -10801,6 +11197,8 @@ angular.module('ngResource', ['ng']).
     // MOMENTS
 
     var getSetSecond = makeGetSet('Seconds', false);
+
+    // FORMATTING
 
     addFormatToken('S', 0, 0, function () {
         return ~~(this.millisecond() / 100);
@@ -10857,6 +11255,8 @@ angular.module('ngResource', ['ng']).
 
     var getSetMillisecond = makeGetSet('Milliseconds', false);
 
+    // FORMATTING
+
     addFormatToken('z',  0, 0, 'zoneAbbr');
     addFormatToken('zz', 0, 0, 'zoneName');
 
@@ -10872,40 +11272,43 @@ angular.module('ngResource', ['ng']).
 
     var momentPrototype__proto = Moment.prototype;
 
-    momentPrototype__proto.add          = add_subtract__add;
-    momentPrototype__proto.calendar     = moment_calendar__calendar;
-    momentPrototype__proto.clone        = clone;
-    momentPrototype__proto.diff         = diff;
-    momentPrototype__proto.endOf        = endOf;
-    momentPrototype__proto.format       = format;
-    momentPrototype__proto.from         = from;
-    momentPrototype__proto.fromNow      = fromNow;
-    momentPrototype__proto.to           = to;
-    momentPrototype__proto.toNow        = toNow;
-    momentPrototype__proto.get          = getSet;
-    momentPrototype__proto.invalidAt    = invalidAt;
-    momentPrototype__proto.isAfter      = isAfter;
-    momentPrototype__proto.isBefore     = isBefore;
-    momentPrototype__proto.isBetween    = isBetween;
-    momentPrototype__proto.isSame       = isSame;
-    momentPrototype__proto.isValid      = moment_valid__isValid;
-    momentPrototype__proto.lang         = lang;
-    momentPrototype__proto.locale       = locale;
-    momentPrototype__proto.localeData   = localeData;
-    momentPrototype__proto.max          = prototypeMax;
-    momentPrototype__proto.min          = prototypeMin;
-    momentPrototype__proto.parsingFlags = parsingFlags;
-    momentPrototype__proto.set          = getSet;
-    momentPrototype__proto.startOf      = startOf;
-    momentPrototype__proto.subtract     = add_subtract__subtract;
-    momentPrototype__proto.toArray      = toArray;
-    momentPrototype__proto.toObject     = toObject;
-    momentPrototype__proto.toDate       = toDate;
-    momentPrototype__proto.toISOString  = moment_format__toISOString;
-    momentPrototype__proto.toJSON       = moment_format__toISOString;
-    momentPrototype__proto.toString     = toString;
-    momentPrototype__proto.unix         = unix;
-    momentPrototype__proto.valueOf      = to_type__valueOf;
+    momentPrototype__proto.add               = add_subtract__add;
+    momentPrototype__proto.calendar          = moment_calendar__calendar;
+    momentPrototype__proto.clone             = clone;
+    momentPrototype__proto.diff              = diff;
+    momentPrototype__proto.endOf             = endOf;
+    momentPrototype__proto.format            = format;
+    momentPrototype__proto.from              = from;
+    momentPrototype__proto.fromNow           = fromNow;
+    momentPrototype__proto.to                = to;
+    momentPrototype__proto.toNow             = toNow;
+    momentPrototype__proto.get               = getSet;
+    momentPrototype__proto.invalidAt         = invalidAt;
+    momentPrototype__proto.isAfter           = isAfter;
+    momentPrototype__proto.isBefore          = isBefore;
+    momentPrototype__proto.isBetween         = isBetween;
+    momentPrototype__proto.isSame            = isSame;
+    momentPrototype__proto.isSameOrAfter     = isSameOrAfter;
+    momentPrototype__proto.isSameOrBefore    = isSameOrBefore;
+    momentPrototype__proto.isValid           = moment_valid__isValid;
+    momentPrototype__proto.lang              = lang;
+    momentPrototype__proto.locale            = locale;
+    momentPrototype__proto.localeData        = localeData;
+    momentPrototype__proto.max               = prototypeMax;
+    momentPrototype__proto.min               = prototypeMin;
+    momentPrototype__proto.parsingFlags      = parsingFlags;
+    momentPrototype__proto.set               = getSet;
+    momentPrototype__proto.startOf           = startOf;
+    momentPrototype__proto.subtract          = add_subtract__subtract;
+    momentPrototype__proto.toArray           = toArray;
+    momentPrototype__proto.toObject          = toObject;
+    momentPrototype__proto.toDate            = toDate;
+    momentPrototype__proto.toISOString       = moment_format__toISOString;
+    momentPrototype__proto.toJSON            = toJSON;
+    momentPrototype__proto.toString          = toString;
+    momentPrototype__proto.unix              = unix;
+    momentPrototype__proto.valueOf           = to_type__valueOf;
+    momentPrototype__proto.creationData      = creationData;
 
     // Year
     momentPrototype__proto.year       = getSetYear;
@@ -10991,7 +11394,7 @@ angular.module('ngResource', ['ng']).
 
     function locale_calendar__calendar (key, mom, now) {
         var output = this._calendar[key];
-        return typeof output === 'function' ? output.call(mom, now) : output;
+        return isFunction(output) ? output.call(mom, now) : output;
     }
 
     var defaultLongDateFormat = {
@@ -11053,21 +11456,21 @@ angular.module('ngResource', ['ng']).
 
     function relative__relativeTime (number, withoutSuffix, string, isFuture) {
         var output = this._relativeTime[string];
-        return (typeof output === 'function') ?
+        return (isFunction(output)) ?
             output(number, withoutSuffix, string, isFuture) :
             output.replace(/%d/i, number);
     }
 
     function pastFuture (diff, output) {
         var format = this._relativeTime[diff > 0 ? 'future' : 'past'];
-        return typeof format === 'function' ? format(output) : format.replace(/%s/i, output);
+        return isFunction(format) ? format(output) : format.replace(/%s/i, output);
     }
 
     function locale_set__set (config) {
         var prop, i;
         for (i in config) {
             prop = config[i];
-            if (typeof prop === 'function') {
+            if (isFunction(prop)) {
                 this[i] = prop;
             } else {
                 this['_' + i] = prop;
@@ -11097,11 +11500,15 @@ angular.module('ngResource', ['ng']).
     prototype__proto.set             = locale_set__set;
 
     // Month
-    prototype__proto.months       =        localeMonths;
-    prototype__proto._months      = defaultLocaleMonths;
-    prototype__proto.monthsShort  =        localeMonthsShort;
-    prototype__proto._monthsShort = defaultLocaleMonthsShort;
-    prototype__proto.monthsParse  =        localeMonthsParse;
+    prototype__proto.months            =        localeMonths;
+    prototype__proto._months           = defaultLocaleMonths;
+    prototype__proto.monthsShort       =        localeMonthsShort;
+    prototype__proto._monthsShort      = defaultLocaleMonthsShort;
+    prototype__proto.monthsParse       =        localeMonthsParse;
+    prototype__proto._monthsRegex      = defaultMonthsRegex;
+    prototype__proto.monthsRegex       = monthsRegex;
+    prototype__proto._monthsShortRegex = defaultMonthsShortRegex;
+    prototype__proto.monthsShortRegex  = monthsShortRegex;
 
     // Week
     prototype__proto.week = localeWeek;
@@ -11389,15 +11796,15 @@ angular.module('ngResource', ['ng']).
         var years    = round(duration.as('y'));
 
         var a = seconds < thresholds.s && ['s', seconds]  ||
-                minutes === 1          && ['m']           ||
+                minutes <= 1           && ['m']           ||
                 minutes < thresholds.m && ['mm', minutes] ||
-                hours   === 1          && ['h']           ||
+                hours   <= 1           && ['h']           ||
                 hours   < thresholds.h && ['hh', hours]   ||
-                days    === 1          && ['d']           ||
+                days    <= 1           && ['d']           ||
                 days    < thresholds.d && ['dd', days]    ||
-                months  === 1          && ['M']           ||
+                months  <= 1           && ['M']           ||
                 months  < thresholds.M && ['MM', months]  ||
-                years   === 1          && ['y']           || ['yy', years];
+                years   <= 1           && ['y']           || ['yy', years];
 
         a[2] = withoutSuffix;
         a[3] = +posNegDuration > 0;
@@ -11518,6 +11925,8 @@ angular.module('ngResource', ['ng']).
 
     // Side effect imports
 
+    // FORMATTING
+
     addFormatToken('X', 0, 0, 'unix');
     addFormatToken('x', 0, 0, 'valueOf');
 
@@ -11535,13 +11944,14 @@ angular.module('ngResource', ['ng']).
     // Side effect imports
 
 
-    utils_hooks__hooks.version = '2.10.6';
+    utils_hooks__hooks.version = '2.11.1';
 
     setHookCallback(local__createLocal);
 
     utils_hooks__hooks.fn                    = momentPrototype;
     utils_hooks__hooks.min                   = min;
     utils_hooks__hooks.max                   = max;
+    utils_hooks__hooks.now                   = now;
     utils_hooks__hooks.utc                   = create_utc__createUTC;
     utils_hooks__hooks.unix                  = moment__createUnix;
     utils_hooks__hooks.months                = lists__listMonths;
@@ -11560,6 +11970,7 @@ angular.module('ngResource', ['ng']).
     utils_hooks__hooks.weekdaysShort         = lists__listWeekdaysShort;
     utils_hooks__hooks.normalizeUnits        = normalizeUnits;
     utils_hooks__hooks.relativeTimeThreshold = duration_humanize__getSetRelativeTimeThreshold;
+    utils_hooks__hooks.prototype             = momentPrototype;
 
     var _moment = utils_hooks__hooks;
 
@@ -11570,8 +11981,9 @@ angular.module('ngResource', ['ng']).
 //! locale : portuguese (pt)
 //! author : Jefferson : https://github.com/jalex79
 
-(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('../moment')) :
+;(function (global, factory) {
+   typeof exports === 'object' && typeof module !== 'undefined'
+       && typeof require === 'function' ? factory(require('../moment')) :
    typeof define === 'function' && define.amd ? define(['moment'], factory) :
    factory(global.moment)
 }(this, function (moment) { 'use strict';
@@ -32325,11 +32737,11 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
  * Implementing Drag and Drop functionality in AngularJS is easier than ever.
  * Demo: http://codef0rmer.github.com/angular-dragdrop/
  * 
- * @version 1.0.12
+ * @version 1.0.13
  *
  * (c) 2013 Amit Gharat a.k.a codef0rmer <amit.2006.it@gmail.com> - amitgharat.wordpress.com
  */
-!function(e,t,a,n){"use strict";var i=t.module("ngDragDrop",[]).service("ngDragDropService",["$timeout","$parse","$q",function(r,l,o){this.draggableScope=null,this.droppableScope=null,a("head").prepend('<style type="text/css">@charset "UTF-8";.angular-dragdrop-hide{display: none !important;}</style>'),this.callEventCallback=function(e,t,n,i){function r(t){var n=-1!==t.indexOf("(")?t.indexOf("("):t.length,i=-1!==t.lastIndexOf(")")?t.lastIndexOf(")"):t.length,r=t.substring(n+1,i),o=-1!==t.indexOf(".")?t.substr(0,t.indexOf(".")):null;return o=e[o]&&"function"==typeof e[o].constructor?o:null,{callback:t.substring(o&&o.length+1||0,n),args:a.map(r&&r.split(",")||[],function(t){return[l(t)(e)]}),constructor:o}}if(t){var o=r(t),s=o.callback,d=o.constructor,p=[n,i].concat(o.args);return(e[s]||e[d][s]).apply(e,p)}},this.invokeDrop=function(e,l,s,d){var p,c,u,g="",f="",b={},h={},v=null,y={},x={},m=null,D=this.droppableScope,q=this.draggableScope,j=null,k=[];g=e.ngattr("ng-model"),f=l.ngattr("ng-model"),p=q.$eval(g),c=D.$eval(f),m=l.find("[jqyoui-draggable]:last,[data-jqyoui-draggable]:last"),h=D.$eval(l.attr("jqyoui-droppable")||l.attr("data-jqyoui-droppable"))||[],b=q.$eval(e.attr("jqyoui-draggable")||e.attr("data-jqyoui-draggable"))||[],b.index=this.fixIndex(q,b,p),h.index=this.fixIndex(D,h,c),v=t.isArray(p)?b.index:null,y=t.isArray(p)?p[v]:p,b.deepCopy&&(y=t.copy(y)),x=t.isArray(c)&&h&&h.index!==n?c[h.index]:t.isArray(c)?{}:c,h.deepCopy&&(x=t.copy(x)),b.beforeDrop&&k.push(this.callEventCallback(q,b.beforeDrop,s,d)),o.all(k).then(t.bind(this,function(){if(b.insertInline&&g===f){if(b.index>h.index){u=p[b.index];for(var n=b.index;n>h.index;n--)c[n]=t.copy(c[n-1]),c[n-1]={},c[n][b.direction]="left";c[h.index]=u}else{u=p[b.index];for(var n=b.index;n<h.index;n++)c[n]=t.copy(c[n+1]),c[n+1]={},c[n][b.direction]="right";c[h.index]=u}this.callEventCallback(D,h.onDrop,s,d)}else b.animate===!0?(j=e.clone(),j.css({position:"absolute"}).css(e.offset()),a("body").append(j),e.addClass("angular-dragdrop-hide"),this.move(j,m.length>0?m:l,null,"fast",h,function(){j.remove()}),this.move(m.length>0&&!h.multiple?m:[],e.parent("[jqyoui-droppable],[data-jqyoui-droppable]"),i.startXY,"fast",h,t.bind(this,function(){r(t.bind(this,function(){e.css({position:"relative",left:"",top:""}).removeClass("angular-dragdrop-hide"),m.css({position:"relative",left:"",top:"",display:"none"===m.css("display")?"":m.css("display")}),this.mutateDraggable(q,h,b,g,f,x,e),this.mutateDroppable(D,h,b,f,y,v),this.callEventCallback(D,h.onDrop,s,d)}))}))):r(t.bind(this,function(){this.mutateDraggable(q,h,b,g,f,x,e),this.mutateDroppable(D,h,b,f,y,v),this.callEventCallback(D,h.onDrop,s,d)}))}))["finally"](t.bind(this,function(){this.restore(e)}))},this.move=function(t,a,i,r,l,o){if(0===t.length)return o&&e.setTimeout(function(){o()},300),!1;var s=t.css("z-index"),d=t[l.containment||"offset"](),p=a.css("display"),c=a.hasClass("ng-hide");null===i&&a.length>0&&((a.attr("jqyoui-draggable")||a.attr("data-jqyoui-draggable"))!==n&&a.ngattr("ng-model")!==n&&a.is(":visible")&&l&&l.multiple?(i=a[l.containment||"offset"](),l.stack===!1?i.left+=a.outerWidth(!0):i.top+=a.outerHeight(!0)):(c&&a.removeClass("ng-hide"),i=a.css({visibility:"hidden",display:"block"})[l.containment||"offset"](),a.css({visibility:"",display:p}))),t.css({position:"absolute","z-index":9999}).css(d).animate(i,r,function(){c&&a.addClass("ng-hide"),t.css("z-index",s),o&&o()})},this.mutateDroppable=function(e,a,n,i,r,o){var s=e.$eval(i);e.dndDragItem=r,t.isArray(s)?(a&&a.index>=0?s[a.index]=r:s.push(r),n&&n.placeholder===!0&&(s[s.length-1].jqyoui_pos=o)):(l(i+" = dndDragItem")(e),n&&n.placeholder===!0&&(s.jqyoui_pos=o))},this.mutateDraggable=function(e,a,i,r,o,s,d){var p=t.equals(s,{})||!s,c=e.$eval(r);e.dndDropItem=s,i&&i.placeholder?"keep"!=i.placeholder&&(t.isArray(c)&&i.index!==n?c[i.index]=s:l(r+" = dndDropItem")(e)):t.isArray(c)?p?i&&i.placeholder!==!0&&"keep"!==i.placeholder&&c.splice(i.index,1):c[i.index]=s:(l(r+" = dndDropItem")(e),e.$parent&&l(r+" = dndDropItem")(e.$parent)),this.restore(d)},this.restore=function(e){e.css({"z-index":"",left:"",top:""})},this.fixIndex=function(e,a,i){if(a.applyFilter&&t.isArray(i)&&i.length>0){var r=e[a.applyFilter](),l=r[a.index],o=n;return i.forEach(function(e,a){t.equals(e,l)&&(o=a)}),o}return a.index}}]).directive("jqyouiDraggable",["ngDragDropService",function(e){return{require:"?jqyouiDroppable",restrict:"A",link:function(n,r,l){var o,s,d,p,c=a(r),u=function(r){r?(o=n.$eval(c.attr("jqyoui-draggable")||c.attr("data-jqyoui-draggable"))||{},s=n.$eval(l.jqyouiOptions)||{},c.draggable({disabled:!1}).draggable(s).draggable({start:function(t,r){e.draggableScope=n,d=a(s.helper?r.helper:this).css("z-index"),a(s.helper?r.helper:this).css("z-index",9999),i.startXY=a(this)[o.containment||"offset"](),e.callEventCallback(n,o.onStart,t,r)},stop:function(t,i){a(s.helper?i.helper:this).css("z-index",d),e.callEventCallback(n,o.onStop,t,i)},drag:function(t,a){e.callEventCallback(n,o.onDrag,t,a)}})):c.draggable({disabled:!0}),p&&t.isDefined(r)&&(t.equals(l.drag,"true")||t.equals(l.drag,"false"))&&(p(),p=null)};p=n.$watch(function(){return n.$eval(l.drag)},u),u(),c.on("$destroy",function(){c.draggable({disabled:!0}).draggable("destroy")})}}}]).directive("jqyouiDroppable",["ngDragDropService","$q",function(e,n){return{restrict:"A",priority:1,link:function(i,r,l){var o,s,d=a(r),p=function(r){r?(o=i.$eval(a(d).attr("jqyoui-droppable")||a(d).attr("data-jqyoui-droppable"))||{},d.droppable({disabled:!1}).droppable(i.$eval(l.jqyouiOptions)||{}).droppable({over:function(t,a){e.callEventCallback(i,o.onOver,t,a)},out:function(t,a){e.callEventCallback(i,o.onOut,t,a)},drop:function(r,s){var d=null;d=o.beforeDrop?e.callEventCallback(i,o.beforeDrop,r,s):function(){var e=n.defer();return e.resolve(),e.promise}(),d.then(t.bind(this,function(){a(s.draggable).ngattr("ng-model")&&l.ngModel?(e.droppableScope=i,e.invokeDrop(a(s.draggable),a(this),r,s)):e.callEventCallback(i,o.onDrop,r,s)}),function(){s.draggable.css({left:"",top:""})})}})):d.droppable({disabled:!0}),s&&t.isDefined(r)&&(t.equals(l.drop,"true")||t.equals(l.drop,"false"))&&(s(),s=null)};s=i.$watch(function(){return i.$eval(l.drop)},p),p(),d.on("$destroy",function(){d.droppable({disabled:!0}).droppable("destroy")})}}}]);a.fn.ngattr=function(e){var t=this[0];return t.getAttribute(e)||t.getAttribute("data-"+e)}}(window,window.angular,window.jQuery);
+!function(e,a,t,n){"use strict";var i=a.module("ngDragDrop",[]).service("ngDragDropService",["$timeout","$parse","$q",function(r,l,o){this.draggableScope=null,this.droppableScope=null,t("head").prepend('<style type="text/css">@charset "UTF-8";.angular-dragdrop-hide{display: none !important;}</style>'),this.callEventCallback=function(e,a,n,i){function r(a){var n=-1!==a.indexOf("(")?a.indexOf("("):a.length,i=-1!==a.lastIndexOf(")")?a.lastIndexOf(")"):a.length,r=a.substring(n+1,i),o=-1!==a.indexOf(".")?a.substr(0,a.indexOf(".")):null;return o=e[o]&&"function"==typeof e[o].constructor?o:null,{callback:a.substring(o&&o.length+1||0,n),args:t.map(r&&r.split(",")||[],function(a){return[l(a)(e)]}),constructor:o}}if(a){var o=r(a),d=o.callback,s=o.constructor,p=[n,i].concat(o.args);return(e[d]||e[s][d]).apply(e[d]?e:e[s],p)}},this.invokeDrop=function(e,l,d,s){var p,c,u,g="",f="",b={},h={},v=null,y={},x={},m=null,D=this.droppableScope,q=this.draggableScope,j=null,k=[];g=e.ngattr("ng-model"),f=l.ngattr("ng-model"),p=q.$eval(g),c=D.$eval(f),m=l.find("[jqyoui-draggable]:last,[data-jqyoui-draggable]:last"),h=D.$eval(l.attr("jqyoui-droppable")||l.attr("data-jqyoui-droppable"))||[],b=q.$eval(e.attr("jqyoui-draggable")||e.attr("data-jqyoui-draggable"))||[],b.index=this.fixIndex(q,b,p),h.index=this.fixIndex(D,h,c),v=a.isArray(p)?b.index:null,y=a.isArray(p)?p[v]:p,b.deepCopy&&(y=a.copy(y)),x=a.isArray(c)&&h&&h.index!==n?c[h.index]:a.isArray(c)?{}:c,h.deepCopy&&(x=a.copy(x)),b.beforeDrop&&k.push(this.callEventCallback(q,b.beforeDrop,d,s)),o.all(k).then(a.bind(this,function(){if(b.insertInline&&g===f){if(b.index>h.index){u=p[b.index];for(var n=b.index;n>h.index;n--)c[n]=a.copy(c[n-1]),c[n-1]={},c[n][b.direction]="left";c[h.index]=u}else{u=p[b.index];for(var n=b.index;n<h.index;n++)c[n]=a.copy(c[n+1]),c[n+1]={},c[n][b.direction]="right";c[h.index]=u}this.callEventCallback(D,h.onDrop,d,s)}else b.animate===!0?(j=e.clone(),j.css({position:"absolute"}).css(e.offset()),t("body").append(j),e.addClass("angular-dragdrop-hide"),this.move(j,m.length>0?m:l,null,"fast",h,function(){j.remove()}),this.move(m.length>0&&!h.multiple?m:[],e.parent("[jqyoui-droppable],[data-jqyoui-droppable]"),i.startXY,"fast",h,a.bind(this,function(){r(a.bind(this,function(){e.css({position:"relative",left:"",top:""}).removeClass("angular-dragdrop-hide"),m.css({position:"relative",left:"",top:"",display:"none"===m.css("display")?"":m.css("display")}),this.mutateDraggable(q,h,b,g,f,x,e),this.mutateDroppable(D,h,b,f,y,v),this.callEventCallback(D,h.onDrop,d,s)}))}))):r(a.bind(this,function(){this.mutateDraggable(q,h,b,g,f,x,e),this.mutateDroppable(D,h,b,f,y,v),this.callEventCallback(D,h.onDrop,d,s)}))}))["finally"](a.bind(this,function(){this.restore(e)}))},this.move=function(a,t,i,r,l,o){if(0===a.length)return o&&e.setTimeout(function(){o()},300),!1;var d=a.css("z-index"),s=a[l.containment||"offset"](),p=t.css("display"),c=t.hasClass("ng-hide"),u=t.hasClass("angular-dragdrop-hide");null===i&&t.length>0&&((t.attr("jqyoui-draggable")||t.attr("data-jqyoui-draggable"))!==n&&t.ngattr("ng-model")!==n&&t.is(":visible")&&l&&l.multiple?(i=t[l.containment||"offset"](),l.stack===!1?i.left+=t.outerWidth(!0):i.top+=t.outerHeight(!0)):(c&&t.removeClass("ng-hide"),u&&t.removeClass("angular-dragdrop-hide"),i=t.css({visibility:"hidden",display:"block"})[l.containment||"offset"](),t.css({visibility:"",display:p}))),a.css({position:"absolute","z-index":9999}).css(s).animate(i,r,function(){c&&t.addClass("ng-hide"),u&&t.addClass("angular-dragdrop-hide"),a.css("z-index",d),o&&o()})},this.mutateDroppable=function(e,t,n,i,r,o){var d=e.$eval(i);e.dndDragItem=r,a.isArray(d)?(t&&t.index>=0?d[t.index]=r:d.push(r),n&&n.placeholder===!0&&(d[d.length-1].jqyoui_pos=o)):(l(i+" = dndDragItem")(e),n&&n.placeholder===!0&&(d.jqyoui_pos=o))},this.mutateDraggable=function(e,t,i,r,o,d,s){var p=a.equals(d,{})||!d,c=e.$eval(r);e.dndDropItem=d,i&&i.placeholder?"keep"!=i.placeholder&&(a.isArray(c)&&i.index!==n?c[i.index]=d:l(r+" = dndDropItem")(e)):a.isArray(c)?p?i&&i.placeholder!==!0&&"keep"!==i.placeholder&&c.splice(i.index,1):c[i.index]=d:(l(r+" = dndDropItem")(e),e.$parent&&l(r+" = dndDropItem")(e.$parent)),this.restore(s)},this.restore=function(e){e.css({"z-index":"",left:"",top:""})},this.fixIndex=function(e,t,i){if(t.applyFilter&&a.isArray(i)&&i.length>0){var r=e[t.applyFilter](),l=r[t.index],o=n;return i.forEach(function(e,t){a.equals(e,l)&&(o=t)}),o}return t.index}}]).directive("jqyouiDraggable",["ngDragDropService",function(e){return{require:"?jqyouiDroppable",restrict:"A",link:function(n,r,l){var o,d,s,p,c=t(r),u=function(r,u){r?(o=n.$eval(c.attr("jqyoui-draggable")||c.attr("data-jqyoui-draggable"))||{},d=n.$eval(l.jqyouiOptions)||{},c.draggable({disabled:!1}).draggable(d).draggable({start:function(a,r){e.draggableScope=n,s=t(d.helper?r.helper:this).css("z-index"),t(d.helper?r.helper:this).css("z-index",9999),i.startXY=t(this)[o.containment||"offset"](),e.callEventCallback(n,o.onStart,a,r)},stop:function(a,i){t(d.helper?i.helper:this).css("z-index",s),e.callEventCallback(n,o.onStop,a,i)},drag:function(a,t){e.callEventCallback(n,o.onDrag,a,t)}})):c.draggable({disabled:!0}),p&&a.isDefined(r)&&(a.equals(l.drag,"true")||a.equals(l.drag,"false"))&&(p(),p=null)};p=n.$watch(function(){return n.$eval(l.drag)},u),u(),c.on("$destroy",function(){c.draggable({disabled:!0}).draggable("destroy")})}}}]).directive("jqyouiDroppable",["ngDragDropService","$q",function(e,n){return{restrict:"A",priority:1,link:function(i,r,l){var o,d,s,p=t(r),c=function(r,c){r?(o=i.$eval(t(p).attr("jqyoui-droppable")||t(p).attr("data-jqyoui-droppable"))||{},d=i.$eval(l.jqyouiOptions)||{},p.droppable({disabled:!1}).droppable(d).droppable({over:function(a,t){e.callEventCallback(i,o.onOver,a,t)},out:function(a,t){e.callEventCallback(i,o.onOut,a,t)},drop:function(r,s){var p=null;p=o.beforeDrop?e.callEventCallback(i,o.beforeDrop,r,s):function(){var e=n.defer();return e.resolve(),e.promise}(),p.then(a.bind(this,function(){t(s.draggable).ngattr("ng-model")&&l.ngModel?(e.droppableScope=i,e.invokeDrop(t(s.draggable),t(this),r,s)):e.callEventCallback(i,o.onDrop,r,s)}),function(){s.draggable.animate({left:"",top:""},d.revertDuration||0)})}})):p.droppable({disabled:!0}),s&&a.isDefined(r)&&(a.equals(l.drop,"true")||a.equals(l.drop,"false"))&&(s(),s=null)};s=i.$watch(function(){return i.$eval(l.drop)},c),c(),p.on("$destroy",function(){p.droppable({disabled:!0}).droppable("destroy")})}}}]);t.fn.ngattr=function(e,a){var t=this[0];return t.getAttribute(e)||t.getAttribute("data-"+e)}}(window,window.angular,window.jQuery);
 /**
  * @see http://docs.angularjs.org/guide/concepts
  * @see http://docs.angularjs.org/api/ng.directive:ngModel.NgModelController
@@ -33581,17 +33993,17 @@ tagsInput.run(["$templateCache", function($templateCache) {
 
 }());
 /*!
- * Angular Socialshare v0.1.19
+ * Angular Socialshare v0.1.20
  *
  * Released by 720kb.net under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2015-11-16
+ * 2015-12-17
  * source link: //github.com/720kb/angular-socialshare
  */
 
 
-!function(a){"use strict";a.module("720kb.socialshare",[]).directive("socialshare",["$window","$location",function(a,b){return{restrict:"A",link:function(c,d,e){var f,g,h={},i={url:"",redirectUri:"",provider:"",type:"",text:"",caption:"",to:"",ref:"",display:"",from:"",media:"",hashtags:"",via:"",description:"",source:"",subreddit:"",follow:"",popupHeight:500,popupWidth:500};for(f in i)i.hasOwnProperty(f)&&(g="socialshare"+f.substring(0,1).toUpperCase()+f.substring(1),function(a){e.$observe(g,function(b){b&&(h[a]=b)})}(f),void 0===h[f]&&(h[f]=i[f]));h.eventTrigger=e.socialshareTrigger||"click",c.facebookShare=function(c){if(c.type&&"feed"===c.type){var d="https://www.facebook.com/dialog/feed?display=popup&app_id="+encodeURI(c.via)+"&redirect_uri="+encodeURI(c.redirectUri);c.url&&(d+="&link="+encodeURIComponent(c.url)),c.to&&(d+="&to="+encodeURIComponent(c.to)),c.display&&(d+="&display="+encodeURIComponent(c.display)),c.ref&&(d+="&ref="+encodeURIComponent(c.ref)),c.from&&(d+="&from="+encodeURIComponent(c.from)),c.description&&(d+="&description="+encodeURIComponent(c.description)),c.text&&(d+="&name="+encodeURIComponent(c.text)),c.caption&&(d+="&caption="+encodeURIComponent(c.caption)),c.media&&(d+="&picture="+encodeURIComponent(c.media)),c.source&&(d+="&source="+encodeURIComponent(c.source)),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)}else a.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(c.url||b.absUrl()),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.twitterShare=function(c){var d="https://www.twitter.com/intent/tweet?";c.text&&(d+="text="+encodeURIComponent(c.text)),c.via&&(d+="&via="+encodeURI(c.via)),c.hashtags&&(d+="&hashtags="+encodeURI(c.hashtags)),d+="&url="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.googlePlusShare=function(c){a.open("https://plus.google.com/share?url="+encodeURIComponent(c.url||b.absUrl()),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.redditShare=function(c){var d="https://www.reddit.com/";d+=c.subreddit?"r/"+c.subreddit+"/submit?url=":"submit?url=",c.popupWidth<900&&(c.popupWidth=900),c.popupHeight<650&&(c.popupHeight=650),a.open(d+encodeURIComponent(c.url||b.absUrl())+"&title="+encodeURIComponent(c.text),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.stumbleuponShare=function(c){a.open("https://www.stumbleupon.com/submit?url="+encodeURIComponent(c.url||b.absUrl())+"&title="+encodeURIComponent(c.text),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.linkedinShare=function(c){a.open("https://www.linkedin.com/shareArticle?mini=true&url="+encodeURIComponent(c.url||b.absUrl())+"&title="+encodeURIComponent(c.text),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.pinterestShare=function(c){a.open("https://www.pinterest.com/pin/create/button/?url="+encodeURIComponent(c.url||b.absUrl())+"&media="+encodeURI(c.media)+"&description="+encodeURIComponent(c.text),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.diggShare=function(c){a.open("https://www.digg.com/submit?url="+encodeURIComponent(c.url||b.absUrl())+"&title="+encodeURIComponent(c.text),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.tumblrShare=function(b){if(b.media){var c="https://www.tumblr.com/share/photo?source="+encodeURIComponent(b.media);b.text&&(c+="&caption="+encodeURIComponent(b.text)),a.open(c,"sharer","toolbar=0,status=0,width="+b.popupWidth+",height="+b.popupHeight)}else a.open("https://www.tumblr.com/share/link?url="+encodeURIComponent(b.url)+"&description="+encodeURIComponent(b.text),"sharer","toolbar=0,status=0,width="+b.popupWidth+",height="+b.popupHeight)},c.vkShare=function(c){a.open("https://www.vk.com/share.php?url="+encodeURIComponent(c.url||b.absUrl()),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.deliciousShare=function(c){a.open("https://www.delicious.com/save?v=5&noui&jump=close&url="+encodeURIComponent(c.url||b.absUrl())+"&title="+encodeURIComponent(c.text),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.bufferShare=function(c){var d="https://bufferapp.com/add?";c.text&&(d+="text="+encodeURIComponent(c.text)),c.via&&(d+="&via="+encodeURI(c.via)),d+="&url="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.hackernewsShare=function(c){var d="https://news.ycombinator.com/submitlink?";c.text&&(d+="t="+encodeURIComponent(c.text)+"&"),d+="u="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.flipboardShare=function(c){var d="https://share.flipboard.com/bookmarklet/popout?v=2&";c.text&&(d+="title="+encodeURIComponent(c.text)+"&"),d+="url="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.pocketShare=function(c){var d="https://getpocket.com/save?";c.text&&(d+="text="+encodeURIComponent(c.text)+"&"),d+="url="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.wordpressShare=function(c){var d="http://wordpress.com/press-this.php?";c.text&&(d+="t="+encodeURIComponent(c.text)+"&"),c.media&&(d+="i="+encodeURIComponent(c.media)+"&"),d+="u="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.xingShare=function(c){var d="";c.follow&&(d="&follow_url="+encodeURIComponent(c.follow)),a.open("https://www.xing.com/spi/shares/new?url="+encodeURIComponent(c.url||b.absUrl())+d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},d.bind(h.eventTrigger,function(){switch(h.provider){case"facebook":c.facebookShare(h);break;case"google+":c.googlePlusShare(h);break;case"twitter":c.twitterShare(h);break;case"stumbleupon":c.stumbleuponShare(h);break;case"reddit":c.redditShare(h);break;case"pinterest":c.pinterestShare(h);break;case"linkedin":c.linkedinShare(h);break;case"digg":c.diggShare(h);break;case"tumblr":c.tumblrShare(h);break;case"delicious":c.deliciousShare(h);break;case"vk":c.vkShare(h);break;case"buffer":c.bufferShare(h);break;case"pocket":c.pocketShare(h);break;case"wordpress":c.wordpressShare(h);break;case"flipboard":c.flipboardShare(h);break;case"hackernews":c.hackernewsShare(h);break;case"xing":c.xingShare(h);break;default:return}})}}}])}(angular);
+!function(a){"use strict";a.module("720kb.socialshare",[]).directive("socialshare",["$window","$location",function(a,b){return{restrict:"A",link:function(c,d,e){var f,g,h={},i={url:"",redirectUri:"",provider:"",type:"",text:"",caption:"",to:"",ref:"",display:"",from:"",media:"",hashtags:"",via:"",description:"",source:"",subreddit:"",follow:"",popupHeight:500,popupWidth:500};for(f in i)i.hasOwnProperty(f)&&(g="socialshare"+f.substring(0,1).toUpperCase()+f.substring(1),function(a){e.$observe(g,function(b){b&&(h[a]=b)})}(f),void 0===h[f]&&(h[f]=i[f]));h.eventTrigger=e.socialshareTrigger||"click",c.facebookShare=function(c){if(c.type&&"feed"===c.type){var d="https://www.facebook.com/dialog/feed?display=popup&app_id="+encodeURI(c.via)+"&redirect_uri="+encodeURI(c.redirectUri);c.url&&(d+="&link="+encodeURIComponent(c.url)),c.to&&(d+="&to="+encodeURIComponent(c.to)),c.display&&(d+="&display="+encodeURIComponent(c.display)),c.ref&&(d+="&ref="+encodeURIComponent(c.ref)),c.from&&(d+="&from="+encodeURIComponent(c.from)),c.description&&(d+="&description="+encodeURIComponent(c.description)),c.text&&(d+="&name="+encodeURIComponent(c.text)),c.caption&&(d+="&caption="+encodeURIComponent(c.caption)),c.media&&(d+="&picture="+encodeURIComponent(c.media)),c.source&&(d+="&source="+encodeURIComponent(c.source)),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)}else a.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(c.url||b.absUrl()),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.twitterShare=function(c){var d="https://www.twitter.com/intent/tweet?";c.text&&(d+="text="+encodeURIComponent(c.text)),c.via&&(d+="&via="+encodeURI(c.via)),c.hashtags&&(d+="&hashtags="+encodeURI(c.hashtags)),d+="&url="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.googlePlusShare=function(c){a.open("https://plus.google.com/share?url="+encodeURIComponent(c.url||b.absUrl()),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.redditShare=function(c){var d="https://www.reddit.com/";d+=c.subreddit?"r/"+c.subreddit+"/submit?url=":"submit?url=",c.popupWidth<900&&(c.popupWidth=900),c.popupHeight<650&&(c.popupHeight=650),a.open(d+encodeURIComponent(c.url||b.absUrl())+"&title="+encodeURIComponent(c.text),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.stumbleuponShare=function(c){a.open("https://www.stumbleupon.com/submit?url="+encodeURIComponent(c.url||b.absUrl())+"&title="+encodeURIComponent(c.text),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.linkedinShare=function(c){var d="https://www.linkedin.com/shareArticle?mini=true";d+="&url="+encodeURIComponent(c.url||b.absUrl()),c.text&&(d+="&title="+encodeURIComponent(c.text)),c.description&&(d+="&summary="+encodeURIComponent(c.description)),c.source&&(d+="&source="+encodeURIComponent(c.source)),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.pinterestShare=function(c){a.open("https://www.pinterest.com/pin/create/button/?url="+encodeURIComponent(c.url||b.absUrl())+"&media="+encodeURI(c.media)+"&description="+encodeURIComponent(c.text),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.diggShare=function(c){a.open("https://www.digg.com/submit?url="+encodeURIComponent(c.url||b.absUrl())+"&title="+encodeURIComponent(c.text),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.tumblrShare=function(b){if(b.media){var c="https://www.tumblr.com/share/photo?source="+encodeURIComponent(b.media);b.text&&(c+="&caption="+encodeURIComponent(b.text)),a.open(c,"sharer","toolbar=0,status=0,width="+b.popupWidth+",height="+b.popupHeight)}else a.open("https://www.tumblr.com/share/link?url="+encodeURIComponent(b.url)+"&description="+encodeURIComponent(b.text),"sharer","toolbar=0,status=0,width="+b.popupWidth+",height="+b.popupHeight)},c.vkShare=function(c){a.open("https://www.vk.com/share.php?url="+encodeURIComponent(c.url||b.absUrl()),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.deliciousShare=function(c){a.open("https://www.delicious.com/save?v=5&noui&jump=close&url="+encodeURIComponent(c.url||b.absUrl())+"&title="+encodeURIComponent(c.text),"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.bufferShare=function(c){var d="https://bufferapp.com/add?";c.text&&(d+="text="+encodeURIComponent(c.text)),c.via&&(d+="&via="+encodeURI(c.via)),d+="&url="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.hackernewsShare=function(c){var d="https://news.ycombinator.com/submitlink?";c.text&&(d+="t="+encodeURIComponent(c.text)+"&"),d+="u="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.flipboardShare=function(c){var d="https://share.flipboard.com/bookmarklet/popout?v=2&";c.text&&(d+="title="+encodeURIComponent(c.text)+"&"),d+="url="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.pocketShare=function(c){var d="https://getpocket.com/save?";c.text&&(d+="text="+encodeURIComponent(c.text)+"&"),d+="url="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.wordpressShare=function(c){var d="http://wordpress.com/press-this.php?";c.text&&(d+="t="+encodeURIComponent(c.text)+"&"),c.media&&(d+="i="+encodeURIComponent(c.media)+"&"),d+="u="+encodeURIComponent(c.url||b.absUrl()),a.open(d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},c.xingShare=function(c){var d="";c.follow&&(d="&follow_url="+encodeURIComponent(c.follow)),a.open("https://www.xing.com/spi/shares/new?url="+encodeURIComponent(c.url||b.absUrl())+d,"sharer","toolbar=0,status=0,width="+c.popupWidth+",height="+c.popupHeight)},d.bind(h.eventTrigger,function(){switch(h.provider){case"facebook":c.facebookShare(h);break;case"google+":c.googlePlusShare(h);break;case"twitter":c.twitterShare(h);break;case"stumbleupon":c.stumbleuponShare(h);break;case"reddit":c.redditShare(h);break;case"pinterest":c.pinterestShare(h);break;case"linkedin":c.linkedinShare(h);break;case"digg":c.diggShare(h);break;case"tumblr":c.tumblrShare(h);break;case"delicious":c.deliciousShare(h);break;case"vk":c.vkShare(h);break;case"buffer":c.bufferShare(h);break;case"pocket":c.pocketShare(h);break;case"wordpress":c.wordpressShare(h);break;case"flipboard":c.flipboardShare(h);break;case"hackernews":c.hackernewsShare(h);break;case"xing":c.xingShare(h);break;default:return}})}}}])}(angular);
 //# sourceMappingURL=angular-socialshare.sourcemap.map
 (function(){
 	angular
