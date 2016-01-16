@@ -282,7 +282,7 @@ class CodigoHost extends AppHost {
   	$this->registerService(new InitService());
 
     $db = $container->get('OdmConfiguration');
-    $db->setDefaultDb('viseu');
+    $db->setDefaultDb('codigo');
   }
 }
 
