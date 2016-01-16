@@ -1,7 +1,7 @@
 (function(){
     var nutritionCard = function(ApiIsAuthorService, $rootScope)  {
         var link = function(scope, elem, attrs){
-          if(!_.isDefined(scope.showSocial)) {
+          if(_.isUndefined(scope.showSocial)) {
             showSocial = true;
           }
         }

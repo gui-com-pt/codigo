@@ -286,5 +286,5 @@ class CodigoHost extends AppHost {
   }
 }
 
-$host = new DemoHost();
+$host = new CodigoHost();
 $host->init();

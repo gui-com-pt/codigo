@@ -9,6 +9,7 @@ $susy: (
 @import "../bower_components/susy/sass/susy";
 @import "../bower_components/compass-breakpoint/stylesheets/breakpoint";
 @import "../bower_components/compass-mixins/lib/compass";
+
 @import "../bower_components/pi-sass/src/boot";
 @import "panel";
 @import "text-angular";
@@ -20,6 +21,8 @@ $susy: (
 @import "prism";
 @import "core/comment";
 $breakpoint-site: 900px;
+
+
 @import "card";
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -44,51 +47,6 @@ $breakpoint-site: 900px;
 
 body {
   margin-top: 42px;
-}
-
-.pi-nav__sub {
-  background-color: #ccc;
-  font-size: 0.75em;
-}
-
-.pi-nav__sub  > .pi-nav {
-  padding: 4px 0px;
-  min-height: auto;
-  font-weight: normal;
-}
-.pi-card__tumb {
-    /*max-width: 570px;*/
-    min-height: 40px;
-    min-width: 120px;
-  }
-
-.pi-card__social-list {
-  text-align: center;
-
-  > li, > .pi-card__list-item {
-    text-align:center;
-    white-space:nowrap;
-    display: inline;
-    text-align: center;
-    font-size: 2em;
-  }
-}
-
-.pi-card__thumb-anchor {
-  background-repeat: none;
-  background-size: 100% auto;
-  width: 100%;
-  min-height: 100px;
-}
-
-
-.pi-card__content > p {
-  max-height: $font-size * 4;
-  /*line-height: $font-size-small;
-  font-size: 10px;*/
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  overflow: hidden;
 }
 .ui-select-choices-content {
   background-color: #fff;
@@ -149,8 +107,14 @@ button, input[type="button"] {
 }
 @include breakpoint($breakpoint-site) {
   .masonry-brick__wrapper  > .masonry-brick {
-    width: 33%;
+    width: 32.5%;
+    margin-right: 0.5%;
+
+    &:nth-child(3n) {
+      margin-right: 0;
+    }
   }
+
 
 
 	.sidebar-right {
@@ -202,14 +166,3 @@ pre {
   overflow-y: visible;
 }
 
-
-.pi-card {
-  @include clearfix();
-}
-
-.pi-card__tag {
-  @extend color-secondary();
-  padding: $pi-card-content-padding;
-  font-size: 0.6em;
-  display: inline-block;
-}

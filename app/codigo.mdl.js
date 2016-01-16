@@ -57,6 +57,7 @@ var boot = function(){
 
   angular
     .module('codigo', ['templates', 'pi', 'pi.core', 'pi.adsense', 'pi.core.app', 'pi.core.question', 'pi.core.payment', 'pi.core.chat', 'pi.core.likes', 'pi.core.product', 'codigo.core', 'codigo.core.article', 'codigo.core.question',
+      'pi.googleAdsense',
       'ui.router', 'textAngular', 'infinite-scroll', 'ngFileUpload', 'ui.select', 'angularMoment',
       'piClassHover', 'ngTagsInput', '720kb.socialshare', 'wu.masonry', 'config', 'angular-bind-html-compile']);
 

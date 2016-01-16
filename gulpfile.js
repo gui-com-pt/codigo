@@ -43,7 +43,8 @@ var paths = {
         './bower_components/angular-contenteditable/angular-contenteditable.js',
         './bower_components/prism/prism.js',
         './bower_components/ng-tags-input/ng-tags-input.js',
-        './bower_components/angular-socialshare/dist/angular-socialshare.min.js'
+        './bower_components/angular-socialshare/dist/angular-socialshare.min.js',
+        './bower_components/pi-google-adsense/dist/pi-google-adsense.js'
     ],
     appModules: [
         './app/module.js',
