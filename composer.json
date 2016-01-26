@@ -1,5 +1,11 @@
 {
     "name": "guilhermegeek/codigo",
+    "repositories": [
+        {
+                "url": "https://github.com/guilhermegeek/pi-framework.git",
+                "type": "git"
+        }
+    ],
     "authors": [
         {
             "name": "Guilherme Cardoso",
