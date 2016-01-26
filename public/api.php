@@ -283,6 +283,7 @@ class CodigoHost extends AppHost {
 
     $db = $container->get('OdmConfiguration');
     $db->setDefaultDb('codigo');
+    $db->setHostname('ds1.codigo.ovh');
   }
 }
 
