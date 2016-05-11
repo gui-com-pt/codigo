@@ -1,11 +1,11 @@
-var gulp = require('gulp'),
-    concat = require('gulp-concat'),
-    uglify = require('gulp-uglifyjs'),
-    templateCache = require('gulp-angular-templatecache'),
-    watch = require('gulp-watch'),
-    inject = require('gulp-inject'),
-    sass = require('gulp-sass'),
-    requireDir = require('require-dir');
+var gulp = require('gulp');
+    var concat = require('gulp-concat');
+    var uglify = require('gulp-uglifyjs');
+    var templateCache = require('gulp-angular-templatecache');
+    var watch = require('gulp-watch');
+
+    var sass = require('gulp-sass');
+    var requireDir = require('require-dir');
 
 var tasks = requireDir('./bower_components/pi-gulp-tasks/tasks');
 
@@ -47,35 +47,36 @@ var paths = {
         './bower_components/pi-google-adsense/dist/pi-google-adsense.js'
     ],
     appModules: [
-        './app/module.js',
-        './app/**/module.js',
-        './app/*.js',
-        './app/**/*.js',
-        './app/*.mdl.js',
-        './app/common/*.mdl.js',
-        './app/common/**/*.mdl.js',
-        './app/common/**/**/*.mdl.js',
-        './app/common/*.js',
-        './app/common/**/*.js',
-        './app/common/**/**/*.js',
-        './app/core/*.mdl.js',
-        './app/core/**/**/*.mdl.js',
-        './app/core/**/*.mdl.js',
-        './app/core/*.js',
-        './app/core/**/*.js',
-        './app/core/**/**/*.js'
+        './src/module.js',
+        './src/**/module.js',
+        './src/*.js',
+        './src/**/*.js',
+        './src/*.mdl.js',
+        './src/common/*.mdl.js',
+        './src/common/**/*.mdl.js',
+        './src/common/**/**/*.mdl.js',
+        './src/common/*.js',
+        './src/common/**/*.js',
+        './src/common/**/**/*.js',
+        './src/core/*.mdl.js',
+        './src/core/**/**/*.mdl.js',
+        './src/core/**/*.mdl.js',
+        './src/core/*.js',
+        './src/core/**/*.js',
+        './src/core/**/**/*.js'
     ],
     sass: [
-        './app/*.scss',
-        './app/**/*.scss'
+        './src/*.scss',
+        './src/**/*.scss'
     ],
     templates: [
-        './app/*.html',
-        './app/**/*.html',
-        './app/**/**/*.html',
-        './app/**/**/**/*.html'
+        './src/*.html',
+        './src/**/*.html',
+        './src/**/**/*.html',
+        './src/**/**/**/*.html'
     ]
 };
+        
 
 gulp.task('scripts', function(){
 
